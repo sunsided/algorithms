@@ -6,7 +6,11 @@ using JetBrains.Annotations;
 namespace widemeadows.algorithms
 {
     /// <summary>
-    /// Class Quickselect.
+    /// Hoare's section algorithm to select the n-th smallest element in a list.
+    /// <para>
+    /// As a side effect, the processed list will be partially ordered with respect to the
+    /// n-th element.
+    /// </para>
     /// </summary>
     public sealed class Quickselect<TElement>
         where TElement : IComparable
