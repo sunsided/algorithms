@@ -153,5 +153,68 @@ namespace widemeadows.algorithms
                 ? SelectRecursive(list, leftIndex, pivotIndex - 1, n)
                 : SelectRecursive(list, pivotIndex + 1, rightIndex, n);
         }
+
+        /// <summary>
+        /// Selects the (<paramref name="n" />+1)-th smallest element in the <paramref name="list" />.
+        /// <para>
+        /// As a side effect, returns a partially sorted list, where each element left of the element
+        /// is smaller and each element right of it is greater or equal.
+        /// </para>
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <param name="n">The order (e.g. smallest element (<c>n=0</c>), 2nd smallest element (<c>n=1</c>), 3rd smallest (<c>n=2</c>), ...).</param>
+        /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
+        public int Select<TList>([NotNull] TList list, int n)
+            where TList : IList<TElement>
+        {
+            return Select(list, 0, list.Count - 1, n);
+        }
+
+        /// <summary>
+        /// Selects the (<paramref name="n" />+1)-th smallest element in the <paramref name="list"/>
+        /// between the <paramref name="leftIndex"/> and the <paramref name="rightIndex"/>.
+        /// <para>
+        /// As a side effect, returns a partially sorted list, where each element left of the element
+        /// is smaller and each element right of it is greater or equal.
+        /// </para>
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <param name="leftIndex">Start index in the list.</param>
+        /// <param name="rightIndex">End index in the list.</param>
+        /// <param name="n">The order (e.g. smallest element (<c>n=0</c>), 2nd smallest element (<c>n=1</c>), 3rd smallest (<c>n=2</c>), ...).</param>
+        /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
+        private int Select<TList>([NotNull] TList list, int leftIndex, int rightIndex, int n) where TList : IList<TElement>
+        {
+            while (true)
+            {
+                Debug.Assert(n >= 0 && n < list.Count, "pivotIndex >= 0 && pivotIndex < list.Count");
+                Debug.Assert(leftIndex >= 0 && leftIndex < list.Count, "leftIndex >= 0 && leftIndex < list.Count");
+                Debug.Assert(rightIndex >= 0 && rightIndex < list.Count, "rightIndex >= 0 && rightIndex < list.Count");
+
+                // when there only is one element, return it.
+                if (leftIndex == rightIndex) return leftIndex;
+
+                // select a pivot index and partition the list
+                var pivotIndex = SelectPivotElement(leftIndex, rightIndex);
+                pivotIndex = Partition(list, leftIndex, rightIndex, pivotIndex);
+
+                // check if the pivot index is at the final position
+                if (pivotIndex == n)
+                {
+                    return pivotIndex;
+                }
+
+                // check if the pivot index is greater than the final position and
+                // recurse into the left half
+                if (n < pivotIndex)
+                {
+                    rightIndex = pivotIndex - 1;
+                    continue;
+                }
+
+                // ... otherwise the pivot is smaller or equal so we recurse into the right half.
+                leftIndex = pivotIndex + 1;
+            }
+        }
     }
 }
