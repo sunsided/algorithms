@@ -108,23 +108,30 @@ namespace widemeadows.algorithms
         /// is smaller and each element right of it is greater or equal.
         /// </para>
         /// </summary>
+        /// <typeparam name="TList">The type of the list.</typeparam>
         /// <param name="list">The list.</param>
         /// <param name="n">The order (e.g. smallest element (<c>n=0</c>), 2nd smallest element (<c>n=1</c>), 3rd smallest (<c>n=2</c>), ...).</param>
         /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
+        /// <exception cref="System.ArgumentException">List reference was null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">n was either negative or greater than or equal to the size of the list</exception>
         public int SelectRecursive<TList>([NotNull] TList list, int n)
             where TList : IList<TElement>
         {
+            if (ReferenceEquals(null, list)) throw new ArgumentException("List reference must not be null", "list");
+            if (n < 0 || n >= list.Count) throw new ArgumentOutOfRangeException("n", n, "n must be nonnegative and less than the size of the list");
+
             return SelectRecursive(list, 0, list.Count-1, n);
         }
 
         /// <summary>
-        /// Selects the (<paramref name="n" />+1)-th smallest element in the <paramref name="list"/>
-        /// between the <paramref name="leftIndex"/> and the <paramref name="rightIndex"/>.
+        /// Selects the (<paramref name="n" />+1)-th smallest element in the <paramref name="list" />
+        /// between the <paramref name="leftIndex" /> and the <paramref name="rightIndex" />.
         /// <para>
         /// As a side effect, returns a partially sorted list, where each element left of the element
         /// is smaller and each element right of it is greater or equal.
         /// </para>
         /// </summary>
+        /// <typeparam name="TList">The type of the list.</typeparam>
         /// <param name="list">The list.</param>
         /// <param name="leftIndex">Start index in the list.</param>
         /// <param name="rightIndex">End index in the list.</param>
@@ -165,23 +172,30 @@ namespace widemeadows.algorithms
         /// is smaller and each element right of it is greater or equal.
         /// </para>
         /// </summary>
+        /// <typeparam name="TList">The type of the list.</typeparam>
         /// <param name="list">The list.</param>
         /// <param name="n">The order (e.g. smallest element (<c>n=0</c>), 2nd smallest element (<c>n=1</c>), 3rd smallest (<c>n=2</c>), ...).</param>
         /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
+        /// <exception cref="System.ArgumentException">List reference was null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">n was either negative or greater than or equal to the size of the list</exception>
         public int Select<TList>([NotNull] TList list, int n)
             where TList : IList<TElement>
         {
+            if (ReferenceEquals(null, list)) throw new ArgumentException("List reference must not be null", "list");
+            if (n < 0 || n >= list.Count) throw new ArgumentOutOfRangeException("n", n, "n must be nonnegative and less than the size of the list");
+
             return Select(list, 0, list.Count - 1, n);
         }
 
         /// <summary>
-        /// Selects the (<paramref name="n" />+1)-th smallest element in the <paramref name="list"/>
-        /// between the <paramref name="leftIndex"/> and the <paramref name="rightIndex"/>.
+        /// Selects the (<paramref name="n" />+1)-th smallest element in the <paramref name="list" />
+        /// between the <paramref name="leftIndex" /> and the <paramref name="rightIndex" />.
         /// <para>
         /// As a side effect, returns a partially sorted list, where each element left of the element
         /// is smaller and each element right of it is greater or equal.
         /// </para>
         /// </summary>
+        /// <typeparam name="TList">The type of the list.</typeparam>
         /// <param name="list">The list.</param>
         /// <param name="leftIndex">Start index in the list.</param>
         /// <param name="rightIndex">End index in the list.</param>

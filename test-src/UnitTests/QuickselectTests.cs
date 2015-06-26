@@ -6,6 +6,9 @@ using NUnit.Framework;
 
 namespace widemeadows.algorithms.tests
 {
+    /// <summary>
+    /// Tests the <see cref="Quickselect{T}"/> algorithm.
+    /// </summary>
     [TestFixture]
     public class QuickselectTests
     {
