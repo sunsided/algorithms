@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickselect", "src\Quicksel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "test-src\UnitTests\UnitTests.csproj", "{D030A0A8-9BFE-41D0-ABB7-B49F97625AF7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algorithms", "Algorithms", "{081A00C4-A875-45A8-B599-A6B46EB1AF82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{605CD6DC-62BC-4EBD-9BF3-760DFCBD3E8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B25D9A26-C094-4740-90D2-00EEC452203A} = {081A00C4-A875-45A8-B599-A6B46EB1AF82}
+		{D030A0A8-9BFE-41D0-ABB7-B49F97625AF7} = {605CD6DC-62BC-4EBD-9BF3-760DFCBD3E8D}
 	EndGlobalSection
 EndGlobal
