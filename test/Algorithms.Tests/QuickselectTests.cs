@@ -49,9 +49,9 @@ namespace Widemeadows.Algorithms.Tests
 
             // act
             var smallestIndex = qs.SelectRecursive(list, 0);
-            smallestIndex.Should().Be(0, "because quickselect returns a partially ordered list left of the returned index which is smaller - and that list must be empty for the smallest element");
-
+            
             // assert
+            smallestIndex.Should().Be(0, "because quickselect returns a partially ordered list left of the returned index which is smaller - and that list must be empty for the smallest element");
             var smallestElement = list[smallestIndex];
             smallestElement.Should().Be(list.Min(), "because that is the smallest element");
         }
@@ -68,9 +68,9 @@ namespace Widemeadows.Algorithms.Tests
 
             // act
             var secondSmallestIndex = qs.SelectRecursive(list, 1);
-            secondSmallestIndex.Should().Be(1, "because quickselect returns a partially ordered list left of the returned index which is smaller - and there must only be one element to the left");
-
+            
             // assert
+            secondSmallestIndex.Should().Be(1, "because quickselect returns a partially ordered list left of the returned index which is smaller - and there must only be one element to the left");
             var secondSmallestElement = list[secondSmallestIndex];
             secondSmallestElement.Should().BeGreaterThan(list[0], "because the element left of the returned index should be smaller");
             secondSmallestElement.Should().BeLessOrEqualTo(list[2], "because the elements right of the returned index should be greater or equal");
@@ -90,9 +90,9 @@ namespace Widemeadows.Algorithms.Tests
 
             // act
             var index = qs.SelectRecursive(list, n);
-            index.Should().BeInRange(0, Length - 1, "because we expect the result to be a list index");
-
+            
             // assert
+            index.Should().BeInRange(0, Length - 1, "because we expect the result to be a list index");
             var element = list[index];
             list.Take(n).Should().OnlyContain(value => value < element, "because all elements left of the returned index should be smaller");
             list.Skip(n).Should().OnlyContain(value => value >= element, "because all elements right of the returned index should be greater or equal");
@@ -129,9 +129,9 @@ namespace Widemeadows.Algorithms.Tests
 
             // act
             var smallestIndex = qs.Select(list, 0);
-            smallestIndex.Should().Be(0, "because quickselect returns a partially ordered list left of the returned index which is smaller - and that list must be empty for the smallest element");
 
             // assert
+            smallestIndex.Should().Be(0, "because quickselect returns a partially ordered list left of the returned index which is smaller - and that list must be empty for the smallest element");
             var smallestElement = list[smallestIndex];
             smallestElement.Should().Be(list.Min(), "because that is the smallest element");
         }
@@ -148,9 +148,9 @@ namespace Widemeadows.Algorithms.Tests
 
             // act
             var secondSmallestIndex = qs.Select(list, 1);
-            secondSmallestIndex.Should().Be(1, "because quickselect returns a partially ordered list left of the returned index which is smaller - and there must only be one element to the left");
 
             // assert
+            secondSmallestIndex.Should().Be(1, "because quickselect returns a partially ordered list left of the returned index which is smaller - and there must only be one element to the left");
             var secondSmallestElement = list[secondSmallestIndex];
             secondSmallestElement.Should().BeGreaterThan(list[0], "because the element left of the returned index should be smaller");
             secondSmallestElement.Should().BeLessOrEqualTo(list[2], "because the elements right of the returned index should be greater or equal");
@@ -170,9 +170,9 @@ namespace Widemeadows.Algorithms.Tests
             
             // act
             var index = qs.Select(list, n);
-            index.Should().BeInRange(0, Length - 1, "because we expect the result to be a list index");
 
             // assert
+            index.Should().BeInRange(0, Length - 1, "because we expect the result to be a list index");
             var element = list[index];
             list.Take(n).Should().OnlyContain(value => value < element, "because all elements left of the returned index should be smaller");
             list.Skip(n).Should().OnlyContain(value => value >= element, "because all elements right of the returned index should be greater or equal");
@@ -190,9 +190,9 @@ namespace Widemeadows.Algorithms.Tests
 
             // act
             var smallestIndex = qs.Select(list, Length - 1);
-            smallestIndex.Should().Be(Length - 1, "because quickselect returns a partially ordered list right of the returned index which is greater or equal - and that list must be empty for the greatest element");
 
             // assert
+            smallestIndex.Should().Be(Length - 1, "because quickselect returns a partially ordered list right of the returned index which is greater or equal - and that list must be empty for the greatest element");
             var smallestElement = list[smallestIndex];
             smallestElement.Should().Be(list.Max(), "because that is the greatest element");
         }
