@@ -17,6 +17,9 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
+            <e p="net461" t="Include">
+              <e p="Algorithms.AssemblyInfo.cs" t="Include" />
+            </e>
             <e p="netstandard1.6" t="Include">
               <e p="Algorithms.AssemblyInfo.cs" t="Include" />
             </e>
