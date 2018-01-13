@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.Rider2017.3/system/resharper-host/local/Transient/ReSharperHost/v11/SolutionCaches/_Algorithms.-302344928.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.2.0/build/netcoreapp1.0/xunit.runner.reporters.netstandard15.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.2.0/build/netcoreapp1.0/xunit.runner.utility.netstandard15.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.2.0/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="Algorithms" t="Include" />
+      <e p="Algorithms.sln" t="IncludeFlat" />
+      <e p="Unit Tests" t="Include" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="src/Algorithms" t="IncludeRecursive">
+        <e p="Algorithms.csproj" t="IncludeRecursive" />
+        <e p="AssemblyInfo.cs" t="Include" />
+        <e p="Quickselect.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net461" t="Include">
+              <e p="Algorithms.AssemblyInfo.cs" t="Include" />
+            </e>
+            <e p="netstandard1.6" t="Include">
+              <e p="Algorithms.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="test/Algorithms.Tests" t="IncludeRecursive">
+        <e p="Algorithms.Tests.csproj" t="IncludeRecursive" />
+        <e p="QuickselectTests.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp1.1" t="Include">
+              <e p="Algorithms.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="Algorithms.Tests.Program.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+    </e>
+  </component>
+</project>
