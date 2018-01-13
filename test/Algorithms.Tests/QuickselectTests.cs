@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using NUnit.Framework;
+using JetBrains.Annotations;
+using Xunit;
 
-namespace widemeadows.algorithms.tests
+namespace Widemeadows.Algorithms.Tests
 {
     /// <summary>
-    /// Tests the <see cref="Quickselect{T}"/> algorithm.
+    /// Tests the <see cref="Quickselect{TElement}"/> algorithm.
     /// </summary>
-    [TestFixture]
     public class QuickselectTests
     {
         /// <summary>
@@ -20,13 +20,13 @@ namespace widemeadows.algorithms.tests
         /// <summary>
         /// The list to test against
         /// </summary>
-        private List<double> _list;
+        [NotNull]
+        private readonly List<double> _list;
 
         /// <summary>
-        /// Performs the test setup
+        /// Initializes an instance of the <see cref="QuickselectTests"/> class.
         /// </summary>
-        [SetUp]
-        public void Setup()
+        public QuickselectTests()
         {
             var random = new Random();
             var list = new List<double>(Length);
@@ -37,20 +37,21 @@ namespace widemeadows.algorithms.tests
             _list = list;
         }
 
-        #region Recursive Quickselect
-
         /// <summary>
         /// Tests that the quickselect algorithm indeed returns the smallest element
         /// </summary>
-        [Test]
+        [Fact]
         public void RecursiveQuickSelectFindsSmallestElement()
         {
+            // arrange
             var list = _list;
             var qs = new Quickselect<double>();
 
+            // act
             var smallestIndex = qs.SelectRecursive(list, 0);
             smallestIndex.Should().Be(0, "because quickselect returns a partially ordered list left of the returned index which is smaller - and that list must be empty for the smallest element");
 
+            // assert
             var smallestElement = list[smallestIndex];
             smallestElement.Should().Be(list.Min(), "because that is the smallest element");
         }
@@ -58,15 +59,18 @@ namespace widemeadows.algorithms.tests
         /// <summary>
         /// Tests that the quickselect algorithm indeed returns the second-smallest element
         /// </summary>
-        [Test]
+        [Fact]
         public void RecursiveQuickSelectFindsSecondSmallestElement()
         {
+            // arrange
             var list = _list;
             var qs = new Quickselect<double>();
 
+            // act
             var secondSmallestIndex = qs.SelectRecursive(list, 1);
             secondSmallestIndex.Should().Be(1, "because quickselect returns a partially ordered list left of the returned index which is smaller - and there must only be one element to the left");
 
+            // assert
             var secondSmallestElement = list[secondSmallestIndex];
             secondSmallestElement.Should().BeGreaterThan(list[0], "because the element left of the returned index should be smaller");
             secondSmallestElement.Should().BeLessOrEqualTo(list[2], "because the elements right of the returned index should be greater or equal");
@@ -76,16 +80,19 @@ namespace widemeadows.algorithms.tests
         /// <summary>
         /// Tests that the quickselect algorithm indeed returns the n-th smallest element
         /// </summary>
-        [Test]
+        [Fact]
         public void RecursiveQuickSelectFindsNthSmallestElement()
         {
+            // arrange
             var list = _list;
             var qs = new Quickselect<double>();
+            const int n = Length/2;
 
-            var n = Length/2;
+            // act
             var index = qs.SelectRecursive(list, n);
             index.Should().BeInRange(0, Length - 1, "because we expect the result to be a list index");
 
+            // assert
             var element = list[index];
             list.Take(n).Should().OnlyContain(value => value < element, "because all elements left of the returned index should be smaller");
             list.Skip(n).Should().OnlyContain(value => value >= element, "because all elements right of the returned index should be greater or equal");
@@ -94,35 +101,37 @@ namespace widemeadows.algorithms.tests
         /// <summary>
         /// Tests that the quickselect algorithm indeed returns the smallest element
         /// </summary>
-        [Test]
+        [Fact]
         public void RecursiveQuickSelectFindsGreatestElement()
         {
+            // arrange
             var list = _list;
             var qs = new Quickselect<double>();
 
+            // act
             var smallestIndex = qs.SelectRecursive(list, Length-1);
             smallestIndex.Should().Be(Length-1, "because quickselect returns a partially ordered list right of the returned index which is greater or equal - and that list must be empty for the greatest element");
 
+            // assert
             var smallestElement = list[smallestIndex];
             smallestElement.Should().Be(list.Max(), "because that is the greatest element");
         }
 
-        #endregion Recursive Quickselect
-
-        #region Nonrecursive Quickselect
-
         /// <summary>
         /// Tests that the quickselect algorithm indeed returns the smallest element
         /// </summary>
-        [Test]
+        [Fact]
         public void QuickSelectFindsSmallestElement()
         {
+            // arrange
             var list = _list;
             var qs = new Quickselect<double>();
 
+            // act
             var smallestIndex = qs.Select(list, 0);
             smallestIndex.Should().Be(0, "because quickselect returns a partially ordered list left of the returned index which is smaller - and that list must be empty for the smallest element");
 
+            // assert
             var smallestElement = list[smallestIndex];
             smallestElement.Should().Be(list.Min(), "because that is the smallest element");
         }
@@ -130,15 +139,18 @@ namespace widemeadows.algorithms.tests
         /// <summary>
         /// Tests that the quickselect algorithm indeed returns the second-smallest element
         /// </summary>
-        [Test]
+        [Fact]
         public void QuickSelectFindsSecondSmallestElement()
         {
+            // arrange
             var list = _list;
             var qs = new Quickselect<double>();
 
+            // act
             var secondSmallestIndex = qs.Select(list, 1);
             secondSmallestIndex.Should().Be(1, "because quickselect returns a partially ordered list left of the returned index which is smaller - and there must only be one element to the left");
 
+            // assert
             var secondSmallestElement = list[secondSmallestIndex];
             secondSmallestElement.Should().BeGreaterThan(list[0], "because the element left of the returned index should be smaller");
             secondSmallestElement.Should().BeLessOrEqualTo(list[2], "because the elements right of the returned index should be greater or equal");
@@ -148,16 +160,19 @@ namespace widemeadows.algorithms.tests
         /// <summary>
         /// Tests that the quickselect algorithm indeed returns the n-th smallest element
         /// </summary>
-        [Test]
+        [Fact]
         public void QuickSelectFindsNthSmallestElement()
         {
+            // arrange
             var list = _list;
             var qs = new Quickselect<double>();
-
-            var n = Length / 2;
+            const int n = Length / 2;
+            
+            // act
             var index = qs.Select(list, n);
             index.Should().BeInRange(0, Length - 1, "because we expect the result to be a list index");
 
+            // assert
             var element = list[index];
             list.Take(n).Should().OnlyContain(value => value < element, "because all elements left of the returned index should be smaller");
             list.Skip(n).Should().OnlyContain(value => value >= element, "because all elements right of the returned index should be greater or equal");
@@ -166,19 +181,20 @@ namespace widemeadows.algorithms.tests
         /// <summary>
         /// Tests that the quickselect algorithm indeed returns the smallest element
         /// </summary>
-        [Test]
+        [Fact]
         public void QuickSelectFindsGreatestElement()
         {
+            // arrange
             var list = _list;
             var qs = new Quickselect<double>();
 
+            // act
             var smallestIndex = qs.Select(list, Length - 1);
             smallestIndex.Should().Be(Length - 1, "because quickselect returns a partially ordered list right of the returned index which is greater or equal - and that list must be empty for the greatest element");
 
+            // assert
             var smallestElement = list[smallestIndex];
             smallestElement.Should().Be(list.Max(), "because that is the greatest element");
         }
-
-        #endregion Nonrecursive Quickselect
     }
 }
