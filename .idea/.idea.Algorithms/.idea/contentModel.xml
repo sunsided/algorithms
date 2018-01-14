@@ -13,7 +13,9 @@
       <e p="src/Algorithms" t="IncludeRecursive">
         <e p="Algorithms.csproj" t="IncludeRecursive" />
         <e p="AssemblyInfo.cs" t="Include" />
+        <e p="BinaryTree.cs" t="Include" />
         <e p="Quickselect.cs" t="Include" />
+        <e p="RedBlackTree.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -28,11 +30,12 @@
       </e>
       <e p="test/Algorithms.Tests" t="IncludeRecursive">
         <e p="Algorithms.Tests.csproj" t="IncludeRecursive" />
+        <e p="BinaryTreeTests.cs" t="Include" />
         <e p="QuickselectTests.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp1.1" t="Include">
+            <e p="netcoreapp2.0" t="Include">
               <e p="Algorithms.Tests.AssemblyInfo.cs" t="Include" />
               <e p="Algorithms.Tests.Program.cs" t="Include" />
             </e>
