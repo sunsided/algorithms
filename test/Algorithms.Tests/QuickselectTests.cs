@@ -49,7 +49,7 @@ namespace Widemeadows.Algorithms.Tests
 
             // act
             var smallestIndex = qs.SelectRecursive(list, 0);
-            
+
             // assert
             smallestIndex.Should().Be(0, "because quickselect returns a partially ordered list left of the returned index which is smaller - and that list must be empty for the smallest element");
             var smallestElement = list[smallestIndex];
@@ -68,7 +68,7 @@ namespace Widemeadows.Algorithms.Tests
 
             // act
             var secondSmallestIndex = qs.SelectRecursive(list, 1);
-            
+
             // assert
             secondSmallestIndex.Should().Be(1, "because quickselect returns a partially ordered list left of the returned index which is smaller - and there must only be one element to the left");
             var secondSmallestElement = list[secondSmallestIndex];
@@ -86,11 +86,11 @@ namespace Widemeadows.Algorithms.Tests
             // arrange
             var list = _list;
             var qs = new Quickselect<double>();
-            const int n = Length/2;
+            const int n = Length / 2;
 
             // act
             var index = qs.SelectRecursive(list, n);
-            
+
             // assert
             index.Should().BeInRange(0, Length - 1, "because we expect the result to be a list index");
             var element = list[index];
@@ -109,8 +109,8 @@ namespace Widemeadows.Algorithms.Tests
             var qs = new Quickselect<double>();
 
             // act
-            var smallestIndex = qs.SelectRecursive(list, Length-1);
-            smallestIndex.Should().Be(Length-1, "because quickselect returns a partially ordered list right of the returned index which is greater or equal - and that list must be empty for the greatest element");
+            var smallestIndex = qs.SelectRecursive(list, Length - 1);
+            smallestIndex.Should().Be(Length - 1, "because quickselect returns a partially ordered list right of the returned index which is greater or equal - and that list must be empty for the greatest element");
 
             // assert
             var smallestElement = list[smallestIndex];
@@ -167,7 +167,7 @@ namespace Widemeadows.Algorithms.Tests
             var list = _list;
             var qs = new Quickselect<double>();
             const int n = Length / 2;
-            
+
             // act
             var index = qs.Select(list, n);
 
