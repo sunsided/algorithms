@@ -22,6 +22,7 @@ SOFTWARE. */
 
 using System;
 // ReSharper disable InheritdocConsiderUsage
+#pragma warning disable CA1018
 
 #pragma warning disable 1591
 // ReSharper disable UnusedMember.Global
