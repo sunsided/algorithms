@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 
 namespace Widemeadows.Algorithms.Trees
@@ -22,16 +21,14 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
-        [SuppressMessage("ReSharper", "CA1822")]
-        public int GetSize() => GetSizeRecursive(_root);
+        public int GetSize() => GetSizeRecursively(_root);
 
         /// <summary>
         /// Calculates the height (or depth) of the tree.
         /// </summary>
         /// <param name="height">The height of the tree, or <c>-1</c> if the tree has no elements.</param>
         /// <returns><see langword="true"/> if the tree has a height; <see langword="false"/> otherwise.</returns>
-        [SuppressMessage("ReSharper", "CA1822")]
-        public bool TryGetHeight(out int height) => TryGetHeightRecursive(_root, out height);
+        public bool TryGetHeight(out int height) => TryGetHeightRecursively(_root, out height);
 
         /// <summary>
         /// Inserts a node into the tree.
@@ -77,21 +74,21 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
-        private int GetSizeRecursive([CanBeNull] TreeNode<T> node)
+        private int GetSizeRecursively([CanBeNull] TreeNode<T> node)
         {
             if (node == null)
             {
                 return 0;
             }
 
-            return 1 + GetSizeRecursive(node.LeftNode) + GetSizeRecursive(node.RightNode);
+            return 1 + GetSizeRecursively(node.LeftNode) + GetSizeRecursively(node.RightNode);
         }
 
         /// <summary>
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
-        private bool TryGetHeightRecursive([CanBeNull] TreeNode<T> node, out int height)
+        private bool TryGetHeightRecursively([CanBeNull] TreeNode<T> node, out int height)
         {
             if (node == null)
             {
@@ -105,8 +102,8 @@ namespace Widemeadows.Algorithms.Trees
 
             // If the node has at least one child, the tree's height is at least 1,
             // and each sub-tree's height is at least 0.
-            var hasChild = TryGetHeightRecursive(node.LeftNode, out var leftHeight) |
-                           TryGetHeightRecursive(node.RightNode, out var rightHeight);
+            var hasChild = TryGetHeightRecursively(node.LeftNode, out var leftHeight) |
+                           TryGetHeightRecursively(node.RightNode, out var rightHeight);
             if (hasChild)
             {
                 var maxHeight = Math.Max(leftHeight, rightHeight);
