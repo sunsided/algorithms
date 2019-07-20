@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 
 namespace Widemeadows.Algorithms.Trees
@@ -68,6 +69,93 @@ namespace Widemeadows.Algorithms.Trees
                     token = token.RightNode;
                 }
             }
+        }
+
+        /// <summary>
+        /// Traverses the tree's items in the specified traversal order.
+        /// </summary>
+        /// <param name="mode">The traversal order.</param>
+        /// <param name="action">The action to apply to each item.</param>
+        [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
+        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
+        public void Traverse(TraversalMode mode, [NotNull] Action<T> action)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            switch (mode)
+            {
+                case TraversalMode.Preorder:
+                {
+                    TraversePreorderRecursively(_root, action);
+                    break;
+                }
+
+                case TraversalMode.Inorder:
+                {
+                    TraverseInorderRecursively(_root, action);
+                    break;
+                }
+
+                case TraversalMode.Postorder:
+                {
+                    TraversePostorderRecursively(_root, action);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Traverses the tree's items in pre-order mode.
+        /// </summary>
+        /// <param name="node">The node to process.</param>
+        /// <param name="action">The action to apply to each node.</param>
+        private void TraversePreorderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            action(node.Value);
+            TraversePreorderRecursively(node.LeftNode, action);
+            TraversePreorderRecursively(node.RightNode, action);
+        }
+
+        /// <summary>
+        /// Traverses the tree's items in in-order mode.
+        /// </summary>
+        /// <param name="node">The node to process.</param>
+        /// <param name="action">The action to apply to each node.</param>
+        private void TraverseInorderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            TraverseInorderRecursively(node.LeftNode, action);
+            action(node.Value);
+            TraverseInorderRecursively(node.RightNode, action);
+        }
+
+        /// <summary>
+        /// Traverses the tree's items in post-order mode.
+        /// </summary>
+        /// <param name="node">The node to process.</param>
+        /// <param name="action">The action to apply to each node.</param>
+        private void TraversePostorderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            TraversePostorderRecursively(node.LeftNode, action);
+            TraversePostorderRecursively(node.RightNode, action);
+            action(node.Value);
         }
 
         /// <summary>

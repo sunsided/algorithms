@@ -96,5 +96,20 @@ namespace Widemeadows.Algorithms.Tests
             _tree.TryGetHeight(out var height).Should().BeTrue("because the tree has items");
             height.Should().BeInRange(0, count - 1, "because the height must be less than the size");
         }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeTraversalGenerator))]
+        public void TreeTraversalVisitsNodesInCorrectOrder([NotNull] IList<NumericalItem> items, TraversalMode mode, [NotNull] IList<NumericalItem> expectedItems)
+        {
+            foreach (var item in items)
+            {
+                _tree.Insert(item);
+            }
+
+            var traversedItems = new List<NumericalItem>();
+
+            _tree.Traverse(mode, item => traversedItems.Add(item));
+            traversedItems.Should().ContainInOrder(expectedItems, "because the nodes are expected to be traversed in this order");
+        }
     }
 }
