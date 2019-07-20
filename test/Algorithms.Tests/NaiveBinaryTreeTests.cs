@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Widemeadows.Algorithms.Tests.Data;
+using Widemeadows.Algorithms.Tests.Model;
 using Widemeadows.Algorithms.Trees;
 using Xunit;
 
@@ -56,40 +58,22 @@ namespace Widemeadows.Algorithms.Tests
         }
 
         [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(10)]
-        public void SizeOfLeftSkewedTreeIsNumberOfItems(int count)
+        [ClassData(typeof(NaiveBinaryTreeValueGenerator))]
+        public void SizeAndHeightIsCorrect([NotNull] IList<NumericalItem> items, int expectedSize, int expectedHeight)
         {
-            // Arrange left-skewed tree by generating monotonically decreasing item values.
-            for (var i = 0; i < count; ++i)
+            var hasItems = items.Count > 0;
+            foreach (var item in items)
             {
-                _tree.Insert(new NumericalItem(-i));
+                _tree.Insert(item);
             }
 
-            _tree.GetSize().Should().Be(count, "because we added {0} items", count);
+            _tree.GetSize().Should().Be(expectedSize, "because we added {0} items", items.Count);
+            _tree.TryGetHeight(out var height).Should().Be(hasItems, "because we added {0} items", items.Count);
+            height.Should().Be(expectedHeight, "because the tree was constructed that way");
         }
 
         [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(10)]
-        public void SizeOfRightSkewedTreeIsNumberOfItems(int count)
-        {
-            // Arrange right-skewed tree by generating monotonically decreasing item values.
-            for (var i = 0; i < count; ++i)
-            {
-                _tree.Insert(new NumericalItem(i));
-            }
-
-            _tree.GetSize().Should().Be(count, "because we added {0} items", count);
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(10)]
-        [InlineData(1000)]
+        [InlineData(10000)]
         public void SizeOfRandomlyBuiltTreeIsNumberOfItems(int count)
         {
             for (var i = 0; i < count; ++i)
@@ -101,46 +85,6 @@ namespace Widemeadows.Algorithms.Tests
         }
 
         [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(10)]
-        public void HeightOfLeftSkewedTreeIsNumberOfItemsMinusOne(int count)
-        {
-            // Arrange left-skewed tree by generating monotonically decreasing item values.
-            for (var i = 0; i < count; ++i)
-            {
-                _tree.Insert(new NumericalItem(-i));
-            }
-
-            _tree.GetSize().Should().Be(count, "because we added this many items");
-
-            _tree.TryGetHeight(out var height).Should().BeTrue("because the tree has items");
-            height.Should().Be(count - 1, "because the tree is skewed and the root is at depth 0");
-        }
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(10)]
-        public void HeightOfRightSkewedTreeIsNumberOfItemsMinusOne(int count)
-        {
-            // Arrange right-skewed tree by generating monotonically decreasing item values.
-            for (var i = 0; i < count; ++i)
-            {
-                _tree.Insert(new NumericalItem(i));
-            }
-
-            _tree.GetSize().Should().Be(count, "because we added this many items");
-
-            _tree.TryGetHeight(out var height).Should().BeTrue("because the tree has items");
-            height.Should().Be(count - 1, "because the tree is skewed and the root is at depth 0");
-        }
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(1000)]
         [InlineData(10000)]
         public void HeightOfRandomlyBuiltTreeIsAtMostNumberOfItemsMinusOne(int count)
         {
@@ -151,28 +95,6 @@ namespace Widemeadows.Algorithms.Tests
 
             _tree.TryGetHeight(out var height).Should().BeTrue("because the tree has items");
             height.Should().BeInRange(0, count - 1, "because the height must be less than the size");
-        }
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(10)]
-        [InlineData(1000)]
-        public void HeightOfSkewedTreeIsNumberOfItemsMinusOne(int count)
-        {
-            // Arrange generic skewed tree by generating monotonically decreasing item values.
-            for (var i = 0; i < count; ++i)
-            {
-                var item = i % 2 == 0
-                    ? int.MaxValue - i
-                    : int.MinValue + i;
-                _tree.Insert(new NumericalItem(item));
-            }
-
-            _tree.GetSize().Should().Be(count, "because we added this many items");
-
-            _tree.TryGetHeight(out var height).Should().BeTrue("because the tree has items");
-            height.Should().Be(count - 1, "because the tree is skewed and the root is at depth 0");
         }
     }
 }

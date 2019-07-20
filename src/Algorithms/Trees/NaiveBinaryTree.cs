@@ -104,7 +104,7 @@ namespace Widemeadows.Algorithms.Trees
             height = 0;
 
             // If the node has at least one child, the tree's height is at least 1,
-            // and each subtree's height is at least 0.
+            // and each sub-tree's height is at least 0.
             var hasChild = TryGetHeightRecursive(node.LeftNode, out var leftHeight) |
                            TryGetHeightRecursive(node.RightNode, out var rightHeight);
             if (hasChild)

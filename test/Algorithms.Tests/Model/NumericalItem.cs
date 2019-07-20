@@ -1,14 +1,15 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 
-namespace Widemeadows.Algorithms.Tests.Data
+namespace Widemeadows.Algorithms.Tests.Model
 {
     /// <summary>
     /// A test item.
     /// </summary>
     [DebuggerDisplay("NumericalItem({" + nameof(Value) + "})")]
     [DebuggerStepThrough]
-    internal readonly struct NumericalItem : IEquatable<NumericalItem>, IComparable<NumericalItem>
+    public readonly struct NumericalItem : IEquatable<NumericalItem>, IComparable<NumericalItem>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NumericalItem"/> struct.
@@ -26,27 +27,18 @@ namespace Widemeadows.Algorithms.Tests.Data
         public int Value { get; }
 
         /// <inheritdoc cref="IEquatable{T}.Equals(T)" />
-        public bool Equals(NumericalItem other)
-        {
-            return Value == other.Value;
-        }
+        public bool Equals(NumericalItem other) => Value == other.Value;
 
-        /// <inheritdoc cref="object.Equals(object)" />
-        public override bool Equals(object obj)
-        {
-            return obj is NumericalItem other && Equals(other);
-        }
+        /// <inheritdoc cref="ValueType.Equals(object)" />
+        public override bool Equals(object obj) => obj is NumericalItem other && Equals(other);
 
-        /// <inheritdoc cref="object.GetHashCode" />
-        public override int GetHashCode()
-        {
-            return Value;
-        }
+        /// <inheritdoc cref="ValueType.GetHashCode" />
+        public override int GetHashCode() => Value;
 
         /// <inheritdoc cref="IComparable{T}.CompareTo" />
-        public int CompareTo(NumericalItem other)
-        {
-            return Value.CompareTo(other.Value);
-        }
+        public int CompareTo(NumericalItem other) => Value.CompareTo(other.Value);
+
+        /// <inheritdoc cref="ValueType.ToString"/>
+        public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
     }
 }
