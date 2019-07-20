@@ -20,7 +20,7 @@ namespace Widemeadows.Algorithms
         /// <seealso cref="SelectPivotElement"/>
         [NotNull]
         private readonly Random _random = new Random();
-        
+
         /// <summary>
         /// The comparer
         /// </summary>
@@ -35,7 +35,7 @@ namespace Widemeadows.Algorithms
         {
             _comparer = comparer ?? Comparer<TElement>.Default;
         }
-        
+
         /// <summary>
         /// Selects the (<paramref name="n" />+1)-th smallest element in the <paramref name="list" />.
         /// <para>
@@ -55,7 +55,7 @@ namespace Widemeadows.Algorithms
             if (ReferenceEquals(null, list)) throw new ArgumentException("List reference must not be null", nameof(list));
             if (n < 0 || n >= list.Count) throw new ArgumentOutOfRangeException(nameof(n), n, "n must be nonnegative and less than the size of the list");
 
-            return SelectRecursive(list, 0, list.Count-1, n);
+            return SelectRecursive(list, 0, list.Count - 1, n);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Widemeadows.Algorithms
 
             return Select(list, 0, list.Count - 1, n);
         }
-        
+
         /// <summary>
         /// Selects the (<paramref name="n" />+1)-th smallest element in the <paramref name="list" />
         /// between the <paramref name="leftIndex" /> and the <paramref name="rightIndex" />.
@@ -169,7 +169,7 @@ namespace Widemeadows.Algorithms
                 leftIndex = pivotIndex + 1;
             }
         }
-        
+
         /// <summary>
         /// Selects a (random) pivot element between the <paramref name="leftIndex" /> and the <paramref name="rightIndex" />.
         /// </summary>
@@ -180,7 +180,7 @@ namespace Widemeadows.Algorithms
         {
             return _random.Next(leftIndex, rightIndex + 1);
         }
-        
+
         /// <summary>
         /// Swaps the <paramref name="list"/> element at the <paramref name="sourceIndex"/> with the element
         /// at the <paramref name="targetIndex"/>.
@@ -213,7 +213,7 @@ namespace Widemeadows.Algorithms
             where TList : IList<TElement>
         {
             Debug.Assert(pivotIndex >= 0 && pivotIndex < list.Count, "pivotIndex >= 0 && pivotIndex < list.Count");
-            Debug.Assert(leftIndex >= 0 && leftIndex < list.Count,   "leftIndex >= 0 && leftIndex < list.Count");
+            Debug.Assert(leftIndex >= 0 && leftIndex < list.Count, "leftIndex >= 0 && leftIndex < list.Count");
             Debug.Assert(rightIndex >= 0 && rightIndex < list.Count, "rightIndex >= 0 && rightIndex < list.Count");
 
             // prefetch instance variables
