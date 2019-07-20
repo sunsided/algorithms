@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algorithms", "Algorithms", "{081A00C4-A875-45A8-B599-A6B46EB1AF82}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{605CD6DC-62BC-4EBD-9BF3-760DFCBD3E8D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithms", "src\Algorithms\Algorithms.csproj", "{2587023C-779E-4DFF-A4BB-C500D12FF08C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithms.Tests", "test\Algorithms.Tests\Algorithms.Tests.csproj", "{F61DA604-E6D2-4A6C-8F21-4F7CFFE56248}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5ECE180E-33A3-427D-A4D8-212F17959FA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C0822C0C-D8C8-4EC5-8ADA-352F09EE310C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,7 +30,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{2587023C-779E-4DFF-A4BB-C500D12FF08C} = {081A00C4-A875-45A8-B599-A6B46EB1AF82}
-		{F61DA604-E6D2-4A6C-8F21-4F7CFFE56248} = {605CD6DC-62BC-4EBD-9BF3-760DFCBD3E8D}
+		{2587023C-779E-4DFF-A4BB-C500D12FF08C} = {5ECE180E-33A3-427D-A4D8-212F17959FA8}
+		{F61DA604-E6D2-4A6C-8F21-4F7CFFE56248} = {C0822C0C-D8C8-4EC5-8ADA-352F09EE310C}
 	EndGlobalSection
 EndGlobal
