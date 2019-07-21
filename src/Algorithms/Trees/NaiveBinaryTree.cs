@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
@@ -87,21 +88,27 @@ namespace Widemeadows.Algorithms.Trees
 
             switch (mode)
             {
-                case TraversalMode.Preorder:
+                case TraversalMode.PreOrder:
                 {
                     TraversePreorderRecursively(_root, action);
                     break;
                 }
 
-                case TraversalMode.Inorder:
+                case TraversalMode.InOrder:
                 {
                     TraverseInorderRecursively(_root, action);
                     break;
                 }
 
-                case TraversalMode.Postorder:
+                case TraversalMode.PostOrder: // "depth-first":
                 {
                     TraversePostorderRecursively(_root, action);
+                    break;
+                }
+
+                case TraversalMode.LevelOrder: // "breadth-first":
+                {
+                    TraverseLevelOrder(_root, action);
                     break;
                 }
             }
@@ -156,6 +163,39 @@ namespace Widemeadows.Algorithms.Trees
             TraversePostorderRecursively(node.LeftNode, action);
             TraversePostorderRecursively(node.RightNode, action);
             action(node.Value);
+        }
+
+        /// <summary>
+        /// Traverses the tree's items in post-order mode.
+        /// </summary>
+        /// <param name="node">The node to process.</param>
+        /// <param name="action">The action to apply to each node.</param>
+        private void TraverseLevelOrder([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            var expansionList = new Queue<TreeNode<T>>();
+            expansionList.Enqueue(node);
+
+            while (expansionList.Count > 0)
+            {
+                node = expansionList.Dequeue();
+
+                action(node.Value);
+
+                if (node.LeftNode != null)
+                {
+                    expansionList.Enqueue(node.LeftNode);
+                }
+
+                if (node.RightNode != null)
+                {
+                    expansionList.Enqueue(node.RightNode);
+                }
+            }
         }
 
         /// <summary>

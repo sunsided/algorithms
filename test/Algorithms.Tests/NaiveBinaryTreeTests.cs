@@ -111,5 +111,17 @@ namespace Widemeadows.Algorithms.Tests
             _tree.Traverse(mode, item => traversedItems.Add(item));
             traversedItems.Should().ContainInOrder(expectedItems, "because the nodes are expected to be traversed in this order");
         }
+
+        [Fact]
+        public void DepthFirstTraversalIsPostOrder()
+        {
+            TraversalMode.DepthFirst.Should().Be(TraversalMode.PostOrder, "because the traversal modes are identical");
+        }
+
+        [Fact]
+        public void BreadthFirstTraversalIsLevelOrder()
+        {
+            TraversalMode.BreadthFirst.Should().Be(TraversalMode.LevelOrder, "because the traversal modes are identical");
+        }
     }
 }

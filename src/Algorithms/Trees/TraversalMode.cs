@@ -8,16 +8,39 @@ namespace Widemeadows.Algorithms.Trees
         /// <summary>
         /// Traverses the tree items in pre-order (root-left-right) mode.
         /// </summary>
-        Preorder = 0,
+        PreOrder,
 
         /// <summary>
         /// Traverses the tree items in in-order (left-root-right) mode.
         /// </summary>
-        Inorder = 1,
+        InOrder,
 
         /// <summary>
         /// Traverses the tree items in post-order (left-right-root) mode.
         /// </summary>
-        Postorder = 2
+        /// <seealso cref="DepthFirst"/>
+        PostOrder,
+
+        /// <summary>
+        /// Traverses the tree items in level-order (row-wise) mode.
+        /// </summary>
+        /// <seealso cref="BreadthFirst"/>
+        LevelOrder,
+
+        /// <summary>
+        /// Traverses the tree items in depth-first (post-order) mode.
+        /// </summary>
+        /// <remarks>
+        /// This mode is identical to <see cref="PostOrder"/>.
+        /// </remarks>
+        DepthFirst = PostOrder,
+
+        /// <summary>
+        /// Traverses the tree items in breadth-first (level-order) mode.
+        /// </summary>
+        /// <remarks>
+        /// This mode is identical to <see cref="LevelOrder"/>.
+        /// </remarks>
+        BreadthFirst = LevelOrder,
     }
 }
