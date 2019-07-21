@@ -73,6 +73,36 @@ namespace Widemeadows.Algorithms.Trees
         }
 
         /// <summary>
+        /// Determines whether the tree contains the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns><see langword="true"/> if the tree contains the item; <see langword="false"/> otherwise.</returns>
+        public bool Contains([NotNull] in T item)
+        {
+            var token = _root;
+            while (token != null)
+            {
+                var result = item.CompareTo(token.Value);
+                if (result < 0)
+                {
+                    // descend left
+                    token = token.LeftNode;
+                }
+                else if (result > 0)
+                {
+                    // descend right
+                    token = token.RightNode;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Traverses the tree's items in the specified traversal order.
         /// </summary>
         /// <param name="mode">The traversal order.</param>
@@ -90,19 +120,19 @@ namespace Widemeadows.Algorithms.Trees
             {
                 case TraversalMode.PreOrder:
                 {
-                    TraversePreorderRecursively(_root, action);
+                    TraversePreOrderRecursively(_root, action);
                     break;
                 }
 
                 case TraversalMode.InOrder:
                 {
-                    TraverseInorderRecursively(_root, action);
+                    TraverseInOrderRecursively(_root, action);
                     break;
                 }
 
                 case TraversalMode.PostOrder: // "depth-first":
                 {
-                    TraversePostorderRecursively(_root, action);
+                    TraversePostOrderRecursively(_root, action);
                     break;
                 }
 
@@ -110,6 +140,11 @@ namespace Widemeadows.Algorithms.Trees
                 {
                     TraverseLevelOrder(_root, action);
                     break;
+                }
+
+                default:
+                {
+                    throw new ArgumentException($"Unhandled traversal mode: {mode}");
                 }
             }
         }
@@ -119,7 +154,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         /// <param name="action">The action to apply to each node.</param>
-        private void TraversePreorderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        private void TraversePreOrderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
         {
             if (node == null)
             {
@@ -127,8 +162,8 @@ namespace Widemeadows.Algorithms.Trees
             }
 
             action(node.Value);
-            TraversePreorderRecursively(node.LeftNode, action);
-            TraversePreorderRecursively(node.RightNode, action);
+            TraversePreOrderRecursively(node.LeftNode, action);
+            TraversePreOrderRecursively(node.RightNode, action);
         }
 
         /// <summary>
@@ -136,16 +171,16 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         /// <param name="action">The action to apply to each node.</param>
-        private void TraverseInorderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        private void TraverseInOrderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
         {
             if (node == null)
             {
                 return;
             }
 
-            TraverseInorderRecursively(node.LeftNode, action);
+            TraverseInOrderRecursively(node.LeftNode, action);
             action(node.Value);
-            TraverseInorderRecursively(node.RightNode, action);
+            TraverseInOrderRecursively(node.RightNode, action);
         }
 
         /// <summary>
@@ -153,15 +188,15 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         /// <param name="action">The action to apply to each node.</param>
-        private void TraversePostorderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        private void TraversePostOrderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
         {
             if (node == null)
             {
                 return;
             }
 
-            TraversePostorderRecursively(node.LeftNode, action);
-            TraversePostorderRecursively(node.RightNode, action);
+            TraversePostOrderRecursively(node.LeftNode, action);
+            TraversePostOrderRecursively(node.RightNode, action);
             action(node.Value);
         }
 
@@ -183,16 +218,17 @@ namespace Widemeadows.Algorithms.Trees
             while (expansionList.Count > 0)
             {
                 node = expansionList.Dequeue();
-
                 action(node.Value);
 
                 if (node.LeftNode != null)
                 {
+                    // expand left
                     expansionList.Enqueue(node.LeftNode);
                 }
 
                 if (node.RightNode != null)
                 {
+                    // expand right
                     expansionList.Enqueue(node.RightNode);
                 }
             }
@@ -209,7 +245,8 @@ namespace Widemeadows.Algorithms.Trees
                 return 0;
             }
 
-            return 1 + GetSizeRecursively(node.LeftNode) + GetSizeRecursively(node.RightNode);
+            return 1 + GetSizeRecursively(node.LeftNode)
+                     + GetSizeRecursively(node.RightNode);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Widemeadows.Algorithms.Tests.Data;
@@ -122,6 +123,51 @@ namespace Widemeadows.Algorithms.Tests
         public void BreadthFirstTraversalIsLevelOrder()
         {
             TraversalMode.BreadthFirst.Should().Be(TraversalMode.LevelOrder, "because the traversal modes are identical");
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1000)]
+        public void InsertedItemsCanBeFound(int count)
+        {
+            var items = new List<NumericalItem>(count);
+            for (var i = 0; i < count; ++i)
+            {
+                var item = RandomItem;
+                items.Add(item);
+                _tree.Insert(item);
+            }
+
+            var random = new Random();
+            foreach (var item in items.OrderBy(x => random.Next()))
+            {
+                _tree.Contains(item).Should().BeTrue("because the item was added before");
+            }
+        }
+
+        [Theory]
+        [InlineData(1, 10)]
+        [InlineData(1000, 10)]
+        public void NotInsertedItemsCantBeFound(int count, int queryCount)
+        {
+            var set = new HashSet<NumericalItem>(count);
+            for (var i = 0; i < count; ++i)
+            {
+                var item = RandomItem;
+                set.Add(item);
+                _tree.Insert(item);
+            }
+
+            for (var i = 0; i < queryCount; ++i)
+            {
+                NumericalItem query;
+                do
+                {
+                    query = RandomItem;
+                } while (set.Contains(query));
+
+                _tree.Contains(query).Should().BeFalse("because the item was never inserted");
+            }
         }
     }
 }
