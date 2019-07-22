@@ -30,9 +30,15 @@ namespace Widemeadows.Algorithms.Trees
         /// <summary>
         /// Calculates the height (or depth) of the tree.
         /// </summary>
-        /// <param name="height">The height of the tree, or <c>-1</c> if the tree has no elements.</param>
-        /// <returns><see langword="true"/> if the tree has a height; <see langword="false"/> otherwise.</returns>
-        public bool TryGetHeight(out int height) => TryGetHeightRecursively(_root, out height);
+        /// <returns>The height of the tree.</returns>
+        /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
+        public int GetHeight()
+        {
+            var root = GetRootOrThrowIfNoElements();
+            var hasHeight = TryGetHeightRecursively(root, out var height);
+            Debug.Assert(hasHeight, "hasHeight");
+            return height;
+        }
 
         /// <summary>
         /// Inserts a node into the tree.

@@ -38,8 +38,8 @@ namespace Widemeadows.Algorithms.Tests
         [Fact]
         public void EmptyTreeHasNoHeight()
         {
-            var hasHeight = _tree.TryGetHeight(out _);
-            hasHeight.Should().BeFalse("because the tree is empty");
+            Action action = () => _tree.GetHeight();
+            action.Should().ThrowExactly<InvalidOperationException>("because the tree is empty");
         }
 
         [Fact]
@@ -53,8 +53,7 @@ namespace Widemeadows.Algorithms.Tests
         public void HeightAfterInsertingOnceIsOne()
         {
             _tree.Insert(RandomItem);
-            var hasHeight = _tree.TryGetHeight(out var height);
-            hasHeight.Should().BeTrue("because the tree is nonempty");
+            var height = _tree.GetHeight();
             height.Should().Be(0, "because the tree has exactly one element");
         }
 
@@ -68,9 +67,19 @@ namespace Widemeadows.Algorithms.Tests
                 _tree.Insert(item);
             }
 
-            _tree.GetSize().Should().Be(expectedSize, "because we added {0} items", items.Count);
-            _tree.TryGetHeight(out var height).Should().Be(hasItems, "because we added {0} items", items.Count);
-            height.Should().Be(expectedHeight, "because the tree was constructed that way");
+            var size = _tree.GetSize();
+            size.Should().Be(expectedSize, "because we added {0} items", items.Count);
+
+            if (hasItems)
+            {
+                var height = _tree.GetHeight();
+                height.Should().Be(expectedHeight, "because the tree was constructed that way");
+            }
+            else
+            {
+                Action action = () => _tree.GetHeight();
+                action.Should().ThrowExactly<InvalidOperationException>("because the tree has no elements");
+            }
         }
 
         [Theory]
@@ -94,7 +103,7 @@ namespace Widemeadows.Algorithms.Tests
                 _tree.Insert(RandomItem);
             }
 
-            _tree.TryGetHeight(out var height).Should().BeTrue("because the tree has items");
+            var height = _tree.GetHeight();
             height.Should().BeInRange(0, count - 1, "because the height must be less than the size");
         }
 
