@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Widemeadows.Algorithms.Trees
@@ -19,7 +20,7 @@ namespace Widemeadows.Algorithms.Trees
         /// The root node.
         /// </summary>
         [CanBeNull]
-        private TreeNode<T> _root;
+        private BinaryTreeNode<T> _root;
 
         /// <summary>
         /// The height (or depth) of the tree, as a cached value.
@@ -43,9 +44,28 @@ namespace Widemeadows.Algorithms.Trees
         /// <summary>
         /// Calculates the number of items in the tree.
         /// </summary>
+        /// <remarks>
+        /// Note that there is no reason to actually dynamically calculate the size
+        /// if a storage field such as <see cref="Count"/> can be used.
+        /// This implementation is only here for reference purposes.
+        /// </remarks>
         /// <returns>The size of the tree.</returns>
-        /// <see cref="Count"/>
-        public int CalculateSize() => GetSizeRecursively(_root);
+        /// <seealso cref="Count"/>
+        /// <seealso cref="CalculateSizeRecursively"/>
+        public int CalculateSize() => TraversePreOrder(_root).Count();
+
+        /// <summary>
+        /// Recursively calculates the number of items in the tree.
+        /// </summary>
+        /// <remarks>
+        /// Note that there is no reason to actually dynamically calculate the size
+        /// if a storage field such as <see cref="Count"/> can be used.
+        /// This implementation is only here for reference purposes.
+        /// </remarks>
+        /// <returns>The size of the tree.</returns>
+        /// <seealso cref="Count"/>
+        /// <seealso cref="CalculateSize"/>
+        public int CalculateSizeRecursively() => GetSizeRecursively(_root);
 
         /// <summary>
         /// Calculates the height (or depth) of the tree.
@@ -77,7 +97,7 @@ namespace Widemeadows.Algorithms.Trees
 
             if (_root == null)
             {
-                _root = new TreeNode<T>(item);
+                _root = new BinaryTreeNode<T>(item);
                 _height = height;
                 return;
             }
@@ -92,7 +112,7 @@ namespace Widemeadows.Algorithms.Trees
                 {
                     if (token.LeftNode == null)
                     {
-                        token.LeftNode = new TreeNode<T>(item);
+                        token.LeftNode = new BinaryTreeNode<T>(item);
                         break;
                     }
 
@@ -103,7 +123,7 @@ namespace Widemeadows.Algorithms.Trees
                 {
                     if (token.RightNode == null)
                     {
-                        token.RightNode = new TreeNode<T>(item);
+                        token.RightNode = new BinaryTreeNode<T>(item);
                         break;
                     }
 
@@ -290,7 +310,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <param name="node">The node to process.</param>
         /// <seealso cref="TraversePreOrder"/>
         [NotNull]
-        private IEnumerable<T> TraversePreOrderRecursively([CanBeNull] TreeNode<T> node)
+        private IEnumerable<T> TraversePreOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -316,14 +336,14 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraversePreOrder([CanBeNull] TreeNode<T> node)
+        private IEnumerable<T> TraversePreOrder([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
                 yield break;
             }
 
-            var stack = new Stack<TreeNode<T>>();
+            var stack = new Stack<BinaryTreeNode<T>>();
             while (true)
             {
                 while (node != null)
@@ -357,14 +377,14 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraverseInOrder([CanBeNull] TreeNode<T> node)
+        private IEnumerable<T> TraverseInOrder([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
                 yield break;
             }
 
-            var stack = new Stack<TreeNode<T>>();
+            var stack = new Stack<BinaryTreeNode<T>>();
             while (true)
             {
                 while (node != null)
@@ -397,7 +417,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraverseInOrderRecursively([CanBeNull] TreeNode<T> node)
+        private IEnumerable<T> TraverseInOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -423,18 +443,18 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraversePostOrder([CanBeNull] TreeNode<T> node)
+        private IEnumerable<T> TraversePostOrder([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
                 yield break;
             }
 
-            var stack = new Stack<TreeNode<T>>();
+            var stack = new Stack<BinaryTreeNode<T>>();
 
             // We use a token variable to test whether we're ascending
             // from a child back to its parent.
-            TreeNode<T> previousNode = null;
+            BinaryTreeNode<T> previousNode = null;
 
             do
             {
@@ -490,7 +510,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraversePostOrderRecursively([CanBeNull] TreeNode<T> node)
+        private IEnumerable<T> TraversePostOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -515,14 +535,14 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraverseLevelOrder([CanBeNull] TreeNode<T> node)
+        private IEnumerable<T> TraverseLevelOrder([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
                 yield break;
             }
 
-            var expansionList = new Queue<TreeNode<T>>();
+            var expansionList = new Queue<BinaryTreeNode<T>>();
             expansionList.Enqueue(node);
 
             while (expansionList.Count > 0)
@@ -548,7 +568,7 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
-        private int GetSizeRecursively([CanBeNull] TreeNode<T> node)
+        private int GetSizeRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -563,7 +583,7 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
-        private bool TryGetHeightRecursively([CanBeNull] TreeNode<T> node, out int height)
+        private bool TryGetHeightRecursively([CanBeNull] BinaryTreeNode<T> node, out int height)
         {
             if (node == null)
             {

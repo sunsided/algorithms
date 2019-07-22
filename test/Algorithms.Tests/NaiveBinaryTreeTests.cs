@@ -33,6 +33,7 @@ namespace Widemeadows.Algorithms.Tests
         public void EmptyTreeIsSizeZero()
         {
             _tree.CalculateSize().Should().Be(0, "because the tree is empty");
+            _tree.CalculateSizeRecursively().Should().Be(0, "because the tree is empty");
             _tree.Count.Should().Be(0, "because the tree is empty");
         }
 
@@ -48,6 +49,7 @@ namespace Widemeadows.Algorithms.Tests
         {
             _tree.Add(RandomItem);
             _tree.CalculateSize().Should().Be(1, "because the tree contains exactly one element");
+            _tree.CalculateSizeRecursively().Should().Be(1, "because the tree contains exactly one element");
             _tree.Count.Should().Be(1, "because the tree contains exactly one element");
         }
 
@@ -70,6 +72,7 @@ namespace Widemeadows.Algorithms.Tests
             }
 
             _tree.CalculateSize().Should().Be(expectedSize, "because we added {0} items", items.Count);
+            _tree.CalculateSizeRecursively().Should().Be(expectedSize, "because we added {0} items", items.Count);
             _tree.Count.Should().Be(expectedSize, "because we added {0} items", items.Count);
 
             if (hasItems)
@@ -101,6 +104,7 @@ namespace Widemeadows.Algorithms.Tests
             }
 
             _tree.CalculateSize().Should().Be(count, "because we added {0} items", count);
+            _tree.CalculateSizeRecursively().Should().Be(count, "because we added {0} items", count);
             _tree.Count.Should().Be(count, "because we added {0} items", count);
         }
 

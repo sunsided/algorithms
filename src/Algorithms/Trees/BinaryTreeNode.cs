@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using JetBrains.Annotations;
 
 namespace Widemeadows.Algorithms.Trees
@@ -6,13 +7,15 @@ namespace Widemeadows.Algorithms.Trees
     /// A tree node.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
-    internal sealed class TreeNode<T>
+    [DebuggerDisplay("BTN[{" + nameof(Value) + "}]")]
+    [DebuggerStepThrough]
+    internal sealed class BinaryTreeNode<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TreeNode{T}"/> class.
+        /// Initializes a new instance of the <see cref="BinaryTreeNode{T}"/> class.
         /// </summary>
         /// <param name="value">The value of the node.</param>
-        public TreeNode([NotNull] T value)
+        public BinaryTreeNode([NotNull] T value)
         {
             Value = value;
         }
@@ -29,13 +32,13 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// /// <value>The node.</value>
         [CanBeNull]
-        public TreeNode<T> LeftNode { get; set; }
+        public BinaryTreeNode<T> LeftNode { get; set; }
 
         /// <summary>
         /// Gets or sets the right node reference.
         /// </summary>
         /// /// <value>The node.</value>
         [CanBeNull]
-        public TreeNode<T> RightNode { get; set; }
+        public BinaryTreeNode<T> RightNode { get; set; }
     }
 }
