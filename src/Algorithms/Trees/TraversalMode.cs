@@ -1,19 +1,22 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Widemeadows.Algorithms.Trees
 {
     /// <summary>
     /// An enumeration defining tree traversal order.
     /// </summary>
+    [SuppressMessage("ReSharper", "CA1027", Justification = "Combination disallowed")]
     public enum TraversalMode
     {
+        /// <summary>
+        /// Traverses the tree items in in-order (left-root-right) mode.
+        /// </summary>
+        InOrder = 0,
+
         /// <summary>
         /// Traverses the tree items in pre-order (root-left-right) mode.
         /// </summary>
         PreOrder,
-
-        /// <summary>
-        /// Traverses the tree items in in-order (left-root-right) mode.
-        /// </summary>
-        InOrder,
 
         /// <summary>
         /// Traverses the tree items in post-order (left-right-root) mode.

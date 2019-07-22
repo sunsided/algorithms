@@ -110,7 +110,20 @@ namespace Widemeadows.Algorithms.Tests
             var traversedItems = _tree.Traverse(mode).ToList();
             traversedItems.Should().ContainInOrder(expectedItems, "because the nodes are expected to be traversed in this order");
         }
-        
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeTraversalGenerator))]
+        public void RecursiveTreeTraversalVisitsNodesInCorrectOrder([NotNull] IList<NumericalItem> items, TraversalMode mode, [NotNull] IList<NumericalItem> expectedItems)
+        {
+            foreach (var item in items)
+            {
+                _tree.Insert(item);
+            }
+
+            var traversedItems = _tree.TraverseRecursively(mode).ToList();
+            traversedItems.Should().ContainInOrder(expectedItems, "because the nodes are expected to be traversed in this order");
+        }
+
         [Theory]
         [InlineData(TraversalMode.PreOrder)]
         [InlineData(TraversalMode.InOrder)]
@@ -121,12 +134,33 @@ namespace Widemeadows.Algorithms.Tests
             var traversedItems = _tree.Traverse(mode).ToList();
             traversedItems.Should().BeEmpty("because no items were added to the list");
         }
-        
+
+        [Theory]
+        [InlineData(TraversalMode.PreOrder)]
+        [InlineData(TraversalMode.InOrder)]
+        [InlineData(TraversalMode.PostOrder)]
+        [InlineData(TraversalMode.LevelOrder)]
+        public void EmptyTreeDoesntTraverseAnyNodesRecursively(TraversalMode mode)
+        {
+            var traversedItems = _tree.TraverseRecursively(mode).ToList();
+            traversedItems.Should().BeEmpty("because no items were added to the list");
+        }
+
         [Theory]
         [InlineData(-1)]
+        [InlineData(4)]
         public void InvalidTraversalModeThrowsException(int mode)
         {
             Action action = () => _tree.Traverse((TraversalMode)mode);
+            action.Should().ThrowExactly<ArgumentOutOfRangeException>("because no items were added to the list");
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(4)]
+        public void InvalidRecursiveTraversalModeThrowsException(int mode)
+        {
+            Action action = () => _tree.TraverseRecursively((TraversalMode)mode);
             action.Should().ThrowExactly<ArgumentOutOfRangeException>("because no items were added to the list");
         }
 
@@ -185,6 +219,44 @@ namespace Widemeadows.Algorithms.Tests
 
                 _tree.Contains(query).Should().BeFalse("because the item was never inserted");
             }
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1000)]
+        public void InOrderTraversalIsInAscendingOrder(int count)
+        {
+            var items = new List<NumericalItem>(count);
+            for (var i = 0; i < count; ++i)
+            {
+                var item = RandomItem;
+                items.Add(item);
+                _tree.Insert(item);
+            }
+
+            items.Sort();
+
+            _tree.Traverse(TraversalMode.InOrder)
+                .Should()
+                .ContainInOrder(items, "because we expect in-order traversal to be in ascending order");
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1000)]
+        public void EnumeratingTreeIsSameAsInOrderTraversal(int count)
+        {
+            var items = new List<NumericalItem>(count);
+            for (var i = 0; i < count; ++i)
+            {
+                var item = RandomItem;
+                items.Add(item);
+                _tree.Insert(item);
+            }
+
+            items.Sort();
+
+            _tree.Should().ContainInOrder(items, "because we expect in-order traversal to be in ascending order");
         }
     }
 }
