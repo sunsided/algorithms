@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 
 namespace Widemeadows.Algorithms
@@ -94,27 +95,30 @@ namespace Widemeadows.Algorithms
         /// <param name="rightIndex">End index in the list.</param>
         /// <param name="n">The order (e.g. smallest element (<c>n=0</c>), 2nd smallest element (<c>n=1</c>), 3rd smallest (<c>n=2</c>), ...).</param>
         /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
+        /// <seealso cref="Select{TList}"/>
+        [SuppressMessage("ReSharper", "TailRecursiveCall", Justification = "Recursive on purpose")]
         private int SelectRecursive<TList>([NotNull] TList list, int leftIndex, int rightIndex, int n)
             where TList : IList<TElement>
         {
+            // NOTE: This method is tail recursive. For an unrolled version, see Select<T>().
             Debug.Assert(n >= 0 && n < list.Count, "pivotIndex >= 0 && pivotIndex < list.Count");
             Debug.Assert(leftIndex >= 0 && leftIndex < list.Count, "leftIndex >= 0 && leftIndex < list.Count");
             Debug.Assert(rightIndex >= 0 && rightIndex < list.Count, "rightIndex >= 0 && rightIndex < list.Count");
 
-            // when there only is one element, return it.
+            // When there only is one element, return it.
             if (leftIndex == rightIndex) return leftIndex;
 
-            // select a pivot index and partition the list
+            // Select a pivot index and partition the list
             var pivotIndex = SelectPivotElement(leftIndex, rightIndex);
             pivotIndex = Partition(list, leftIndex, rightIndex, pivotIndex);
 
-            // check if the pivot index is at the final position
+            // Check if the pivot index is at the final position
             if (pivotIndex == n)
             {
                 return pivotIndex;
             }
 
-            // check if the pivot index is greater than the final position and
+            // Check if the pivot index is greater than the final position and
             // recurse into the left half, otherwise the pivot is smaller or equal
             // so we recurse into the right half.
             return n < pivotIndex
