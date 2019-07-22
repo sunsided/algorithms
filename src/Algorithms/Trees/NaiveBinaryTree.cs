@@ -310,7 +310,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <param name="node">The node to process.</param>
         /// <seealso cref="TraversePreOrder"/>
         [NotNull]
-        private IEnumerable<T> TraversePreOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
+        private static IEnumerable<T> TraversePreOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -336,7 +336,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraversePreOrder([CanBeNull] BinaryTreeNode<T> node)
+        private static IEnumerable<T> TraversePreOrder([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -377,7 +377,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraverseInOrder([CanBeNull] BinaryTreeNode<T> node)
+        private static IEnumerable<T> TraverseInOrder([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -417,7 +417,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraverseInOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
+        private static IEnumerable<T> TraverseInOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -443,7 +443,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraversePostOrder([CanBeNull] BinaryTreeNode<T> node)
+        private static IEnumerable<T> TraversePostOrder([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -510,7 +510,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraversePostOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
+        private static IEnumerable<T> TraversePostOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -535,7 +535,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="node">The node to process.</param>
         [NotNull]
-        private IEnumerable<T> TraverseLevelOrder([CanBeNull] BinaryTreeNode<T> node)
+        private static IEnumerable<T> TraverseLevelOrder([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -568,7 +568,7 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
-        private int GetSizeRecursively([CanBeNull] BinaryTreeNode<T> node)
+        private static int GetSizeRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
             {
@@ -583,7 +583,7 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
-        private bool TryGetHeightRecursively([CanBeNull] BinaryTreeNode<T> node, out int height)
+        private static bool TryGetHeightRecursively([CanBeNull] BinaryTreeNode<T> node, out int height)
         {
             if (node == null)
             {
@@ -599,6 +599,8 @@ namespace Widemeadows.Algorithms.Trees
             // and each sub-tree's height is at least 0.
             var hasChild = TryGetHeightRecursively(node.LeftNode, out var leftHeight) |
                            TryGetHeightRecursively(node.RightNode, out var rightHeight);
+
+            // ReSharper disable once InvertIf
             if (hasChild)
             {
                 var maxHeight = Math.Max(leftHeight, rightHeight);
