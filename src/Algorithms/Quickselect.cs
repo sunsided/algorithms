@@ -52,7 +52,7 @@ namespace Widemeadows.Algorithms
         public int SelectRecursive<TList>([NotNull] TList list, int n)
             where TList : IList<TElement>
         {
-            if (ReferenceEquals(null, list)) throw new ArgumentException("List reference must not be null", nameof(list));
+            if (ReferenceEquals(null, list)) throw new ArgumentNullException(nameof(list), "List reference must not be null");
             if (n < 0 || n >= list.Count) throw new ArgumentOutOfRangeException(nameof(n), n, "n must be nonnegative and less than the size of the list");
 
             return SelectRecursive(list, 0, list.Count - 1, n);
@@ -74,7 +74,7 @@ namespace Widemeadows.Algorithms
         public int Select<TList>([NotNull] TList list, int n)
             where TList : IList<TElement>
         {
-            if (ReferenceEquals(null, list)) throw new ArgumentException("List reference must not be null", nameof(list));
+            if (ReferenceEquals(null, list)) throw new ArgumentNullException(nameof(list), "List reference must not be null");
             if (n < 0 || n >= list.Count) throw new ArgumentOutOfRangeException(nameof(n), n, "n must be nonnegative and less than the size of the list");
 
             return Select(list, 0, list.Count - 1, n);
@@ -176,10 +176,7 @@ namespace Widemeadows.Algorithms
         /// <param name="leftIndex">Start index in the list.</param>
         /// <param name="rightIndex">End index in the list.</param>
         /// <returns>The pivot index.</returns>
-        private int SelectPivotElement(int leftIndex, int rightIndex)
-        {
-            return _random.Next(leftIndex, rightIndex + 1);
-        }
+        private int SelectPivotElement(int leftIndex, int rightIndex) => _random.Next(leftIndex, rightIndex + 1);
 
         /// <summary>
         /// Swaps the <paramref name="list"/> element at the <paramref name="sourceIndex"/> with the element
