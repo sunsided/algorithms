@@ -32,29 +32,31 @@ namespace Widemeadows.Algorithms.Tests
         [Fact]
         public void EmptyTreeIsSizeZero()
         {
-            _tree.GetSize().Should().Be(0, "because the tree is empty");
+            _tree.CalculateSize().Should().Be(0, "because the tree is empty");
+            _tree.Count.Should().Be(0, "because the tree is empty");
         }
 
         [Fact]
         public void EmptyTreeHasNoHeight()
         {
-            Action action = () => _tree.GetHeight();
+            Action action = () => _tree.CalculateHeight();
             action.Should().ThrowExactly<InvalidOperationException>("because the tree is empty");
         }
 
         [Fact]
         public void SizeAfterInsertingOnceIsOne()
         {
-            _tree.Insert(RandomItem);
-            _tree.GetSize().Should().Be(1, "because the tree contains exactly one element");
+            _tree.Add(RandomItem);
+            _tree.CalculateSize().Should().Be(1, "because the tree contains exactly one element");
+            _tree.Count.Should().Be(1, "because the tree contains exactly one element");
         }
 
         [Fact]
         public void HeightAfterInsertingOnceIsOne()
         {
-            _tree.Insert(RandomItem);
-            var height = _tree.GetHeight();
-            height.Should().Be(0, "because the tree has exactly one element");
+            _tree.Add(RandomItem);
+            _tree.CalculateHeight().Should().Be(0, "because the tree has exactly one element");
+            _tree.Height.Should().Be(0, "because the tree has exactly one element");
         }
 
         [Theory]
@@ -64,20 +66,27 @@ namespace Widemeadows.Algorithms.Tests
             var hasItems = items.Count > 0;
             foreach (var item in items)
             {
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
-            var size = _tree.GetSize();
-            size.Should().Be(expectedSize, "because we added {0} items", items.Count);
+            _tree.CalculateSize().Should().Be(expectedSize, "because we added {0} items", items.Count);
+            _tree.Count.Should().Be(expectedSize, "because we added {0} items", items.Count);
 
             if (hasItems)
             {
-                var height = _tree.GetHeight();
-                height.Should().Be(expectedHeight, "because the tree was constructed that way");
+                _tree.CalculateHeight().Should().Be(expectedHeight, "because the tree was constructed that way");
+                _tree.Height.Should().Be(expectedHeight, "because the tree was constructed that way");
             }
             else
             {
-                Action action = () => _tree.GetHeight();
+                Action action = () => _tree.CalculateHeight();
+                action.Should().ThrowExactly<InvalidOperationException>("because the tree has no elements");
+
+                action = () =>
+                {
+                    // ReSharper disable once UnusedVariable
+                    var value = _tree.Height;
+                };
                 action.Should().ThrowExactly<InvalidOperationException>("because the tree has no elements");
             }
         }
@@ -88,10 +97,11 @@ namespace Widemeadows.Algorithms.Tests
         {
             for (var i = 0; i < count; ++i)
             {
-                _tree.Insert(RandomItem);
+                _tree.Add(RandomItem);
             }
 
-            _tree.GetSize().Should().Be(count, "because we added {0} items", count);
+            _tree.CalculateSize().Should().Be(count, "because we added {0} items", count);
+            _tree.Count.Should().Be(count, "because we added {0} items", count);
         }
 
         [Theory]
@@ -100,11 +110,11 @@ namespace Widemeadows.Algorithms.Tests
         {
             for (var i = 0; i < count; ++i)
             {
-                _tree.Insert(RandomItem);
+                _tree.Add(RandomItem);
             }
 
-            var height = _tree.GetHeight();
-            height.Should().BeInRange(0, count - 1, "because the height must be less than the size");
+            _tree.CalculateHeight().Should().BeInRange(0, count - 1, "because the height must be less than the size");
+            _tree.Height.Should().BeInRange(0, count - 1, "because the height must be less than the size");
         }
 
         [Theory]
@@ -113,7 +123,7 @@ namespace Widemeadows.Algorithms.Tests
         {
             foreach (var item in items)
             {
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
             var traversedItems = _tree.Traverse(mode).ToList();
@@ -126,7 +136,7 @@ namespace Widemeadows.Algorithms.Tests
         {
             foreach (var item in items)
             {
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
             var traversedItems = _tree.TraverseRecursively(mode).ToList();
@@ -195,7 +205,7 @@ namespace Widemeadows.Algorithms.Tests
             {
                 var item = RandomItem;
                 items.Add(item);
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
             var random = new Random();
@@ -215,7 +225,7 @@ namespace Widemeadows.Algorithms.Tests
             {
                 var item = RandomItem;
                 set.Add(item);
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
             for (var i = 0; i < queryCount; ++i)
@@ -240,7 +250,7 @@ namespace Widemeadows.Algorithms.Tests
             {
                 var item = RandomItem;
                 items.Add(item);
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
             items.Sort();
@@ -260,12 +270,26 @@ namespace Widemeadows.Algorithms.Tests
             {
                 var item = RandomItem;
                 items.Add(item);
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
             items.Sort();
 
             _tree.Should().ContainInOrder(items, "because we expect in-order traversal to be in ascending order");
+        }
+
+        [Fact]
+        public void MinimumElementCantBeObtainedIfTreeIsEmpty()
+        {
+            Action action = () => _tree.GetSmallest();
+            action.Should().ThrowExactly<InvalidOperationException>("because the tree is empty");
+        }
+
+        [Fact]
+        public void MaximumElementCantBeObtainedIfTreeIsEmpty()
+        {
+            Action action = () => _tree.GetLargest();
+            action.Should().ThrowExactly<InvalidOperationException>("because the tree is empty");
         }
 
         [Theory]
@@ -278,7 +302,7 @@ namespace Widemeadows.Algorithms.Tests
             {
                 var item = RandomItem;
                 items.Add(item);
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
             items.Sort();
@@ -296,7 +320,7 @@ namespace Widemeadows.Algorithms.Tests
             {
                 var item = RandomItem;
                 items.Add(item);
-                _tree.Insert(item);
+                _tree.Add(item);
             }
 
             items.Sort();

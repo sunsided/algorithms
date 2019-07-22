@@ -12,7 +12,7 @@ namespace Widemeadows.Algorithms.Trees
     /// </summary>
     /// <typeparam name="T">The type of the item.</typeparam>
     [SuppressMessage("ReSharper", "CA1710", Justification = "Tree shouldn't be named collection")]
-    public sealed class NaiveBinaryTree<T> : IEnumerable<T>
+    public sealed class NaiveBinaryTree<T> : IReadOnlyCollection<T>
         where T : IComparable<T>
     {
         /// <summary>
@@ -22,19 +22,42 @@ namespace Widemeadows.Algorithms.Trees
         private TreeNode<T> _root;
 
         /// <summary>
+        /// The height (or depth) of the tree, as a cached value.
+        /// </summary>
+        private int? _height;
+
+        /// <summary>
+        /// Gets the number of items in the tree.
+        /// </summary>
+        /// <value>The number of items.</value>
+        /// <seealso cref="CalculateSize"/>
+        public int Count { get; private set; }
+
+        /// <summary>
+        /// Gets the height (or depth) of the tree.
+        /// </summary>
+        /// <value>The number of items.</value>
+        /// <seealso cref="CalculateHeight"/>
+        public int Height => _height ?? ThrowForNoElements();
+
+        /// <summary>
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
-        public int GetSize() => GetSizeRecursively(_root);
+        /// <see cref="Count"/>
+        public int CalculateSize() => GetSizeRecursively(_root);
 
         /// <summary>
         /// Calculates the height (or depth) of the tree.
         /// </summary>
         /// <returns>The height of the tree.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
-        public int GetHeight()
+        /// <seealso cref="Height"/>
+        public int CalculateHeight()
         {
-            var root = GetRootOrThrowIfNoElements();
+            var root = _root;
+            if (root == null) ThrowForNoElements();
+
             var hasHeight = TryGetHeightRecursively(root, out var height);
             Debug.Assert(hasHeight, "hasHeight");
             return height;
@@ -44,23 +67,33 @@ namespace Widemeadows.Algorithms.Trees
         /// Inserts a node into the tree.
         /// </summary>
         /// <param name="item">The item to add.</param>
-        public void Insert([NotNull] in T item)
+        public void Add([NotNull] in T item)
         {
+            // We simply track the number of items by incrementing the size counter.
+            ++Count;
+
+            // We initialize the new potential height to zero and increase it as we go.
+            var height = 0;
+
             if (_root == null)
             {
                 _root = new TreeNode<T>(item);
+                _height = height;
                 return;
             }
 
             var token = _root;
             while (true)
             {
+                // Increase the depth with every step we go deeper.
+                ++height;
+
                 if (item.CompareTo(token.Value) <= 0)
                 {
                     if (token.LeftNode == null)
                     {
                         token.LeftNode = new TreeNode<T>(item);
-                        return;
+                        break;
                     }
 
                     // descend left
@@ -71,13 +104,17 @@ namespace Widemeadows.Algorithms.Trees
                     if (token.RightNode == null)
                     {
                         token.RightNode = new TreeNode<T>(item);
-                        return;
+                        break;
                     }
 
                     // descend right
                     token = token.RightNode;
                 }
             }
+
+            // The new tree height is the maximum of the current tree
+            // height and the height of the newly inserted node.
+            _height = Math.Max(_height ?? 0, height);
         }
 
         /// <summary>
@@ -201,7 +238,9 @@ namespace Widemeadows.Algorithms.Trees
         [NotNull]
         public T GetSmallest()
         {
-            var token = GetRootOrThrowIfNoElements();
+            var token = _root;
+            if (token == null) ThrowForNoElements();
+
             while (token.LeftNode != null)
             {
                 token = token.LeftNode;
@@ -218,7 +257,9 @@ namespace Widemeadows.Algorithms.Trees
         [NotNull]
         public T GetLargest()
         {
-            var token = GetRootOrThrowIfNoElements();
+            var token = _root;
+            if (token == null) ThrowForNoElements();
+
             while (token.RightNode != null)
             {
                 token = token.RightNode;
@@ -233,17 +274,15 @@ namespace Widemeadows.Algorithms.Trees
         /// <summary>
         /// Throws an <see cref="InvalidOperationException"/> if the tree has no elements.
         /// </summary>
+        /// <remarks>
+        /// This method implements a small hack to work around a compiler issue where methods
+        /// won't get inlined if they contain a <see langword="throw"/> statement. By outsourcing
+        /// the <see langword="throw"/> into a separate method, the calling code is available for inlining.
+        /// </remarks>
+        /// <returns>Never returns, but return type is required to suppress compiler errors.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
-        [NotNull]
-        private TreeNode<T> GetRootOrThrowIfNoElements()
-        {
-            if (_root != null)
-            {
-                return _root;
-            }
-
-            throw new InvalidOperationException("The tree needs to have at least one item.");
-        }
+        [ContractAnnotation("=>halt")]
+        private static int ThrowForNoElements() => throw new InvalidOperationException("The tree needs to have at least one item.");
 
         /// <summary>
         /// Traverses the tree's items in pre-order mode.
