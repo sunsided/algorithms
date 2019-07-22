@@ -187,8 +187,57 @@ namespace Widemeadows.Algorithms.Trees
         /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
         public IEnumerator<T> GetEnumerator() => TraverseInOrder(_root).GetEnumerator();
 
+        /// <summary>
+        /// Returns the smallest element inserted to the tree.
+        /// </summary>
+        /// <returns>The smallest element.</returns>
+        /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
+        [NotNull]
+        public T GetSmallest()
+        {
+            var token = GetRootOrThrowIfNoElements();
+            while (token.LeftNode != null)
+            {
+                token = token.LeftNode;
+            }
+
+            return token.Value;
+        }
+
+        /// <summary>
+        /// Returns the largest element inserted to the tree.
+        /// </summary>
+        /// <returns>The largest element.</returns>
+        /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
+        [NotNull]
+        public T GetLargest()
+        {
+            var token = GetRootOrThrowIfNoElements();
+            while (token.RightNode != null)
+            {
+                token = token.RightNode;
+            }
+
+            return token.Value;
+        }
+
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Throws an <see cref="InvalidOperationException"/> if the tree has no elements.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
+        [NotNull]
+        private TreeNode<T> GetRootOrThrowIfNoElements()
+        {
+            if (_root != null)
+            {
+                return _root;
+            }
+
+            throw new InvalidOperationException("The tree needs to have at least one item.");
+        }
 
         /// <summary>
         /// Traverses the tree's items in pre-order mode.

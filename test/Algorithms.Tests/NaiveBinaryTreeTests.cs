@@ -258,5 +258,41 @@ namespace Widemeadows.Algorithms.Tests
 
             _tree.Should().ContainInOrder(items, "because we expect in-order traversal to be in ascending order");
         }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1000)]
+        public void MinimumElementIsSmallestFromSource(int count)
+        {
+            var items = new List<NumericalItem>(count);
+            for (var i = 0; i < count; ++i)
+            {
+                var item = RandomItem;
+                items.Add(item);
+                _tree.Insert(item);
+            }
+
+            items.Sort();
+
+            _tree.GetSmallest().Should().Be(items.First(), "because this is the smallest inserted item");
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1000)]
+        public void MaximumElementIsSmallestFromSource(int count)
+        {
+            var items = new List<NumericalItem>(count);
+            for (var i = 0; i < count; ++i)
+            {
+                var item = RandomItem;
+                items.Add(item);
+                _tree.Insert(item);
+            }
+
+            items.Sort();
+
+            _tree.GetLargest().Should().Be(items.Last(), "because this is the smallest inserted item");
+        }
     }
 }
