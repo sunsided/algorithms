@@ -106,45 +106,37 @@ namespace Widemeadows.Algorithms.Trees
         /// Traverses the tree's items in the specified traversal order.
         /// </summary>
         /// <param name="mode">The traversal order.</param>
-        /// <param name="action">The action to apply to each item.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
         [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
-        public void Traverse(TraversalMode mode, [NotNull] Action<T> action)
+        [NotNull]
+        public IEnumerable<T> Traverse(TraversalMode mode)
         {
-            if (action == null)
-            {
-                return;
-            }
-
             switch (mode)
             {
                 case TraversalMode.PreOrder:
                 {
-                    TraversePreOrderRecursively(_root, action);
-                    break;
+                    return TraversePreOrderRecursively(_root);
                 }
 
                 case TraversalMode.InOrder:
                 {
-                    TraverseInOrderRecursively(_root, action);
-                    break;
+                    return TraverseInOrderRecursively(_root);
                 }
 
                 case TraversalMode.PostOrder: // "depth-first":
                 {
-                    TraversePostOrderRecursively(_root, action);
-                    break;
+                    return TraversePostOrderRecursively(_root);
                 }
 
                 case TraversalMode.LevelOrder: // "breadth-first":
                 {
-                    TraverseLevelOrder(_root, action);
-                    break;
+                    return TraverseLevelOrder(_root);
                 }
 
                 default:
                 {
-                    throw new ArgumentException($"Unhandled traversal mode: {mode}");
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
                 }
             }
         }
@@ -153,63 +145,88 @@ namespace Widemeadows.Algorithms.Trees
         /// Traverses the tree's items in pre-order mode.
         /// </summary>
         /// <param name="node">The node to process.</param>
-        /// <param name="action">The action to apply to each node.</param>
-        private void TraversePreOrderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        [NotNull]
+        private IEnumerable<T> TraversePreOrderRecursively([CanBeNull] TreeNode<T> node)
         {
             if (node == null)
             {
-                return;
+                yield break;
             }
 
-            action(node.Value);
-            TraversePreOrderRecursively(node.LeftNode, action);
-            TraversePreOrderRecursively(node.RightNode, action);
+            yield return node.Value;
+            foreach (var item in TraversePreOrderRecursively(node.LeftNode))
+            {
+                yield return item;
+            }
+
+            // ReSharper disable once TailRecursiveCall
+            foreach (var item in TraversePreOrderRecursively(node.RightNode))
+            {
+                yield return item;
+            }
         }
 
         /// <summary>
         /// Traverses the tree's items in in-order mode.
         /// </summary>
         /// <param name="node">The node to process.</param>
-        /// <param name="action">The action to apply to each node.</param>
-        private void TraverseInOrderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        [NotNull]
+        private IEnumerable<T> TraverseInOrderRecursively([CanBeNull] TreeNode<T> node)
         {
             if (node == null)
             {
-                return;
+                yield break;
             }
 
-            TraverseInOrderRecursively(node.LeftNode, action);
-            action(node.Value);
-            TraverseInOrderRecursively(node.RightNode, action);
+            foreach (var item in TraverseInOrderRecursively(node.LeftNode))
+            {
+                yield return item;
+            }
+            
+            yield return node.Value;
+
+            // ReSharper disable once TailRecursiveCall
+            foreach (var item in TraverseInOrderRecursively(node.RightNode))
+            {
+                yield return item;
+            }
         }
 
         /// <summary>
         /// Traverses the tree's items in post-order mode.
         /// </summary>
         /// <param name="node">The node to process.</param>
-        /// <param name="action">The action to apply to each node.</param>
-        private void TraversePostOrderRecursively([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        [NotNull]
+        private IEnumerable<T> TraversePostOrderRecursively([CanBeNull] TreeNode<T> node)
         {
             if (node == null)
             {
-                return;
+                yield break;
             }
 
-            TraversePostOrderRecursively(node.LeftNode, action);
-            TraversePostOrderRecursively(node.RightNode, action);
-            action(node.Value);
+            foreach (var item in TraversePostOrderRecursively(node.LeftNode))
+            {
+                yield return item;
+            }
+
+            foreach (var item in TraversePostOrderRecursively(node.RightNode))
+            {
+                yield return item;
+            }
+
+            yield return node.Value;
         }
 
         /// <summary>
         /// Traverses the tree's items in post-order mode.
         /// </summary>
         /// <param name="node">The node to process.</param>
-        /// <param name="action">The action to apply to each node.</param>
-        private void TraverseLevelOrder([CanBeNull] TreeNode<T> node, [NotNull] Action<T> action)
+        [NotNull]
+        private IEnumerable<T> TraverseLevelOrder([CanBeNull] TreeNode<T> node)
         {
             if (node == null)
             {
-                return;
+                yield break;
             }
 
             var expansionList = new Queue<TreeNode<T>>();
@@ -218,7 +235,7 @@ namespace Widemeadows.Algorithms.Trees
             while (expansionList.Count > 0)
             {
                 node = expansionList.Dequeue();
-                action(node.Value);
+                yield return node.Value;
 
                 if (node.LeftNode != null)
                 {

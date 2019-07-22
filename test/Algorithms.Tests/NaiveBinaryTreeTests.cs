@@ -107,10 +107,27 @@ namespace Widemeadows.Algorithms.Tests
                 _tree.Insert(item);
             }
 
-            var traversedItems = new List<NumericalItem>();
-
-            _tree.Traverse(mode, item => traversedItems.Add(item));
+            var traversedItems = _tree.Traverse(mode).ToList();
             traversedItems.Should().ContainInOrder(expectedItems, "because the nodes are expected to be traversed in this order");
+        }
+        
+        [Theory]
+        [InlineData(TraversalMode.PreOrder)]
+        [InlineData(TraversalMode.InOrder)]
+        [InlineData(TraversalMode.PostOrder)]
+        [InlineData(TraversalMode.LevelOrder)]
+        public void EmptyTreeDoesntTraverseAnyNodes(TraversalMode mode)
+        {
+            var traversedItems = _tree.Traverse(mode).ToList();
+            traversedItems.Should().BeEmpty("because no items were added to the list");
+        }
+        
+        [Theory]
+        [InlineData(-1)]
+        public void InvalidTraversalModeThrowsException(int mode)
+        {
+            Action action = () => _tree.Traverse((TraversalMode)mode);
+            action.Should().ThrowExactly<ArgumentOutOfRangeException>("because no items were added to the list");
         }
 
         [Fact]
