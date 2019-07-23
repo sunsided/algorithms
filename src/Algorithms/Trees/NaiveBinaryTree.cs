@@ -333,6 +333,47 @@ namespace Widemeadows.Algorithms.Trees
             _count = 0;
         }
 
+        /// <summary>
+        /// Returns the deepest node of the tree.
+        /// </summary>
+        /// <returns>The deepest node.</returns>
+        /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
+        public T GetDeepestNode()
+        {
+            if (_root == null) ThrowForNoElements();
+
+            var maxDepth = 0;
+            var deepest = _root;
+
+            var stack = new Stack<(int height, BinaryTreeNode<T> node)>();
+            stack.Push((height: 0, node: _root));
+
+            while (stack.Count > 0)
+            {
+                var (nodeDepth, node) = stack.Pop();
+
+                if (node.LeftNode != null)
+                {
+                    stack.Push((height: nodeDepth + 1, node: node.LeftNode));
+                }
+
+                if (node.RightNode != null)
+                {
+                    stack.Push((height: nodeDepth + 1, node: node.RightNode));
+                }
+
+                // We now compare the current depth against the previously registered best depth.
+                // Note that if any of the above conditions were true, this node can't be the deepest one;
+                // however, to simplify the code, we ignore that check here.
+                if (nodeDepth <= maxDepth) continue;
+
+                maxDepth = nodeDepth;
+                deepest = node;
+            }
+
+            return deepest.Value;
+        }
+
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

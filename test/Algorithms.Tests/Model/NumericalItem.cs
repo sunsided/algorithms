@@ -40,5 +40,12 @@ namespace Widemeadows.Algorithms.Tests.Model
 
         /// <inheritdoc cref="ValueType.ToString"/>
         public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
+
+        /// <summary>
+        /// Implicitly converts an <see cref="int"/> to a <see cref="NumericalItem"/>.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The <see cref="NumericalItem"/> representing the <paramref name="value"/>.</returns>
+        public static implicit operator NumericalItem(int value) => new NumericalItem(value);
     }
 }

@@ -347,5 +347,25 @@ namespace Widemeadows.Algorithms.Tests
             _tree.Should().BeEmpty("because we cleared the tree");
             _tree.Count.Should().Be(0, "because an empty tree has no elements");
         }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeDeepestNodeGenerator))]
+        public void TreeGetDeepestNodeFindsDeepestNode([NotNull] IList<NumericalItem> items, NumericalItem expectedItem)
+        {
+            foreach (var item in items)
+            {
+                _tree.Add(item);
+            }
+
+            var deepestNode = _tree.GetDeepestNode();
+            deepestNode.Should().Be(expectedItem, "because that is the deepest node");
+        }
+
+        [Fact]
+        public void GetDeepestNodeOnEmptyTreeThrows()
+        {
+            Action action = () => _tree.GetDeepestNode();
+            action.Should().ThrowExactly<InvalidOperationException>("because the tree is empty");
+        }
     }
 }
