@@ -7,10 +7,10 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// <summary>
     /// Test case generator for <see cref="Widemeadows.Algorithms.Trees.NaiveBinaryTree{T}" /> tests.
     /// </summary>
-    public sealed class NaiveBinaryTreeDeepestNodeGenerator : IEnumerable<object[]>
+    public sealed class NaiveBinaryTreeDeepestNodeGenerator : TestCaseGeneratorBase
     {
-        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
-        public IEnumerator<object[]> GetEnumerator()
+        /// <inheritdoc cref="TestCaseGeneratorBase.GetEnumerator"/>
+        public override IEnumerator<object[]> GetEnumerator()
         {
             yield return BuildDefaultCase();
             yield return LeftSkewedTree();
@@ -18,9 +18,6 @@ namespace Widemeadows.Algorithms.Tests.Data
             yield return ShortLeftLongRight();
             yield return LongLeftShortRight();
         }
-
-        /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Returns the default test case.

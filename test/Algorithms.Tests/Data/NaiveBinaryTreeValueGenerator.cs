@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Widemeadows.Algorithms.Tests.Model;
@@ -8,10 +7,10 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// <summary>
     /// Test case generator for <see cref="Widemeadows.Algorithms.Trees.NaiveBinaryTree{T}" /> tests.
     /// </summary>
-    public sealed class NaiveBinaryTreeValueGenerator : IEnumerable<object[]>
+    public sealed class NaiveBinaryTreeValueGenerator : TestCaseGeneratorBase
     {
-        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
-        public IEnumerator<object[]> GetEnumerator()
+        /// <inheritdoc cref="TestCaseGeneratorBase.GetEnumerator"/>
+        public override IEnumerator<object[]> GetEnumerator()
         {
             // Tree without items.
             yield return new object[] { BuildMonotonicallySkewedTree(0, -1), 0, -1 };
@@ -41,9 +40,6 @@ namespace Widemeadows.Algorithms.Tests.Data
             yield return new object[] { BuildBalancedTreeItems(2), 7, 2 };
             yield return new object[] { BuildBalancedTreeItems(3), 15, 3 };
         }
-
-        /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Builds a list consisting of a single item.
@@ -101,22 +97,27 @@ namespace Widemeadows.Algorithms.Tests.Data
         /// <param name="depth">The depth of the tree.</param>
         /// <returns>The list of items.</returns>
         [NotNull]
-        private IList<NumericalItem> BuildBalancedTreeItems(int depth)
+        private IList<NumericalItem> BuildBalancedTreeItems(int depth) => Bisect(int.MinValue, int.MaxValue, depth);
+
+        /// <summary>
+        /// Builds a full binary tree by bisecting the available value range.
+        /// </summary>
+        /// <param name="min">The minimum value to consider.</param>
+        /// <param name="max">The maximum value to consider.</param>
+        /// <param name="remaining">The number of remaining levels to create.</param>
+        /// <returns>The list of nodes obtained by bisecting the left and right sub-trees.</returns>
+        [NotNull]
+        private static IList<NumericalItem> Bisect(int min, int max, int remaining)
         {
-            return Bisect(int.MinValue, int.MaxValue, depth);
-
-            IList<NumericalItem> Bisect(int min, int max, int remaining)
+            var pivot = (int)(((long)max + min) / 2);
+            var list = new List<NumericalItem> { new NumericalItem(pivot) };
+            if (remaining > 0)
             {
-                var pivot = (int)(((long)max + min) / 2);
-                var list = new List<NumericalItem> { new NumericalItem(pivot) };
-                if (remaining > 0)
-                {
-                    list.AddRange(Bisect(min, pivot - 1, remaining - 1));
-                    list.AddRange(Bisect(pivot + 1, max, remaining - 1));
-                }
-
-                return list;
+                list.AddRange(Bisect(min, pivot - 1, remaining - 1));
+                list.AddRange(Bisect(pivot + 1, max, remaining - 1));
             }
+
+            return list;
         }
     }
 }

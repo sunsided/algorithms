@@ -9,7 +9,7 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// <summary>
     /// Test case generator for <see cref="Widemeadows.Algorithms.Trees.NaiveBinaryTree{T}" /> tests.
     /// </summary>
-    public sealed class NaiveBinaryTreeTraversalGenerator : IEnumerable<object[]>
+    public sealed class NaiveBinaryTreeTraversalGenerator : TestCaseGeneratorBase
     {
         [NotNull]
         private readonly List<NumericalItem> _items;
@@ -68,8 +68,8 @@ namespace Widemeadows.Algorithms.Tests.Data
             };
         }
 
-        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
-        public IEnumerator<object[]> GetEnumerator()
+        /// <inheritdoc cref="TestCaseGeneratorBase.GetEnumerator"/>
+        public override IEnumerator<object[]> GetEnumerator()
         {
             yield return new object[]
             {
@@ -95,8 +95,5 @@ namespace Widemeadows.Algorithms.Tests.Data
                 new[] { _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k }
             };
         }
-
-        /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
