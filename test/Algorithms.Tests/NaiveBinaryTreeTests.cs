@@ -331,5 +331,21 @@ namespace Widemeadows.Algorithms.Tests
 
             _tree.GetLargest().Should().Be(items.Last(), "because this is the smallest inserted item");
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(1000)]
+        public void DeletingTheTreeRemovesAllItems(int count)
+        {
+            for (var i = 0; i < count; ++i)
+            {
+                _tree.Add(RandomItem);
+            }
+
+            _tree.Clear();
+            _tree.Should().BeEmpty("because we cleared the tree");
+            _tree.Count.Should().Be(0, "because an empty tree has no elements");
+        }
     }
 }

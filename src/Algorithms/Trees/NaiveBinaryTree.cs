@@ -28,11 +28,17 @@ namespace Widemeadows.Algorithms.Trees
         private int? _height;
 
         /// <summary>
+        /// The size of the tree.
+        /// </summary>
+        private int _count;
+
+        /// <summary>
         /// Gets the number of items in the tree.
         /// </summary>
         /// <value>The number of items.</value>
         /// <seealso cref="CalculateSize"/>
-        public int Count { get; private set; }
+        [SuppressMessage("ReSharper", "ConvertToAutoPropertyWithPrivateSetter", Justification = "Consistency with Height")]
+        public int Count => _count;
 
         /// <summary>
         /// Gets the height (or depth) of the tree.
@@ -90,7 +96,7 @@ namespace Widemeadows.Algorithms.Trees
         public void Add([NotNull] in T item)
         {
             // We simply track the number of items by incrementing the size counter.
-            ++Count;
+            ++_count;
 
             // We initialize the new potential height to zero and increase it as we go.
             var height = 0;
@@ -286,6 +292,45 @@ namespace Widemeadows.Algorithms.Trees
             }
 
             return token.Value;
+        }
+
+        /// <summary>
+        /// Removes all items from the tree.
+        /// </summary>
+        public void Clear()
+        {
+            if (_root == null)
+            {
+                Debug.Assert(_count == 0, "_count == 0");
+                Debug.Assert(_height == null || _height == 0, "_height == null || _height == 0");
+                return;
+            }
+
+            // In theory, we could set the root node to null and be done with it.
+            // However, this results in a big connected graph of nodes that the
+            // Garbage Collection has to deal with.
+            var stack = new Stack<BinaryTreeNode<T>>();
+            stack.Push(_root);
+
+            while (stack.Count > 0)
+            {
+                var node = stack.Pop();
+                if (node == null)
+                {
+                    continue;
+                }
+
+                stack.Push(node.LeftNode);
+                stack.Push(node.RightNode);
+
+                node.LeftNode = null;
+                node.RightNode = null;
+            }
+
+            // Reset counters and root
+            _root = null;
+            _height = null;
+            _count = 0;
         }
 
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
