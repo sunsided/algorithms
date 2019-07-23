@@ -253,6 +253,56 @@ namespace Widemeadows.Algorithms.Trees
             }
         }
 
+        /// <summary>
+        /// Traverses the tree's leaves in ascending order.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}"/> enumerating the leaves.</returns>
+        /// <seealso cref="TraversalMode.InOrder"/>
+        /// <seealso cref="Traverse"/>
+        [NotNull]
+        public IEnumerable<T> TraverseLeaves()
+        {
+            // This method uses recursion-free in-order traversal to
+            // find all the leaf nodes. See the appropriate traversal methods for more information.
+            var node = _root;
+            if (node == null)
+            {
+                yield break;
+            }
+
+            var stack = new Stack<BinaryTreeNode<T>>();
+            while (true)
+            {
+                while (node != null)
+                {
+                    // Push the current sub-tree's root to the stack.
+                    stack.Push(node);
+
+                    // Descend into left sub-tree.
+                    node = node.LeftNode;
+                }
+
+                if (stack.Count == 0)
+                {
+                    yield break;
+                }
+
+                // Restore and process the last sub-tree's root node.
+                // Note that we descended into the left arm first, so this
+                // is the last node's left sub-tree.
+                node = stack.Pop();
+
+                // Emit only if the node is a leaf.
+                if (node.LeftNode == null && node.RightNode == null)
+                {
+                    yield return node.Value;
+                }
+
+                // Descend into the right sub-tree.
+                node = node.RightNode;
+            }
+        }
+
         /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
         public IEnumerator<T> GetEnumerator() => TraverseInOrder(_root).GetEnumerator();
 

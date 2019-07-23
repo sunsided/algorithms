@@ -45,6 +45,13 @@ namespace Widemeadows.Algorithms.Tests
         }
 
         [Fact]
+        public void EmptyTreeHeightPropertyThrows()
+        {
+            Func<int> func = () => _tree.Height;
+            func.Should().ThrowExactly<InvalidOperationException>("because the tree is empty");
+        }
+
+        [Fact]
         public void SizeAfterInsertingOnceIsOne()
         {
             _tree.Add(RandomItem);
@@ -85,12 +92,8 @@ namespace Widemeadows.Algorithms.Tests
                 Action action = () => _tree.CalculateHeight();
                 action.Should().ThrowExactly<InvalidOperationException>("because the tree has no elements");
 
-                action = () =>
-                {
-                    // ReSharper disable once UnusedVariable
-                    var value = _tree.Height;
-                };
-                action.Should().ThrowExactly<InvalidOperationException>("because the tree has no elements");
+                Func<int> func = () => _tree.Height;
+                func.Should().ThrowExactly<InvalidOperationException>("because the tree has no elements");
             }
         }
 
@@ -366,6 +369,24 @@ namespace Widemeadows.Algorithms.Tests
         {
             Action action = () => _tree.GetDeepestNode();
             action.Should().ThrowExactly<InvalidOperationException>("because the tree is empty");
+        }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeLeafTraversalGenerator))]
+        public void EnumerateLeavesEnumeratesLeavesInAscendingOrder([NotNull] IList<NumericalItem> items, [NotNull] IList<NumericalItem> expectedItems)
+        {
+            foreach (var item in items)
+            {
+                _tree.Add(item);
+            }
+
+            _tree.TraverseLeaves().Should().ContainInOrder(expectedItems, "because these are the leaves of the tree");
+        }
+
+        [Fact]
+        public void EnumerateLeavesOnEmptyTreeEnumeratesNothing()
+        {
+            _tree.TraverseLeaves().Should().BeEmpty("because the tree is empty");
         }
     }
 }
