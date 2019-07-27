@@ -73,10 +73,7 @@ namespace Widemeadows.Algorithms.Tests
         public void SizeAndHeightIsCorrect([NotNull] IList<NumericalItem> items, int expectedSize, int expectedHeight)
         {
             var hasItems = items.Count > 0;
-            foreach (var item in items)
-            {
-                _tree.Add(item);
-            }
+            _tree.AddRange(items);
 
             _tree.CalculateSize().Should().Be(expectedSize, "because we added {0} items", items.Count);
             _tree.CalculateSizeRecursively().Should().Be(expectedSize, "because we added {0} items", items.Count);
@@ -101,11 +98,7 @@ namespace Widemeadows.Algorithms.Tests
         [InlineData(10000)]
         public void SizeOfRandomlyBuiltTreeIsNumberOfItems(int count)
         {
-            for (var i = 0; i < count; ++i)
-            {
-                _tree.Add(RandomItem);
-            }
-
+            _tree.AddRange(Enumerable.Range(0, count).Select(x => RandomItem));
             _tree.CalculateSize().Should().Be(count, "because we added {0} items", count);
             _tree.CalculateSizeRecursively().Should().Be(count, "because we added {0} items", count);
             _tree.Count.Should().Be(count, "because we added {0} items", count);
@@ -115,11 +108,7 @@ namespace Widemeadows.Algorithms.Tests
         [InlineData(10000)]
         public void HeightOfRandomlyBuiltTreeIsAtMostNumberOfItemsMinusOne(int count)
         {
-            for (var i = 0; i < count; ++i)
-            {
-                _tree.Add(RandomItem);
-            }
-
+            _tree.AddRange(Enumerable.Range(0, count).Select(x => RandomItem));
             _tree.CalculateHeight().Should().BeInRange(0, count - 1, "because the height must be less than the size");
             _tree.Height.Should().BeInRange(0, count - 1, "because the height must be less than the size");
         }
@@ -128,11 +117,7 @@ namespace Widemeadows.Algorithms.Tests
         [ClassData(typeof(NaiveBinaryTreeTraversalGenerator))]
         public void TreeTraversalVisitsNodesInCorrectOrder([NotNull] IList<NumericalItem> items, TraversalMode mode, [NotNull] IList<NumericalItem> expectedItems)
         {
-            foreach (var item in items)
-            {
-                _tree.Add(item);
-            }
-
+            _tree.AddRange(items);
             var traversedItems = _tree.Traverse(mode).ToList();
             traversedItems.Should().ContainInOrder(expectedItems, "because the nodes are expected to be traversed in this order");
         }
@@ -141,11 +126,7 @@ namespace Widemeadows.Algorithms.Tests
         [ClassData(typeof(NaiveBinaryTreeTraversalGenerator))]
         public void RecursiveTreeTraversalVisitsNodesInCorrectOrder([NotNull] IList<NumericalItem> items, TraversalMode mode, [NotNull] IList<NumericalItem> expectedItems)
         {
-            foreach (var item in items)
-            {
-                _tree.Add(item);
-            }
-
+            _tree.AddRange(items);
             var traversedItems = _tree.TraverseRecursively(mode).ToList();
             traversedItems.Should().ContainInOrder(expectedItems, "because the nodes are expected to be traversed in this order");
         }
@@ -341,11 +322,7 @@ namespace Widemeadows.Algorithms.Tests
         [InlineData(1000)]
         public void DeletingTheTreeRemovesAllItems(int count)
         {
-            for (var i = 0; i < count; ++i)
-            {
-                _tree.Add(RandomItem);
-            }
-
+            _tree.AddRange(Enumerable.Range(0, count).Select(x => RandomItem));
             _tree.Clear();
             _tree.Should().BeEmpty("because we cleared the tree");
             _tree.Count.Should().Be(0, "because an empty tree has no elements");
@@ -355,11 +332,7 @@ namespace Widemeadows.Algorithms.Tests
         [ClassData(typeof(NaiveBinaryTreeDeepestNodeGenerator))]
         public void TreeGetDeepestNodeFindsDeepestNode([NotNull] IList<NumericalItem> items, NumericalItem expectedItem)
         {
-            foreach (var item in items)
-            {
-                _tree.Add(item);
-            }
-
+            _tree.AddRange(items);
             var deepestNode = _tree.GetDeepestNode();
             deepestNode.Should().Be(expectedItem, "because that is the deepest node");
         }
@@ -375,11 +348,7 @@ namespace Widemeadows.Algorithms.Tests
         [ClassData(typeof(NaiveBinaryTreeLeafTraversalGenerator))]
         public void EnumerateLeavesEnumeratesLeavesInAscendingOrder([NotNull] IList<NumericalItem> items, [NotNull] IList<NumericalItem> expectedItems)
         {
-            foreach (var item in items)
-            {
-                _tree.Add(item);
-            }
-
+            _tree.AddRange(items);
             _tree.TraverseLeaves().Should().ContainInOrder(expectedItems, "because these are the leaves of the tree");
         }
 

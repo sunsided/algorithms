@@ -177,6 +177,19 @@ namespace Widemeadows.Algorithms.Trees
         }
 
         /// <summary>
+        /// Inserts a range of items.
+        /// </summary>
+        /// <param name="items">The items to insert</param>
+        public void AddRange([NotNull, ItemNotNull, InstantHandle] IEnumerable<T> items)
+        {
+            if (ReferenceEquals(items, null)) throw new ArgumentNullException(nameof(items));
+            foreach (var item in items)
+            {
+                Add(item);
+            }
+        }
+
+        /// <summary>
         /// Determines whether the tree contains the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
@@ -294,6 +307,7 @@ namespace Widemeadows.Algorithms.Trees
         }
 
         /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
+        [NotNull]
         public IEnumerator<T> GetEnumerator() => Traverse(TraversalMode.InOrder).GetEnumerator();
 
         /// <summary>
