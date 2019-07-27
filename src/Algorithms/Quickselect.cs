@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using JetBrains.Annotations;
+using Widemeadows.Algorithms.Properties;
 
 namespace Widemeadows.Algorithms
 {

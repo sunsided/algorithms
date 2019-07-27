@@ -21,6 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 using System;
+
 // ReSharper disable InheritdocConsiderUsage
 #pragma warning disable CA1018
 
@@ -33,7 +34,7 @@ using System;
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 
-namespace JetBrains.Annotations
+namespace Widemeadows.Algorithms.Properties
 {
   /// <summary>
   /// Indicates that the value of the marked element could be <c>null</c> sometimes,

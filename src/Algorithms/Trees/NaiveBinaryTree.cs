@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using JetBrains.Annotations;
+using Widemeadows.Algorithms.Properties;
+using Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree;
 
 namespace Widemeadows.Algorithms.Trees
 {
@@ -16,6 +17,32 @@ namespace Widemeadows.Algorithms.Trees
     public sealed class NaiveBinaryTree<T> : IReadOnlyCollection<T>
         where T : IComparable<T>
     {
+        /// <summary>
+        /// Lookup for non-recursive tree traversals by <see cref="TraversalMode"/> value.
+        /// </summary>
+        private static readonly Dictionary<TraversalMode, BinaryTreeTraversal<T>> Traversals =
+            new Dictionary<TraversalMode, BinaryTreeTraversal<T>>(4)
+            {
+                [TraversalMode.InOrder] = new InOrderBinaryTreeTraverser<T>(),
+                [TraversalMode.PostOrder] = new PostOrderBinaryTreeTraverser<T>(),
+                [TraversalMode.PreOrder] = new PreOrderBinaryTreeTraverser<T>(),
+                [TraversalMode.LevelOrder] = new LevelOrderBinaryTreeTraverser<T>(),
+            };
+
+        /// <summary>
+        /// Lookup for recursive tree traversals by <see cref="TraversalMode"/> value.
+        /// </summary>
+        private static readonly Dictionary<TraversalMode, BinaryTreeTraversal<T>> RecursiveTraversals =
+            new Dictionary<TraversalMode, BinaryTreeTraversal<T>>(4)
+            {
+                [TraversalMode.InOrder] = new RecursiveInOrderBinaryTreeTraverser<T>(),
+                [TraversalMode.PostOrder] = new RecursivePostOrderBinaryTreeTraverser<T>(),
+                [TraversalMode.PreOrder] = new RecursivePreOrderBinaryTreeTraverser<T>(),
+
+                // This method can't be implemented recursively.
+                [TraversalMode.LevelOrder] = new LevelOrderBinaryTreeTraverser<T>(),
+            };
+
         /// <summary>
         /// The root node.
         /// </summary>
@@ -58,7 +85,12 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns>The size of the tree.</returns>
         /// <seealso cref="Count"/>
         /// <seealso cref="CalculateSizeRecursively"/>
-        public int CalculateSize() => TraversePreOrder(_root).Count();
+        public int CalculateSize()
+        {
+            // Using non-recursive pre-order traversal here because
+            // it is the simplest non-recursive traversal operation.
+            return Traverse(TraversalMode.PreOrder).Count();
+        }
 
         /// <summary>
         /// Recursively calculates the number of items in the tree.
@@ -178,40 +210,17 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="mode">The traversal order.</param>
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
-        /// <seealso cref="Traverse"/>
         [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
         [NotNull]
-        public IEnumerable<T> TraverseRecursively(TraversalMode mode)
+        public IEnumerable<T> Traverse(TraversalMode mode)
         {
-            switch (mode)
+            if (Traversals.TryGetValue(mode, out var traversal))
             {
-                case TraversalMode.InOrder:
-                {
-                    return TraverseInOrderRecursively(_root);
-                }
-
-                case TraversalMode.PreOrder:
-                {
-                    return TraversePreOrderRecursively(_root);
-                }
-
-                case TraversalMode.PostOrder: // "depth-first":
-                {
-                    return TraversePostOrderRecursively(_root);
-                }
-
-                case TraversalMode.LevelOrder: // "breadth-first":
-                {
-                    // This method can't be implemented recursively.
-                    return TraverseLevelOrder(_root);
-                }
-
-                default:
-                {
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
-                }
+                return traversal.Traverse(_root);
             }
+
+            throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
         }
 
         /// <summary>
@@ -219,38 +228,18 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="mode">The traversal order.</param>
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
+        /// <seealso cref="Traverse"/>
         [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
         [NotNull]
-        public IEnumerable<T> Traverse(TraversalMode mode)
+        public IEnumerable<T> TraverseRecursively(TraversalMode mode)
         {
-            switch (mode)
+            if (RecursiveTraversals.TryGetValue(mode, out var traversal))
             {
-                case TraversalMode.InOrder:
-                {
-                    return TraverseInOrder(_root);
-                }
-
-                case TraversalMode.PreOrder:
-                {
-                    return TraversePreOrder(_root);
-                }
-
-                case TraversalMode.PostOrder: // "depth-first":
-                {
-                    return TraversePostOrder(_root);
-                }
-
-                case TraversalMode.LevelOrder: // "breadth-first":
-                {
-                    return TraverseLevelOrder(_root);
-                }
-
-                default:
-                {
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
-                }
+                return traversal.Traverse(_root);
             }
+
+            throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
         }
 
         /// <summary>
@@ -304,7 +293,7 @@ namespace Widemeadows.Algorithms.Trees
         }
 
         /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
-        public IEnumerator<T> GetEnumerator() => TraverseInOrder(_root).GetEnumerator();
+        public IEnumerator<T> GetEnumerator() => Traverse(TraversalMode.InOrder).GetEnumerator();
 
         /// <summary>
         /// Returns the smallest element inserted to the tree.
@@ -317,6 +306,7 @@ namespace Widemeadows.Algorithms.Trees
             var token = _root;
             if (token == null) ThrowForNoElements();
 
+            // ReSharper disable once PossibleNullReferenceException
             while (token.LeftNode != null)
             {
                 token = token.LeftNode;
@@ -336,6 +326,7 @@ namespace Widemeadows.Algorithms.Trees
             var token = _root;
             if (token == null) ThrowForNoElements();
 
+            // ReSharper disable once PossibleNullReferenceException
             while (token.RightNode != null)
             {
                 token = token.RightNode;
@@ -421,6 +412,7 @@ namespace Widemeadows.Algorithms.Trees
                 deepest = node;
             }
 
+            Debug.Assert(deepest != null, "deepest != null");
             return deepest.Value;
         }
 
@@ -439,266 +431,6 @@ namespace Widemeadows.Algorithms.Trees
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
         [ContractAnnotation("=>halt")]
         private static int ThrowForNoElements() => throw new InvalidOperationException("The tree needs to have at least one item.");
-
-        /// <summary>
-        /// Traverses the tree's items in pre-order mode.
-        /// </summary>
-        /// <param name="node">The node to process.</param>
-        /// <seealso cref="TraversePreOrder"/>
-        [NotNull]
-        private static IEnumerable<T> TraversePreOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
-        {
-            if (node == null)
-            {
-                yield break;
-            }
-
-            yield return node.Value;
-
-            foreach (var item in TraversePreOrderRecursively(node.LeftNode))
-            {
-                yield return item;
-            }
-
-            // ReSharper disable once TailRecursiveCall
-            foreach (var item in TraversePreOrderRecursively(node.RightNode))
-            {
-                yield return item;
-            }
-        }
-
-        /// <summary>
-        /// Traverses the tree's items in pre-order mode.
-        /// </summary>
-        /// <param name="node">The node to process.</param>
-        [NotNull]
-        private static IEnumerable<T> TraversePreOrder([CanBeNull] BinaryTreeNode<T> node)
-        {
-            if (node == null)
-            {
-                yield break;
-            }
-
-            var stack = new Stack<BinaryTreeNode<T>>();
-            while (true)
-            {
-                while (node != null)
-                {
-                    // Process the current sub-tree's root node first.
-                    yield return node.Value;
-
-                    // Push the current sub-tree's right sub-tree to the stack.
-                    if (node.RightNode != null)
-                    {
-                        stack.Push(node.RightNode);
-                    }
-
-                    // Descend into left sub-tree.
-                    node = node.LeftNode;
-                }
-
-                if (stack.Count == 0)
-                {
-                    yield break;
-                }
-
-                // Restore the last sub-tree's right node,
-                // thus descending into the right sub-tree.
-                node = stack.Pop();
-            }
-        }
-
-        /// <summary>
-        /// Traverses the tree's items in in-order mode.
-        /// </summary>
-        /// <param name="node">The node to process.</param>
-        [NotNull]
-        private static IEnumerable<T> TraverseInOrder([CanBeNull] BinaryTreeNode<T> node)
-        {
-            if (node == null)
-            {
-                yield break;
-            }
-
-            var stack = new Stack<BinaryTreeNode<T>>();
-            while (true)
-            {
-                while (node != null)
-                {
-                    // Push the current sub-tree's root to the stack.
-                    stack.Push(node);
-
-                    // Descend into left sub-tree.
-                    node = node.LeftNode;
-                }
-
-                if (stack.Count == 0)
-                {
-                    yield break;
-                }
-
-                // Restore and process the last sub-tree's root node.
-                // Note that we descended into the left arm first, so this
-                // is the last node's left sub-tree.
-                node = stack.Pop();
-                yield return node.Value;
-
-                // Descend into the right sub-tree.
-                node = node.RightNode;
-            }
-        }
-
-        /// <summary>
-        /// Traverses the tree's items in in-order mode.
-        /// </summary>
-        /// <param name="node">The node to process.</param>
-        [NotNull]
-        private static IEnumerable<T> TraverseInOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
-        {
-            if (node == null)
-            {
-                yield break;
-            }
-
-            foreach (var item in TraverseInOrderRecursively(node.LeftNode))
-            {
-                yield return item;
-            }
-
-            yield return node.Value;
-
-            // ReSharper disable once TailRecursiveCall
-            foreach (var item in TraverseInOrderRecursively(node.RightNode))
-            {
-                yield return item;
-            }
-        }
-
-        /// <summary>
-        /// Traverses the tree's items in post-order mode.
-        /// </summary>
-        /// <param name="node">The node to process.</param>
-        [NotNull]
-        private static IEnumerable<T> TraversePostOrder([CanBeNull] BinaryTreeNode<T> node)
-        {
-            if (node == null)
-            {
-                yield break;
-            }
-
-            var stack = new Stack<BinaryTreeNode<T>>();
-
-            // We use a token variable to test whether we're ascending
-            // from a child back to its parent.
-            BinaryTreeNode<T> previousNode = null;
-
-            do
-            {
-                while (node != null)
-                {
-                    // Push the current sub-tree's root to the stack.
-                    stack.Push(node);
-
-                    // Descend into left sub-tree.
-                    node = node.LeftNode;
-                }
-
-                // For post-order traversal, we are visiting each node twice,
-                // the first time for exploring both the left and right sub-tree,
-                // the second time for processing the node itself.
-                while (node == null && stack.Count > 0)
-                {
-                    // Since we exhausted the entire left sub-tree, we're now peeking
-                    // at a node with no left child.
-                    // Note that we don't pop the node from the stack since we may need
-                    // to revisit it later, should it have a right sub-tree.
-                    node = stack.Peek();
-
-                    // If the node has a right sub-tree - or if we're not ascending
-                    // from its right sub-tree - continue descent.
-                    if (node.RightNode != null && node.RightNode != previousNode)
-                    {
-                        // Descend into the right sub-tree.
-                        node = node.RightNode;
-                    }
-                    else
-                    {
-                        // Here, the node is either a leaf or we are ascending from its right sub-tree.
-                        // In either case, we can now process the node (the current sub-tree's root) itself.
-                        yield return node.Value;
-
-                        // Since we visited the node, we can discard it.
-                        stack.Pop();
-
-                        // Keep track of the current node to be able to
-                        // test whether we're ascending back to our parent.
-                        previousNode = node;
-
-                        // Indicate that there is no right sub-tree to explore.
-                        node = null;
-                    }
-                }
-            } while (stack.Count != 0);
-        }
-
-        /// <summary>
-        /// Traverses the tree's items in post-order mode.
-        /// </summary>
-        /// <param name="node">The node to process.</param>
-        [NotNull]
-        private static IEnumerable<T> TraversePostOrderRecursively([CanBeNull] BinaryTreeNode<T> node)
-        {
-            if (node == null)
-            {
-                yield break;
-            }
-
-            foreach (var item in TraversePostOrderRecursively(node.LeftNode))
-            {
-                yield return item;
-            }
-
-            foreach (var item in TraversePostOrderRecursively(node.RightNode))
-            {
-                yield return item;
-            }
-
-            yield return node.Value;
-        }
-
-        /// <summary>
-        /// Traverses the tree's items in post-order mode.
-        /// </summary>
-        /// <param name="node">The node to process.</param>
-        [NotNull]
-        private static IEnumerable<T> TraverseLevelOrder([CanBeNull] BinaryTreeNode<T> node)
-        {
-            if (node == null)
-            {
-                yield break;
-            }
-
-            var expansionList = new Queue<BinaryTreeNode<T>>();
-            expansionList.Enqueue(node);
-
-            while (expansionList.Count > 0)
-            {
-                node = expansionList.Dequeue();
-                yield return node.Value;
-
-                if (node.LeftNode != null)
-                {
-                    // expand left
-                    expansionList.Enqueue(node.LeftNode);
-                }
-
-                if (node.RightNode != null)
-                {
-                    // expand right
-                    expansionList.Enqueue(node.RightNode);
-                }
-            }
-        }
 
         /// <summary>
         /// Calculates the number of items in the tree.
