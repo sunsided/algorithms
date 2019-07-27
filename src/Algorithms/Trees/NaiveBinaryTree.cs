@@ -235,8 +235,6 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="mode">The traversal order.</param>
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
-        [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
         [NotNull, Pure]
         public IEnumerable<T> Traverse(TraversalMode mode) => TraverseNodes(_root, mode).Select(n => n.Value);
 
@@ -246,8 +244,6 @@ namespace Widemeadows.Algorithms.Trees
         /// <param name="mode">The traversal order.</param>
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
         /// <seealso cref="Traverse"/>
-        [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
         [NotNull, Pure]
         public IEnumerable<T> TraverseRecursively(TraversalMode mode)
         {
@@ -546,8 +542,6 @@ namespace Widemeadows.Algorithms.Trees
         /// <param name="node">The root node.</param>
         /// <param name="mode">The traversal order.</param>
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
-        [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
         [NotNull, Pure]
         private static IEnumerable<BinaryTreeNode<T>> TraverseNodes([CanBeNull] BinaryTreeNode<T> node, TraversalMode mode)
         {
