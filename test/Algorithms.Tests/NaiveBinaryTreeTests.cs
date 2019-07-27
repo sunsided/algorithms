@@ -357,5 +357,13 @@ namespace Widemeadows.Algorithms.Tests
         {
             _tree.TraverseLeaves().Should().BeEmpty("because the tree is empty");
         }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeLeafCountGenerator))]
+        public void NumberOfLeavesIsDeterminedCorrectly([NotNull] IList<NumericalItem> items, int expectedCount)
+        {
+            _tree.AddRange(items);
+            _tree.CalculateNumberOfLeaves().Should().Be(expectedCount, "because this is the number of leaves in the tree");
+        }
     }
 }

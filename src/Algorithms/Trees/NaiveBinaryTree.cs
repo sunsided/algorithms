@@ -228,15 +228,7 @@ namespace Widemeadows.Algorithms.Trees
         [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
         [NotNull]
-        public IEnumerable<T> Traverse(TraversalMode mode)
-        {
-            if (Traversals.TryGetValue(mode, out var traversal))
-            {
-                return traversal.TraverseNodes(_root).Select(n => n.Value);
-            }
-
-            throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
-        }
+        public IEnumerable<T> Traverse(TraversalMode mode) => TraverseNodes(mode).Select(n => n.Value);
 
         /// <summary>
         /// Traverses the tree's items in the specified traversal order.
@@ -430,8 +422,72 @@ namespace Widemeadows.Algorithms.Trees
             return deepest.Value;
         }
 
+        /// <summary>
+        /// Calculates the number of leaves of the tree by iterating it.
+        /// </summary>
+        /// <returns>The number of leaves of the tree.</returns>
+        public int CalculateNumberOfLeaves()
+        {
+            var count = 0;
+            var node = _root;
+            if (node == null)
+            {
+                return count;
+            }
+
+            var stack = new Stack<BinaryTreeNode<T>>();
+            while (true)
+            {
+                while (node != null)
+                {
+                    // Push the current sub-tree's root to the stack.
+                    stack.Push(node);
+
+                    // Descend into left sub-tree.
+                    node = node.LeftNode;
+                }
+
+                if (stack.Count == 0)
+                {
+                    break;
+                }
+
+                // Restore and process the last sub-tree's root node.
+                // Note that we descended into the left arm first, so this
+                // is the last node's left sub-tree.
+                node = stack.Pop();
+                if (node.LeftNode == null && node.RightNode == null)
+                {
+                    ++count;
+                }
+
+                // Descend into the right sub-tree.
+                node = node.RightNode;
+            }
+
+            return count;
+        }
+
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Traverses the tree's items in the specified traversal order.
+        /// </summary>
+        /// <param name="mode">The traversal order.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
+        [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
+        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
+        [NotNull]
+        private IEnumerable<BinaryTreeNode<T>> TraverseNodes(TraversalMode mode)
+        {
+            if (Traversals.TryGetValue(mode, out var traversal))
+            {
+                return traversal.TraverseNodes(_root);
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
+        }
 
         /// <summary>
         /// Throws an <see cref="InvalidOperationException"/> if the tree has no elements.
