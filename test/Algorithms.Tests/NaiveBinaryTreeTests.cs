@@ -365,5 +365,13 @@ namespace Widemeadows.Algorithms.Tests
             _tree.AddRange(items);
             _tree.CalculateNumberOfLeaves().Should().Be(expectedCount, "because this is the number of leaves in the tree");
         }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeFullNodeCountGenerator))]
+        public void NumberOfFullNodesIsDeterminedCorrectly([NotNull] IList<NumericalItem> items, int expectedCount)
+        {
+            _tree.AddRange(items);
+            _tree.CalculateNumberOfFullNodes().Should().Be(expectedCount, "because this is the number of full nodes in the tree");
+        }
     }
 }

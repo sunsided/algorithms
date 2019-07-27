@@ -426,47 +426,13 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of leaves of the tree by iterating it.
         /// </summary>
         /// <returns>The number of leaves of the tree.</returns>
-        public int CalculateNumberOfLeaves()
-        {
-            var count = 0;
-            var node = _root;
-            if (node == null)
-            {
-                return count;
-            }
+        public int CalculateNumberOfLeaves() => TraverseNodes(TraversalMode.InOrder).Count(n => n.IsLeaf);
 
-            var stack = new Stack<BinaryTreeNode<T>>();
-            while (true)
-            {
-                while (node != null)
-                {
-                    // Push the current sub-tree's root to the stack.
-                    stack.Push(node);
-
-                    // Descend into left sub-tree.
-                    node = node.LeftNode;
-                }
-
-                if (stack.Count == 0)
-                {
-                    break;
-                }
-
-                // Restore and process the last sub-tree's root node.
-                // Note that we descended into the left arm first, so this
-                // is the last node's left sub-tree.
-                node = stack.Pop();
-                if (node.LeftNode == null && node.RightNode == null)
-                {
-                    ++count;
-                }
-
-                // Descend into the right sub-tree.
-                node = node.RightNode;
-            }
-
-            return count;
-        }
+        /// <summary>
+        /// Calculates the number of full nodes of the tree by iterating it.
+        /// </summary>
+        /// <returns>The number of full nodes of the tree.</returns>
+        public int CalculateNumberOfFullNodes() => TraverseNodes(TraversalMode.InOrder).Count(n => n.IsFull);
 
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

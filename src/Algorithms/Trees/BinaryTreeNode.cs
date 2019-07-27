@@ -30,15 +30,33 @@ namespace Widemeadows.Algorithms.Trees
         /// <summary>
         /// Gets or sets the left node reference.
         /// </summary>
-        /// /// <value>The node.</value>
+        /// <value>The node.</value>
         [CanBeNull]
         public BinaryTreeNode<T> LeftNode { get; set; }
 
         /// <summary>
         /// Gets or sets the right node reference.
         /// </summary>
-        /// /// <value>The node.</value>
+        /// <value>The node.</value>
         [CanBeNull]
         public BinaryTreeNode<T> RightNode { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this node is a leaf node.
+        /// </summary>
+        /// <remarks>
+        /// A node is considered to be a leaf if it has no children.
+        /// </remarks>
+        /// <value><see langword="true"/> if this node is a leaf; <see langword="false"/> otherwise.</value>
+        public bool IsLeaf => LeftNode == null && RightNode == null;
+
+        /// <summary>
+        /// Gets a value indicating whether this node is a full node.
+        /// </summary>
+        /// <remarks>
+        /// A node is considered to be full if each branch or sub-tree is non-<see langword="null"/>.
+        /// </remarks>
+        /// <value><see langword="true"/> if this node is full; <see langword="false"/> otherwise.</value>
+        public bool IsFull => LeftNode != null && RightNode != null;
     }
 }
