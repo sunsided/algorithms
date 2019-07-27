@@ -87,6 +87,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns>The size of the tree.</returns>
         /// <seealso cref="Count"/>
         /// <seealso cref="CalculateSizeRecursively"/>
+        [Pure]
         public int CalculateSize()
         {
             // Using non-recursive pre-order traversal here because
@@ -105,6 +106,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns>The size of the tree.</returns>
         /// <seealso cref="Count"/>
         /// <seealso cref="CalculateSize"/>
+        [Pure]
         public int CalculateSizeRecursively() => GetSizeRecursively(_root);
 
         /// <summary>
@@ -113,6 +115,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns>The height of the tree.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
         /// <seealso cref="Height"/>
+        [Pure]
         public int CalculateHeight()
         {
             var root = ThrowForNoElements(_root);
@@ -201,6 +204,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns><see langword="true"/> if the tree contains the item; <see langword="false"/> otherwise.</returns>
+        [Pure]
         public bool Contains([NotNull] in T item)
         {
             var token = _root;
@@ -233,8 +237,8 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
         [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
-        [NotNull]
-        public IEnumerable<T> Traverse(TraversalMode mode) => TraverseNodes(mode).Select(n => n.Value);
+        [NotNull, Pure]
+        public IEnumerable<T> Traverse(TraversalMode mode) => TraverseNodes(_root, mode).Select(n => n.Value);
 
         /// <summary>
         /// Traverses the tree's items in the specified traversal order.
@@ -244,7 +248,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <seealso cref="Traverse"/>
         [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
         [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
-        [NotNull]
+        [NotNull, Pure]
         public IEnumerable<T> TraverseRecursively(TraversalMode mode)
         {
             if (RecursiveTraversals.TryGetValue(mode, out var traversal))
@@ -261,7 +265,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns>An <see cref="IEnumerable{T}"/> enumerating the leaves.</returns>
         /// <seealso cref="TraversalMode.InOrder"/>
         /// <seealso cref="Traverse"/>
-        [NotNull]
+        [NotNull, Pure]
         public IEnumerable<T> TraverseLeaves()
         {
             // This method uses recursion-free in-order traversal to
@@ -306,7 +310,7 @@ namespace Widemeadows.Algorithms.Trees
         }
 
         /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
-        [NotNull]
+        [NotNull, Pure]
         public IEnumerator<T> GetEnumerator() => Traverse(TraversalMode.InOrder).GetEnumerator();
 
         /// <summary>
@@ -314,7 +318,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <returns>The smallest element.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
-        [NotNull]
+        [NotNull, Pure]
         public T GetSmallest()
         {
             var token = ThrowForNoElements(_root);
@@ -334,7 +338,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <returns>The largest element.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
-        [NotNull]
+        [NotNull, Pure]
         public T GetLargest()
         {
             var token = ThrowForNoElements(_root);
@@ -393,6 +397,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <returns>The deepest node.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
+        [Pure]
         public T GetDeepestNode()
         {
             var maxDepth = 0;
@@ -432,40 +437,25 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of leaves of the tree by iterating it.
         /// </summary>
         /// <returns>The number of leaves of the tree.</returns>
-        public int CalculateNumberOfLeaves() => TraverseNodes(TraversalMode.InOrder).Count(n => n.IsLeaf);
+        [Pure]
+        public int CalculateNumberOfLeaves() => TraverseNodes(_root, TraversalMode.InOrder).Count(n => n.IsLeaf);
 
         /// <summary>
         /// Calculates the number of full nodes of the tree by iterating it.
         /// </summary>
         /// <returns>The number of full nodes of the tree.</returns>
-        public int CalculateNumberOfFullNodes() => TraverseNodes(TraversalMode.InOrder).Count(n => n.IsFull);
+        [Pure]
+        public int CalculateNumberOfFullNodes() => TraverseNodes(_root, TraversalMode.InOrder).Count(n => n.IsFull);
 
         /// <summary>
         /// Calculates the number of half nodes of the tree by iterating it.
         /// </summary>
         /// <returns>The number of half nodes of the tree.</returns>
-        public int CalculateNumberOfHalfNodes() => TraverseNodes(TraversalMode.InOrder).Count(n => n.IsHalf);
+        [Pure]
+        public int CalculateNumberOfHalfNodes() => TraverseNodes(_root, TraversalMode.InOrder).Count(n => n.IsHalf);
 
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        /// <summary>
-        /// Traverses the tree's items in the specified traversal order.
-        /// </summary>
-        /// <param name="mode">The traversal order.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
-        [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
-        [NotNull]
-        private IEnumerable<BinaryTreeNode<T>> TraverseNodes(TraversalMode mode)
-        {
-            if (Traversals.TryGetValue(mode, out var traversal))
-            {
-                return traversal.TraverseNodes(_root);
-            }
-
-            throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
-        }
 
         /// <summary>
         /// Throws an <see cref="InvalidOperationException"/> if the tree has no elements.
@@ -478,7 +468,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
         /// <seealso cref="ThrowForNoElements"/>
         [ContractAnnotation("value:null => halt; value:notnull => notnull")]
-        [NotNull]
+        [NotNull, Pure]
         private static TValue ThrowForNoElements<TValue>([CanBeNull] TValue value)
         {
             if (value != null) return value;
@@ -497,12 +487,14 @@ namespace Widemeadows.Algorithms.Trees
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
         /// <seealso cref="ThrowForNoElements{T}"/>
         [ContractAnnotation("=> halt")]
+        [Pure]
         private static int ThrowForNoElements() => throw new InvalidOperationException("The tree needs to have at least one item.");
 
         /// <summary>
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
+        [Pure]
         private static int GetSizeRecursively([CanBeNull] BinaryTreeNode<T> node)
         {
             if (node == null)
@@ -518,6 +510,7 @@ namespace Widemeadows.Algorithms.Trees
         /// Calculates the number of items in the tree.
         /// </summary>
         /// <returns>The size of the tree.</returns>
+        [Pure]
         private static bool TryGetHeightRecursively([CanBeNull] BinaryTreeNode<T> node, out int height)
         {
             if (node == null)
@@ -546,5 +539,25 @@ namespace Widemeadows.Algorithms.Trees
 
             return true;
         }
+
+        /// <summary>
+        /// Traverses the tree's items in the specified traversal order.
+        /// </summary>
+        /// <param name="node">The root node.</param>
+        /// <param name="mode">The traversal order.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
+        [SuppressMessage("ReSharper", "HeuristicUnreachableCode", Justification = "Null action gracefully exits")]
+        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "Null action gracefully exits")]
+        [NotNull, Pure]
+        private static IEnumerable<BinaryTreeNode<T>> TraverseNodes([CanBeNull] BinaryTreeNode<T> node, TraversalMode mode)
+        {
+            if (Traversals.TryGetValue(mode, out var traversal))
+            {
+                return traversal.TraverseNodes(node);
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
+        }
+
     }
 }
