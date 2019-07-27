@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Widemeadows.Algorithms.Tests.Model;
-using Widemeadows.Algorithms.Trees;
 
 namespace Widemeadows.Algorithms.Tests.Data
 {

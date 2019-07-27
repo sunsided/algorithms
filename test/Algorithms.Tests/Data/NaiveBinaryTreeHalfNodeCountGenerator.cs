@@ -7,15 +7,15 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// <summary>
     /// Test case generator for <see cref="Widemeadows.Algorithms.Trees.NaiveBinaryTree{T}" /> tests.
     /// </summary>
-    public sealed class NaiveBinaryTreeLeafCountGenerator : TestCaseGeneratorBase
+    public sealed class NaiveBinaryTreeHalfNodeCountGenerator : TestCaseGeneratorBase
     {
         [NotNull]
         private readonly List<NumericalItem> _items;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NaiveBinaryTreeLeafCountGenerator"/> class.
+        /// Initializes a new instance of the <see cref="NaiveBinaryTreeHalfNodeCountGenerator"/> class.
         /// </summary>
-        public NaiveBinaryTreeLeafCountGenerator()
+        public NaiveBinaryTreeHalfNodeCountGenerator()
         {
             //                 A
             //        B                  C
@@ -58,25 +58,25 @@ namespace Widemeadows.Algorithms.Tests.Data
         public override IEnumerator<object[]> GetEnumerator()
         {
             // Default tree.
-            yield return new object[] { _items, 5 };
+            yield return new object[] { _items, 2 };
 
             // Empty tree.
             yield return new object[] { new NumericalItem[0], 0 };
 
             // Single-element tree.
-            yield return new object[] {new NumericalItem[] {0}, 1};
+            yield return new object[] {new NumericalItem[] {0}, 0};
 
             // Right-skewed tree
-            yield return new object[] {new NumericalItem[] {0, 1, 2, 3, 4, 5, 6}, 1};
+            yield return new object[] {new NumericalItem[] {0, 1, 2, 3, 4, 5, 6}, 6};
 
             // Left-skewed tree
-            yield return new object[] {new NumericalItem[] {0, -1, -2, -3}, 1};
+            yield return new object[] {new NumericalItem[] {0, -1, -2, -3}, 3};
 
             // Tree with two arms
-            yield return new object[] {new NumericalItem[] {0, -1, -2, -3, 1, 2}, 2};
+            yield return new object[] {new NumericalItem[] {0, -1, -2, -3, 1, 2}, 3};
 
             // Complete tree.
-            yield return new object[] {new NumericalItem[] {0, -10, 10, -15, -5, 5, 15}, 4};
+            yield return new object[] {new NumericalItem[] {0, -10, 10, -15, -5, 5, 15}, 0};
         }
     }
 }

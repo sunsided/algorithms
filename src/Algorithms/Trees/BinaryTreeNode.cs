@@ -58,5 +58,14 @@ namespace Widemeadows.Algorithms.Trees
         /// </remarks>
         /// <value><see langword="true"/> if this node is full; <see langword="false"/> otherwise.</value>
         public bool IsFull => LeftNode != null && RightNode != null;
+
+        /// <summary>
+        /// Gets a value indicating whether this node is a half node.
+        /// </summary>
+        /// <remarks>
+        /// A binary tree node is considered to be half if exactly one branch or sub-tree is non-<see langword="null"/>.
+        /// </remarks>
+        /// <value><see langword="true"/> if this node is half; <see langword="false"/> otherwise.</value>
+        public bool IsHalf => !(IsLeaf || IsFull);
     }
 }

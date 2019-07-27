@@ -440,6 +440,12 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns>The number of full nodes of the tree.</returns>
         public int CalculateNumberOfFullNodes() => TraverseNodes(TraversalMode.InOrder).Count(n => n.IsFull);
 
+        /// <summary>
+        /// Calculates the number of half nodes of the tree by iterating it.
+        /// </summary>
+        /// <returns>The number of half nodes of the tree.</returns>
+        public int CalculateNumberOfHalfNodes() => TraverseNodes(TraversalMode.InOrder).Count(n => n.IsHalf);
+
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

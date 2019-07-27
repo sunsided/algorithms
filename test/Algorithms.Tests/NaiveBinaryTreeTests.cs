@@ -406,5 +406,28 @@ namespace Widemeadows.Algorithms.Tests
             _tree.AddRange(items);
             _tree.CalculateNumberOfFullNodes().Should().Be(expectedCount, "because this is the number of full nodes in the tree");
         }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeHalfNodeCountGenerator))]
+        public void NumberOfHalfNodesIsDeterminedCorrectly([NotNull] IList<NumericalItem> items, int expectedCount)
+        {
+            _tree.AddRange(items);
+            _tree.CalculateNumberOfHalfNodes().Should().Be(expectedCount, "because this is the number of half nodes in the tree");
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(1000)]
+        public void SumOfLeafHalfAndFullNodesIsNumberOfNodes(int count)
+        {
+            _tree.AddRange(Enumerable.Range(0, count).Select(x => RandomItem));
+
+            var sumOfNodes = _tree.CalculateNumberOfLeaves() +
+                             _tree.CalculateNumberOfHalfNodes() +
+                             _tree.CalculateNumberOfFullNodes();
+
+            sumOfNodes.Should().Be(_tree.Count, "because the sum of the node types should be equal to the count");
+        }
     }
 }
