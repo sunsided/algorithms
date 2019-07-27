@@ -7,11 +7,11 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     /// In-order tree traversal.
     /// </summary>
     /// <seealso cref="RecursiveInOrderBinaryTreeTraverser{TData}"/>
-    internal sealed class InOrderBinaryTreeTraverser<TData> : BinaryTreeTraversal<TData>
+    internal sealed class InOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
-        /// <inheritdoc cref="TreeTraversal{TNode,TData}.Traverse"/>
+        /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
-        public override IEnumerable<TData> Traverse(BinaryTreeNode<TData> node)
+        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData> node)
         {
             if (node == null)
             {
@@ -39,7 +39,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
                 // Note that we descended into the left arm first, so this
                 // is the last node's left sub-tree.
                 node = stack.Pop();
-                yield return node.Value;
+                yield return node;
 
                 // Descend into the right sub-tree.
                 node = node.RightNode;

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Widemeadows.Algorithms.Properties;
+using Widemeadows.Algorithms.Trees.TreeTraversals;
 using Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree;
 
 namespace Widemeadows.Algorithms.Trees
@@ -20,8 +21,8 @@ namespace Widemeadows.Algorithms.Trees
         /// <summary>
         /// Lookup for non-recursive tree traversals by <see cref="TraversalMode"/> value.
         /// </summary>
-        private static readonly Dictionary<TraversalMode, BinaryTreeTraversal<T>> Traversals =
-            new Dictionary<TraversalMode, BinaryTreeTraversal<T>>(4)
+        private static readonly Dictionary<TraversalMode, TreeTraversal<BinaryTreeNode<T>>> Traversals =
+            new Dictionary<TraversalMode, TreeTraversal<BinaryTreeNode<T>>>(4)
             {
                 [TraversalMode.InOrder] = new InOrderBinaryTreeTraverser<T>(),
                 [TraversalMode.PostOrder] = new PostOrderBinaryTreeTraverser<T>(),
@@ -32,8 +33,8 @@ namespace Widemeadows.Algorithms.Trees
         /// <summary>
         /// Lookup for recursive tree traversals by <see cref="TraversalMode"/> value.
         /// </summary>
-        private static readonly Dictionary<TraversalMode, BinaryTreeTraversal<T>> RecursiveTraversals =
-            new Dictionary<TraversalMode, BinaryTreeTraversal<T>>(4)
+        private static readonly Dictionary<TraversalMode, TreeTraversal<BinaryTreeNode<T>>> RecursiveTraversals =
+            new Dictionary<TraversalMode, TreeTraversal<BinaryTreeNode<T>>>(4)
             {
                 [TraversalMode.InOrder] = new RecursiveInOrderBinaryTreeTraverser<T>(),
                 [TraversalMode.PostOrder] = new RecursivePostOrderBinaryTreeTraverser<T>(),
@@ -231,7 +232,7 @@ namespace Widemeadows.Algorithms.Trees
         {
             if (Traversals.TryGetValue(mode, out var traversal))
             {
-                return traversal.Traverse(_root);
+                return traversal.TraverseNodes(_root).Select(n => n.Value);
             }
 
             throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
@@ -250,7 +251,7 @@ namespace Widemeadows.Algorithms.Trees
         {
             if (RecursiveTraversals.TryGetValue(mode, out var traversal))
             {
-                return traversal.Traverse(_root);
+                return traversal.TraverseNodes(_root).Select(n => n.Value);
             }
 
             throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");

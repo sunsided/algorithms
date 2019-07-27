@@ -7,11 +7,11 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     /// Post-order tree traversal.
     /// </summary>
     /// <seealso cref="RecursivePostOrderBinaryTreeTraverser{TData}"/>
-    internal sealed class PostOrderBinaryTreeTraverser<TData> : BinaryTreeTraversal<TData>
+    internal sealed class PostOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
-        /// <inheritdoc cref="TreeTraversal{TNode,TData}.Traverse"/>
+        /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
-        public override IEnumerable<TData> Traverse(BinaryTreeNode<TData> node)
+        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData> node)
         {
             if (node == null)
             {
@@ -57,7 +57,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
                     {
                         // Here, the node is either a leaf or we are ascending from its right sub-tree.
                         // In either case, we can now process the node (the current sub-tree's root) itself.
-                        yield return node.Value;
+                        yield return node;
 
                         // Since we visited the node, we can discard it.
                         stack.Pop();

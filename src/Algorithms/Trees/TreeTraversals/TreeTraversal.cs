@@ -7,9 +7,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals
     /// Base class for tree traversals.
     /// </summary>
     /// <typeparam name="TNode">The type of the nodes to traverse.</typeparam>
-    /// <typeparam name="TData">The type of the data to emit.</typeparam>
-    // ReSharper disable once CA1710
-    internal abstract class TreeTraversal<TNode, TData>
+    internal abstract class TreeTraversal<TNode>
     {
         /// <summary>
         /// Traverses the nodes starting from the specified root <paramref name="node"/>.
@@ -17,6 +15,6 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals
         /// <param name="node">The root node to start traversal from.</param>
         /// <returns>An enumerable of all traversed data items.</returns>
         [NotNull]
-        public abstract IEnumerable<TData> Traverse([CanBeNull] TNode node);
+        public abstract IEnumerable<TNode> TraverseNodes([CanBeNull] TNode node);
     }
 }

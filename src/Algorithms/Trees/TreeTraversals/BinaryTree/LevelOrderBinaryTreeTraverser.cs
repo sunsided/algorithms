@@ -9,11 +9,11 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     /// <remarks>
     /// Level-order traversal is also known as "breadth-first".
     /// </remarks>
-    internal sealed class LevelOrderBinaryTreeTraverser<TData> : BinaryTreeTraversal<TData>
+    internal sealed class LevelOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
-        /// <inheritdoc cref="TreeTraversal{TNode,TData}.Traverse"/>
+        /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
-        public override IEnumerable<TData> Traverse(BinaryTreeNode<TData> node)
+        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData> node)
         {
             if (node == null)
             {
@@ -26,7 +26,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
             while (expansionList.Count > 0)
             {
                 node = expansionList.Dequeue();
-                yield return node.Value;
+                yield return node;
 
                 if (node.LeftNode != null)
                 {

@@ -7,28 +7,28 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     /// Recursive post-order tree traversal.
     /// </summary>
     /// <seealso cref="PostOrderBinaryTreeTraverser{TData}"/>
-    internal sealed class RecursivePostOrderBinaryTreeTraverser<TData> : BinaryTreeTraversal<TData>
+    internal sealed class RecursivePostOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
-        /// <inheritdoc cref="TreeTraversal{TNode,TData}.Traverse"/>
+        /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
-        public override IEnumerable<TData> Traverse(BinaryTreeNode<TData> node)
+        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData> node)
         {
             if (node == null)
             {
                 yield break;
             }
 
-            foreach (var item in Traverse(node.LeftNode))
+            foreach (var item in TraverseNodes(node.LeftNode))
             {
                 yield return item;
             }
 
-            foreach (var item in Traverse(node.RightNode))
+            foreach (var item in TraverseNodes(node.RightNode))
             {
                 yield return item;
             }
 
-            yield return node.Value;
+            yield return node;
         }
     }
 }

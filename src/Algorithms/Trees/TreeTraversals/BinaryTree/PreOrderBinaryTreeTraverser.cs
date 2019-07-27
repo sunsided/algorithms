@@ -10,11 +10,11 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     /// Pre-order traversal is also known as "depth-first".
     /// </remarks>
     /// <seealso cref="RecursivePreOrderBinaryTreeTraverser{TData}"/>
-    internal sealed class PreOrderBinaryTreeTraverser<TData> : BinaryTreeTraversal<TData>
+    internal sealed class PreOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
-        /// <inheritdoc cref="TreeTraversal{TNode,TData}.Traverse"/>
+        /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
-        public override IEnumerable<TData> Traverse(BinaryTreeNode<TData> node)
+        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData> node)
         {
             if (node == null)
             {
@@ -27,7 +27,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
                 while (node != null)
                 {
                     // Process the current sub-tree's root node first.
-                    yield return node.Value;
+                    yield return node;
 
                     // Push the current sub-tree's right sub-tree to the stack.
                     if (node.RightNode != null)
