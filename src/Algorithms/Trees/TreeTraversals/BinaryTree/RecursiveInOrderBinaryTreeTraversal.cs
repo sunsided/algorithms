@@ -4,10 +4,10 @@ using System.Diagnostics.Contracts;
 namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
 {
     /// <summary>
-    /// Recursive pre-order tree traversal.
+    /// Recursive in-order tree traversal.
     /// </summary>
-    /// <seealso cref="PreOrderBinaryTreeTraverser{TData}"/>
-    internal sealed class RecursivePreOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
+    /// <seealso cref="InOrderBinaryTreeTraversal{TData}"/>
+    internal sealed class RecursiveInOrderBinaryTreeTraversal<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
         /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
@@ -18,12 +18,12 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
                 yield break;
             }
 
-            yield return node;
-
             foreach (var item in TraverseNodes(node.LeftNode))
             {
                 yield return item;
             }
+
+            yield return node;
 
             // ReSharper disable once TailRecursiveCall
             foreach (var item in TraverseNodes(node.RightNode))

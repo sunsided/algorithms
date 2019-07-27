@@ -24,10 +24,10 @@ namespace Widemeadows.Algorithms.Trees
         private static readonly Dictionary<TraversalMode, TreeTraversal<BinaryTreeNode<T>>> Traversals =
             new Dictionary<TraversalMode, TreeTraversal<BinaryTreeNode<T>>>(4)
             {
-                [TraversalMode.InOrder] = new InOrderBinaryTreeTraverser<T>(),
-                [TraversalMode.PostOrder] = new PostOrderBinaryTreeTraverser<T>(),
-                [TraversalMode.PreOrder] = new PreOrderBinaryTreeTraverser<T>(),
-                [TraversalMode.LevelOrder] = new LevelOrderBinaryTreeTraverser<T>(),
+                [TraversalMode.InOrder] = new InOrderBinaryTreeTraversal<T>(),
+                [TraversalMode.PostOrder] = new PostOrderBinaryTreeTraversal<T>(),
+                [TraversalMode.PreOrder] = new PreOrderBinaryTreeTraversal<T>(),
+                [TraversalMode.LevelOrder] = new LevelOrderBinaryTreeTraversal<T>(),
             };
 
         /// <summary>
@@ -36,12 +36,12 @@ namespace Widemeadows.Algorithms.Trees
         private static readonly Dictionary<TraversalMode, TreeTraversal<BinaryTreeNode<T>>> RecursiveTraversals =
             new Dictionary<TraversalMode, TreeTraversal<BinaryTreeNode<T>>>(4)
             {
-                [TraversalMode.InOrder] = new RecursiveInOrderBinaryTreeTraverser<T>(),
-                [TraversalMode.PostOrder] = new RecursivePostOrderBinaryTreeTraverser<T>(),
-                [TraversalMode.PreOrder] = new RecursivePreOrderBinaryTreeTraverser<T>(),
+                [TraversalMode.InOrder] = new RecursiveInOrderBinaryTreeTraversal<T>(),
+                [TraversalMode.PostOrder] = new RecursivePostOrderBinaryTreeTraversal<T>(),
+                [TraversalMode.PreOrder] = new RecursivePreOrderBinaryTreeTraversal<T>(),
 
                 // This method can't be implemented recursively.
-                [TraversalMode.LevelOrder] = new LevelOrderBinaryTreeTraverser<T>(),
+                [TraversalMode.LevelOrder] = new LevelOrderBinaryTreeTraversal<T>(),
             };
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     /// <remarks>
     /// Level-order traversal is also known as "breadth-first".
     /// </remarks>
-    internal sealed class LevelOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
+    internal sealed class LevelOrderBinaryTreeTraversal<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
         /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]

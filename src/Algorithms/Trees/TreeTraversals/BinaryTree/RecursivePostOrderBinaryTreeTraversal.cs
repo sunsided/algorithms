@@ -6,8 +6,8 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     /// <summary>
     /// Recursive post-order tree traversal.
     /// </summary>
-    /// <seealso cref="PostOrderBinaryTreeTraverser{TData}"/>
-    internal sealed class RecursivePostOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
+    /// <seealso cref="PostOrderBinaryTreeTraversal{TData}"/>
+    internal sealed class RecursivePostOrderBinaryTreeTraversal<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
         /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]

@@ -9,8 +9,8 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     /// <remarks>
     /// Pre-order traversal is also known as "depth-first".
     /// </remarks>
-    /// <seealso cref="RecursivePreOrderBinaryTreeTraverser{TData}"/>
-    internal sealed class PreOrderBinaryTreeTraverser<TData> : TreeTraversal<BinaryTreeNode<TData>>
+    /// <seealso cref="RecursivePreOrderBinaryTreeTraversal{TData}"/>
+    internal sealed class PreOrderBinaryTreeTraversal<TData> : TreeTraversal<BinaryTreeNode<TData>>
     {
         /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
