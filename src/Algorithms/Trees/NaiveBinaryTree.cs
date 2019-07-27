@@ -71,6 +71,7 @@ namespace Widemeadows.Algorithms.Trees
         /// Gets the height (or depth) of the tree.
         /// </summary>
         /// <value>The number of items.</value>
+        /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
         /// <seealso cref="CalculateHeight"/>
         public int Height => _height ?? ThrowForNoElements();
 
@@ -113,8 +114,8 @@ namespace Widemeadows.Algorithms.Trees
         /// <seealso cref="Height"/>
         public int CalculateHeight()
         {
-            var root = _root;
-            if (root == null) ThrowForNoElements();
+            var root = ThrowForNoElements(_root);
+            Debug.Assert(root != null, "root != null");
 
             var hasHeight = TryGetHeightRecursively(root, out var height);
             Debug.Assert(hasHeight, "hasHeight");
@@ -303,8 +304,8 @@ namespace Widemeadows.Algorithms.Trees
         [NotNull]
         public T GetSmallest()
         {
-            var token = _root;
-            if (token == null) ThrowForNoElements();
+            var token = ThrowForNoElements(_root);
+            Debug.Assert(token != null, "token != null");
 
             // ReSharper disable once PossibleNullReferenceException
             while (token.LeftNode != null)
@@ -323,8 +324,8 @@ namespace Widemeadows.Algorithms.Trees
         [NotNull]
         public T GetLargest()
         {
-            var token = _root;
-            if (token == null) ThrowForNoElements();
+            var token = ThrowForNoElements(_root);
+            Debug.Assert(token != null, "token != null");
 
             // ReSharper disable once PossibleNullReferenceException
             while (token.RightNode != null)
@@ -381,10 +382,9 @@ namespace Widemeadows.Algorithms.Trees
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
         public T GetDeepestNode()
         {
-            if (_root == null) ThrowForNoElements();
-
             var maxDepth = 0;
-            var deepest = _root;
+            var deepest = ThrowForNoElements(_root);
+            Debug.Assert(deepest != null, "deepest != null");
 
             var stack = new Stack<(int height, BinaryTreeNode<T> node)>();
             stack.Push((height: 0, node: _root));
@@ -412,7 +412,6 @@ namespace Widemeadows.Algorithms.Trees
                 deepest = node;
             }
 
-            Debug.Assert(deepest != null, "deepest != null");
             return deepest.Value;
         }
 
@@ -427,9 +426,28 @@ namespace Widemeadows.Algorithms.Trees
         /// won't get inlined if they contain a <see langword="throw"/> statement. By outsourcing
         /// the <see langword="throw"/> into a separate method, the calling code is available for inlining.
         /// </remarks>
-        /// <returns>Never returns, but return type is required to suppress compiler errors.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
-        [ContractAnnotation("=>halt")]
+        /// <seealso cref="ThrowForNoElements"/>
+        [ContractAnnotation("value:null => halt; value:notnull => notnull")]
+        [NotNull]
+        private static TValue ThrowForNoElements<TValue>([CanBeNull] TValue value)
+        {
+            if (value != null) return value;
+            throw new InvalidOperationException("The tree needs to have at least one item.");
+        }
+
+        /// <summary>
+        /// Throws an <see cref="InvalidOperationException"/> if the tree has no elements.
+        /// </summary>
+        /// <remarks>
+        /// This method implements a small hack to work around a compiler issue where methods
+        /// won't get inlined if they contain a <see langword="throw"/> statement. By outsourcing
+        /// the <see langword="throw"/> into a separate method, the calling code is available for inlining.
+        /// </remarks>
+        /// <returns>Never returns, but the return value is required for the compiler.</returns>
+        /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
+        /// <seealso cref="ThrowForNoElements{T}"/>
+        [ContractAnnotation("=> halt")]
         private static int ThrowForNoElements() => throw new InvalidOperationException("The tree needs to have at least one item.");
 
         /// <summary>
