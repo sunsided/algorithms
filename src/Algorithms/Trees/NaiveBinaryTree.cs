@@ -129,6 +129,12 @@ namespace Widemeadows.Algorithms.Trees
         /// <param name="item">The item to add.</param>
         public void Add([NotNull] in T item)
         {
+            // We expect that the first check will be optimized away by the JITter.
+            if (typeof(T).IsClass)
+            {
+                if (ReferenceEquals(item, null)) throw new ArgumentNullException(nameof(item));
+            }
+
             // We simply track the number of items by incrementing the size counter.
             ++_count;
 

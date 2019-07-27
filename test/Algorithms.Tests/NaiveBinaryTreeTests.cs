@@ -38,6 +38,39 @@ namespace Widemeadows.Algorithms.Tests
         }
 
         [Fact]
+        public void AddingANullItemThrows()
+        {
+            var tree = new NaiveBinaryTree<ReferenceItem<NumericalItem>>();
+            Action action = () => tree.Add(null);
+            action.Should().Throw<ArgumentNullException>("because the argument was null");
+        }
+
+        [Fact]
+        public void AddingANonNullSequenceDoesntThrow()
+        {
+            var tree = new NaiveBinaryTree<ReferenceItem<NumericalItem>>();
+            Action action = () => tree.AddRange(Enumerable.Range(0, 10).Select(x => new ReferenceItem<NumericalItem>(RandomItem)));
+            action.Should().NotThrow("because all elements were valid");
+        }
+
+        [Fact]
+        public void AddingPartiallyNullElementSequenceThrows()
+        {
+            const int count = 10;
+            var tree = new NaiveBinaryTree<ReferenceItem<NumericalItem>>();
+            Action action = () => tree.AddRange(Enumerable.Range(0, count).Select((x, i) => i <= count / 2 ? new ReferenceItem<NumericalItem>(RandomItem) : null));
+            action.Should().Throw<ArgumentNullException>("because some arguments were null");
+        }
+
+        [Fact]
+        public void AddingNullSequenceThrows()
+        {
+            var tree = new NaiveBinaryTree<ReferenceItem<NumericalItem>>();
+            Action action = () => tree.AddRange(null);
+            action.Should().Throw<ArgumentNullException>("because some arguments were null");
+        }
+
+        [Fact]
         public void EmptyTreeHasNoHeight()
         {
             Action action = () => _tree.CalculateHeight();
