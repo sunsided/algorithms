@@ -460,18 +460,29 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns><see langword="true"/> if the trees are structurally similar; <see langword="false"/> otherwise.</returns>
         public bool IsStructurallyIdenticalTo([CanBeNull] NaiveBinaryTree<T> otherTree)
         {
-            return AreStructurallyIdentical(_root, otherTree?._root);
+            var stack = new Stack<(BinaryTreeNode<T> root1, BinaryTreeNode<T> root2)>();
+            stack.Push((_root, otherTree?._root));
 
-            bool AreStructurallyIdentical(BinaryTreeNode<T> root1, BinaryTreeNode<T> root2)
+            while (stack.Count > 0)
             {
-                // If both nodes are identical references (e.g., both are null), structure is identical.
-                if (ReferenceEquals(root1, root2)) return true;
-                // If any of the nodes is null, while the other is non-null, structure differs.
+                var (root1, root2) = stack.Pop();
+
+                // If the two roots are reference identical, they're either the exact same
+                // nodes, or they are both null. In any case, there's no point checking their
+                // children, as they must be identical, too.
+                if (ReferenceEquals(root1, root2)) continue;
+
+                // If any of the nodes is null though while the other one isn't, the
+                // trees differ in structure.
                 if (ReferenceEquals(root1, null) || ReferenceEquals(root2, null)) return false;
-                // Traverse into the children, ignoring the value.
-                return AreStructurallyIdentical(root1.LeftNode, root2.LeftNode) &&
-                       AreStructurallyIdentical(root1.RightNode, root2.RightNode);
+
+                // Descend into the child nodes.
+                stack.Push((root1.LeftNode, root2.LeftNode));
+                stack.Push((root1.RightNode, root2.RightNode));
             }
+
+            // At this point, all nodes were compared and no error occured.
+            return true;
         }
 
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
