@@ -460,12 +460,14 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns><see langword="true"/> if the trees are structurally similar; <see langword="false"/> otherwise.</returns>
         public bool IsStructurallyIdenticalTo([CanBeNull] NaiveBinaryTree<T> otherTree)
         {
-            var stack = new Stack<(BinaryTreeNode<T> root1, BinaryTreeNode<T> root2)>();
-            stack.Push((_root, otherTree?._root));
+            // We're expanding the nodes in breadth-first order in order to
+            // early stop when there are structural differences "up" in the tree.
+            var explore = new Queue<(BinaryTreeNode<T> root1, BinaryTreeNode<T> root2)>();
+            explore.Enqueue((_root, otherTree?._root));
 
-            while (stack.Count > 0)
+            while (explore.Count > 0)
             {
-                var (root1, root2) = stack.Pop();
+                var (root1, root2) = explore.Dequeue();
 
                 // If the two roots are reference identical, they're either the exact same
                 // nodes, or they are both null. In any case, there's no point checking their
@@ -477,8 +479,8 @@ namespace Widemeadows.Algorithms.Trees
                 if (ReferenceEquals(root1, null) || ReferenceEquals(root2, null)) return false;
 
                 // Descend into the child nodes.
-                stack.Push((root1.LeftNode, root2.LeftNode));
-                stack.Push((root1.RightNode, root2.RightNode));
+                explore.Enqueue((root1.LeftNode, root2.LeftNode));
+                explore.Enqueue((root1.RightNode, root2.RightNode));
             }
 
             // At this point, all nodes were compared and no error occured.
