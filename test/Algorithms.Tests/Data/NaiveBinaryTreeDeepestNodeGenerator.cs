@@ -6,7 +6,7 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// <summary>
     /// Test case generator for <see cref="Widemeadows.Algorithms.Trees.NaiveBinaryTree{T}" /> tests.
     /// </summary>
-    public sealed class NaiveBinaryTreeDeepestNodeGenerator : TestCaseGeneratorBase
+    public sealed class NaiveBinaryTreeDeepestNodeGenerator : NaiveBinaryTreeTestCaseGeneratorBase
     {
         /// <inheritdoc cref="TestCaseGeneratorBase.GetEnumerator"/>
         public override IEnumerator<object[]> GetEnumerator()

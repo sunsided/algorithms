@@ -7,10 +7,12 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// <summary>
     /// Test case generator for <see cref="Widemeadows.Algorithms.Trees.NaiveBinaryTree{T}" /> tests.
     /// </summary>
-    public sealed class NaiveBinaryTreeLeafTraversalGenerator : TestCaseGeneratorBase
+    public sealed class NaiveBinaryTreeLeafTraversalGenerator : NaiveBinaryTreeTestCaseGeneratorBase
     {
-        [NotNull] private readonly List<NumericalItem> _items;
+        [NotNull]
+        private readonly List<NumericalItem> _items;
 
+        // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
         private readonly NumericalItem _a;
         private readonly NumericalItem _b;
         private readonly NumericalItem _d;
@@ -22,6 +24,7 @@ namespace Widemeadows.Algorithms.Tests.Data
         private readonly NumericalItem _i;
         private readonly NumericalItem _j;
         private readonly NumericalItem _g;
+        // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NaiveBinaryTreeLeafTraversalGenerator"/> class.

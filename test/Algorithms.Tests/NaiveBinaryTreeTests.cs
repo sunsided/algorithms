@@ -429,5 +429,43 @@ namespace Widemeadows.Algorithms.Tests
 
             sumOfNodes.Should().Be(_tree.Count, "because the sum of the node types should be equal to the count");
         }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeGenerator))]
+        public void TreeIsNeverStructurallyIdenticalToNullUnlessSourceTreeHasNoItems([NotNull] IList<NumericalItem> items)
+        {
+            _tree.AddRange(items);
+            var structurallyEqual = _tree.IsStructurallyIdenticalTo(null);
+
+            if (_tree.Count > 0)
+            {
+                structurallyEqual.Should().BeFalse("because the other tree is null");
+            }
+            else
+            {
+                structurallyEqual.Should().BeTrue("because the source tree has a nul lroot");
+            }
+        }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeGenerator))]
+        public void TwoTreesAreStructurallyTheSameIfTheTreesAreIdentical([NotNull] IList<NumericalItem> items)
+        {
+            _tree.AddRange(items);
+            var structurallyEqual = _tree.IsStructurallyIdenticalTo(_tree);
+            structurallyEqual.Should().BeTrue("because we're comparing the tree to itself");
+        }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeGenerator))]
+        public void TwoTreesAreStructurallyTheSameIfTheTreesHaveTheSameShape([NotNull] IList<NumericalItem> items)
+        {
+            _tree.AddRange(items);
+            var otherTree = new NaiveBinaryTree<NumericalItem>();
+            otherTree.AddRange(items.Select(x => new NumericalItem(x.Value + 1)));
+
+            var structurallyEqual = _tree.IsStructurallyIdenticalTo(otherTree);
+            structurallyEqual.Should().BeTrue("because we're comparing the same trees with shifted values");
+        }
     }
 }

@@ -450,6 +450,30 @@ namespace Widemeadows.Algorithms.Trees
         [Pure]
         public int CalculateNumberOfHalfNodes() => TraverseNodes(_root, TraversalMode.InOrder).Count(n => n.IsHalf);
 
+        /// <summary>
+        /// Determines whether two trees are structurally similar.
+        /// </summary>
+        /// <remarks>
+        /// Two trees are structurally similar if they have the same shape, but may have different values.
+        /// </remarks>
+        /// <param name="otherTree">The tree to compare with.</param>
+        /// <returns><see langword="true"/> if the trees are structurally similar; <see langword="false"/> otherwise.</returns>
+        public bool IsStructurallyIdenticalTo([CanBeNull] NaiveBinaryTree<T> otherTree)
+        {
+            return AreStructurallyIdentical(_root, otherTree?._root);
+
+            bool AreStructurallyIdentical(BinaryTreeNode<T> root1, BinaryTreeNode<T> root2)
+            {
+                // If both nodes are identical references (e.g., both are null), structure is identical.
+                if (ReferenceEquals(root1, root2)) return true;
+                // If any of the nodes is null, while the other is non-null, structure differs.
+                if (ReferenceEquals(root1, null) || ReferenceEquals(root2, null)) return false;
+                // Traverse into the children, ignoring the value.
+                return AreStructurallyIdentical(root1.LeftNode, root2.LeftNode) &&
+                       AreStructurallyIdentical(root1.RightNode, root2.RightNode);
+            }
+        }
+
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -552,6 +576,5 @@ namespace Widemeadows.Algorithms.Trees
 
             throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
         }
-
     }
 }

@@ -7,7 +7,7 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// <summary>
     /// Test case generator for <see cref="Widemeadows.Algorithms.Trees.NaiveBinaryTree{T}" /> tests.
     /// </summary>
-    public sealed class NaiveBinaryTreeLeafCountGenerator : TestCaseGeneratorBase
+    public sealed class NaiveBinaryTreeLeafCountGenerator : NaiveBinaryTreeTestCaseGeneratorBase
     {
         [NotNull]
         private readonly List<NumericalItem> _items;
