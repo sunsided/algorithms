@@ -467,5 +467,17 @@ namespace Widemeadows.Algorithms.Tests
             var structurallyEqual = _tree.IsStructurallyIdenticalTo(otherTree);
             structurallyEqual.Should().BeTrue("because we're comparing the same trees with shifted values");
         }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeDivergingStructureGenerator))]
+        public void TwoTreesAreStructurallyDifferentIfTheTreesDontShareTheSameShape([NotNull] IList<NumericalItem> items, [NotNull] IList<NumericalItem> otherItems)
+        {
+            _tree.AddRange(items);
+            var otherTree = new NaiveBinaryTree<NumericalItem>();
+            otherTree.AddRange(otherItems);
+
+            var structurallyEqual = _tree.IsStructurallyIdenticalTo(otherTree);
+            structurallyEqual.Should().BeFalse("because both trees are different");
+        }
     }
 }
