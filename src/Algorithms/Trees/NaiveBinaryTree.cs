@@ -589,5 +589,37 @@ namespace Widemeadows.Algorithms.Trees
 
             throw new ArgumentOutOfRangeException(nameof(mode), mode, $"Unhandled traversal mode: {mode}");
         }
+
+        /// <summary>
+        /// Calculates the diameter (or width) of the tree.
+        /// </summary>
+        /// <remarks>
+        ///    The diameter of a tree is the longest distance between two leaves.
+        /// </remarks>
+        /// <returns>The diameter of the tree.</returns>
+        public int CalculateDiameter()
+        {
+            var diameter = 0;
+            GetDiameter(_root, ref diameter);
+            return diameter;
+
+            int GetDiameter(BinaryTreeNode<T> node, ref int value)
+            {
+                if (node == null) return 0;
+
+                // Calculate left and right sub-tree heights.
+                var leftHeight = GetDiameter(node.LeftNode, ref value);
+                var rightHeight = GetDiameter(node.RightNode, ref value);
+
+                // Calculate diameter through the current node.
+                var maxDiameter = leftHeight + rightHeight + 1;
+
+                // Update maximum diameter.
+                diameter = Math.Max(diameter, maxDiameter);
+
+                // Return the height of the subtree rooted at current node.
+                return Math.Max(leftHeight, rightHeight) + 1;
+            }
+        }
     }
 }

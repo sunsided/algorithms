@@ -479,5 +479,15 @@ namespace Widemeadows.Algorithms.Tests
             var structurallyEqual = _tree.IsStructurallyIdenticalTo(otherTree);
             structurallyEqual.Should().BeFalse("because both trees are different");
         }
+
+        [Theory]
+        [ClassData(typeof(NaiveBinaryTreeDiameterGenerator))]
+        public void DiameterOfTreeIsCalculatedCorrectly([NotNull] IList<NumericalItem> items, int expectedValue)
+        {
+            _tree.AddRange(items);
+
+            var diameter = _tree.CalculateDiameter();
+            diameter.Should().Be(expectedValue, "because that is the expected value");
+        }
     }
 }
