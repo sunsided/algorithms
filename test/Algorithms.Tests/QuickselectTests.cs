@@ -196,5 +196,73 @@ namespace Widemeadows.Algorithms.Tests
             var smallestElement = list[smallestIndex];
             smallestElement.Should().Be(list.Max(), "because that is the greatest element");
         }
+
+        /// <summary>
+        /// Attempting to select on a <see langword="null"/> reference throws an exception.
+        /// </summary>
+        [Fact]
+        public void SelectOnNullListThrowsException()
+        {
+            var qs = new Quickselect<double>();
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Action action = () => qs.Select((List<double>) null, 0);
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+        
+        /// <summary>
+        /// Attempting to select on a <see langword="null"/> reference throws an exception.
+        /// </summary>
+        [Fact]
+        public void SelectRecursiveOnNullListThrowsException()
+        {
+            var qs = new Quickselect<double>();
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Action action = () => qs.SelectRecursive((List<double>) null, 0);
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+        
+        /// <summary>
+        /// Attempting to select on a <see langword="null"/> reference throws an exception.
+        /// </summary>
+        [Fact]
+        public void SelectNegativeAmountThrowsException()
+        {
+            var qs = new Quickselect<double>();
+            Action action = () => qs.Select(_list, -1);
+            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+        }
+        
+        /// <summary>
+        /// Attempting to select on a <see langword="null"/> reference throws an exception.
+        /// </summary>
+        [Fact]
+        public void SelectRecursiveNegativeAmountThrowsException()
+        {
+            var qs = new Quickselect<double>();
+            Action action = () => qs.SelectRecursive(_list, -1);
+            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+        }
+        
+        /// <summary>
+        /// Attempting to select on a <see langword="null"/> reference throws an exception.
+        /// </summary>
+        [Fact]
+        public void SelectTooBigAmountThrowsException()
+        {
+            var qs = new Quickselect<double>();
+            Action action = () => qs.Select(_list, _list.Count);
+            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+        }
+        
+        /// <summary>
+        /// Attempting to select on a <see langword="null"/> reference throws an exception.
+        /// </summary>
+        [Fact]
+        public void SelectRecursiveTooBigAmountThrowsException()
+        {
+            var qs = new Quickselect<double>();
+            Action action = () => qs.SelectRecursive(_list, _list.Count);
+            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+        }
     }
 }
