@@ -8,6 +8,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
     /// <summary>
     /// Tests for <see cref="MinHeap{T}"/>.
     /// </summary>
+    [Trait("Fuzzing","Slow")]
     public class BigHeapSmallNumbers : MinHeapFuzzingBase
     {
         private const int MaxOperations = 10000;
