@@ -171,8 +171,6 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
                     Insert(9, 5, 9),
                     Insert(4, 4, 9),
                     Insert(3, 3, 9),
-
-                    // At this point we have six items, remove one and add another one.
                     RemoveAny(0, true, 4, 9),
                     Insert(4, 4, 9)
                 }
@@ -189,17 +187,14 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             {
                 new[]
                 {
-                    Insert(8, 8, 8),
-                    ChangeTop(7, 7, 8),
-                    Insert(9, 7, 9),
-                    ChangeAny(0, 4, 4, 9),
-                    Insert(6, 4, 9),
-                    Insert(7, 4, 9),
-                    Insert(1, 1, 9),
-                    Extract(true, 4, 9),
-                    Insert(9, 4, 9),
-                    Insert(3, 3, 9),
-                    Extract(true, 4, 9),
+                    Insert(4, 4, 4),
+                    Insert(5, 4, 5),
+                    Insert(2, 2,5),
+                    Insert(6, 2, 6),
+                    Insert(1, 1, 6),
+                    Extract(true, 2, 6),
+                    Insert(7, 2, 7),
+                    Insert(3, 2, 7)
                 }
             };
         }
