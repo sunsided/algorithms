@@ -1,9 +1,21 @@
-algorithm library and testbed
+Algorithm library and testbed
 =============================
 
-This project implements (or will - over time - implement) various algorithms in C# in order to study and use them.
+This project implements (or will - over time - implement) various 
+algorithms in C# in order to study and use them.
 
-Currently, the library consists only of one algorithm, which is **Quickselect**.
+Currently, the library consists only of a handful of algorithms
+and data structures.
+ 
+### Algorithms
+ 
+- Quickselect
+
+### Data Structures
+
+- Binary Tree
+    - In-, Level-, Pre- and Post-Order Traversals
+    - Recursive In-, Pre- and Post-Order Traversals
 
 ### License
 

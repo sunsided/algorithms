@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Widemeadows.Algorithms.Properties;
+using JetBrains.Annotations;
 
 namespace Widemeadows.Algorithms.Trees.TreeTraversals
 {

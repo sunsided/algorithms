@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Widemeadows.Algorithms.Properties;
+using JetBrains.Annotations;
 using Widemeadows.Algorithms.Trees.TreeTraversals;
 using Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree;
 
@@ -88,12 +88,10 @@ namespace Widemeadows.Algorithms.Trees
         /// <seealso cref="Count"/>
         /// <seealso cref="CalculateSizeRecursively"/>
         [Pure]
-        public int CalculateSize()
-        {
+        public int CalculateSize() =>
             // Using non-recursive pre-order traversal here because
             // it is the simplest non-recursive traversal operation.
-            return Traverse(TraversalMode.PreOrder).Count();
-        }
+            Traverse(TraversalMode.PreOrder).Count();
 
         /// <summary>
         /// Recursively calculates the number of items in the tree.
