@@ -25,7 +25,7 @@ namespace Widemeadows.Algorithms.Tests
             }
 
             _minHeap.Count.Should().Be(items.Count, "because that is the number of items we inserted");
-            ValidateMinHeap(_minHeap.RawAccess, items.Count);
+            ValidateMinHeap(_minHeap, items.Count);
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace Widemeadows.Algorithms.Tests
                     _minHeap.Count.Should().Be(0, "because we have removed the last item");
                 }
 
-                ValidateMinHeap(_minHeap.RawAccess, index);
+                ValidateMinHeap(_minHeap, index);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Widemeadows.Algorithms.Tests
                     heap.ChangeValue(operation.Value);
                     break;
                 case HeapOperationType.ChangeAny:
-                    heap.RawAccess.ChangeValue(operation.Index, operation.Value);
+                    heap.ChangeValue(operation.Index, operation.Value);
                     break;
 
                 // This operation may remove the last item from the heap.
@@ -76,7 +76,7 @@ namespace Widemeadows.Algorithms.Tests
                     heap.Extract();
                     break;
                 case HeapOperationType.RemoveAny:
-                    heap.RawAccess.Remove(operation.Index);
+                    heap.Remove(operation.Index);
                     break;
 
                 default:
@@ -84,7 +84,7 @@ namespace Widemeadows.Algorithms.Tests
             }
         }
 
-        private static void ValidateMinHeap(IRawHeapAccess<NumericalItem> heap, int step)
+        private static void ValidateMinHeap(IHeapIndexes<NumericalItem> heap, int step)
         {
             for (var i = 0; i < heap.Count; ++i)
             {

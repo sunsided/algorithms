@@ -25,7 +25,7 @@ namespace Widemeadows.Algorithms.Tests
             }
 
             _maxHeap.Count.Should().Be(items.Count, "because that is the number of items we inserted");
-            ValidateMaxHeap(_maxHeap.RawAccess, items.Count);
+            ValidateMaxHeap(_maxHeap, items.Count);
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace Widemeadows.Algorithms.Tests
                     _maxHeap.Count.Should().Be(0, "because we have removed the last item");
                 }
 
-                ValidateMaxHeap(_maxHeap.RawAccess, index);
+                ValidateMaxHeap(_maxHeap, index);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Widemeadows.Algorithms.Tests
                     heap.ChangeValue(operation.Value);
                     break;
                 case HeapOperationType.ChangeAny:
-                    heap.RawAccess.ChangeValue(operation.Index, operation.Value);
+                    heap.ChangeValue(operation.Index, operation.Value);
                     break;
 
                 // This operation may remove the last item from the heap.
@@ -76,7 +76,7 @@ namespace Widemeadows.Algorithms.Tests
                     heap.Extract();
                     break;
                 case HeapOperationType.RemoveAny:
-                    heap.RawAccess.Remove(operation.Index);
+                    heap.Remove(operation.Index);
                     break;
 
                 default:
@@ -84,7 +84,7 @@ namespace Widemeadows.Algorithms.Tests
             }
         }
 
-        private static void ValidateMaxHeap(IRawHeapAccess<NumericalItem> heap, int step)
+        private static void ValidateMaxHeap(Heap<NumericalItem> heap, int step)
         {
             for (var i = 0; i < heap.Count; ++i)
             {

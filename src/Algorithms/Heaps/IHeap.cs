@@ -10,6 +10,12 @@ namespace Widemeadows.Algorithms.Heaps
         where T : notnull
     {
         /// <summary>
+        /// Gets an item given its index.
+        /// </summary>
+        /// <param name="index">The index of the item to get.</param>
+        T this[[ValueRange(0, int.MaxValue)] int index] { get; }
+
+        /// <summary>
         /// Gets the number of items in the heap.
         /// </summary>
         [ValueRange(0, int.MaxValue)]
@@ -19,13 +25,20 @@ namespace Widemeadows.Algorithms.Heaps
         /// Inserts a value into the heap.
         /// </summary>
         /// <param name="value">The value to insert.</param>
-        void Insert(T value);
+        void Insert(in T value);
 
         /// <summary>
         /// Changes the value of the top item.
         /// </summary>
         /// <param name="value">The value to set for the top item.</param>
-        void ChangeValue(T value);
+        void ChangeValue(in T value);
+
+        /// <summary>
+        /// Changes the value of the specified item.
+        /// </summary>
+        /// <param name="i">The index of the item to remove.</param>
+        /// <param name="value">The new value.</param>
+        void ChangeValue([ValueRange(0, int.MaxValue)] int i, in T value);
 
         /// <summary>
         /// Gets the first item from the heap without removing it.
@@ -38,5 +51,11 @@ namespace Widemeadows.Algorithms.Heaps
         /// </summary>
         /// <returns>The first item.</returns>
         T Extract();
+
+        /// <summary>
+        /// Removes an item from the heap.
+        /// </summary>
+        /// <param name="i">The index of the item to remove.</param>
+        void Remove([ValueRange(0, int.MaxValue)] int i);
     }
 }

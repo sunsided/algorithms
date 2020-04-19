@@ -11,9 +11,9 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps
     /// </summary>
     public abstract class HeapFuzzingBase
     {
-        internal readonly IRawHeapAccess<NumericalItem> Heap;
+        internal readonly IHeapIndexes<NumericalItem> Heap;
 
-        internal HeapFuzzingBase(IRawHeapAccess<NumericalItem> heap)
+        internal HeapFuzzingBase(IHeapIndexes<NumericalItem> heap)
         {
             Heap = heap;
         }
