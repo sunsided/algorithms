@@ -81,16 +81,17 @@ namespace Widemeadows.Algorithms.Tests
                 case HeapOperationType.ChangeTop:
                     heap.ChangeValue(operation.Value);
                     break;
-
-                // This operation may remove the last item from the heap.
-                case HeapOperationType.PullTop:
-                    heap.Extract();
+                case HeapOperationType.ChangeAny:
+                    heap.RawAccess.ChangeValue(operation.Index, operation.Value);
                     break;
 
-                case HeapOperationType.ChangeAny:
-                    throw new InvalidOperationException("ChangeAny is not supported by this method.");
+                // This operation may remove the last item from the heap.
+                case HeapOperationType.Extract:
+                    heap.Extract();
+                    break;
                 case HeapOperationType.RemoveAny:
-                    throw new InvalidOperationException("RemoveAny is not supported by this method.");
+                    heap.RawAccess.Remove(operation.Index);
+                    break;
 
                 default:
                     throw new InvalidOperationException($"Unable to process operation of type {operation.Type}");

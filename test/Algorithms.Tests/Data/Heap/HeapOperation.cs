@@ -8,15 +8,17 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
     {
         public readonly HeapOperationType Type;
         public readonly T Value;
+        public readonly int Index;
 
-        public HeapOperation(HeapOperationType type, T value)
+        public HeapOperation(HeapOperationType type, int index, T value)
         {
             Type = type;
+            Index = index;
             Value = value;
         }
 
         public override string ToString() =>
-            Type != HeapOperationType.PullTop
+            Type != HeapOperationType.Extract
                 ? $"{Type} {Value}"
                 : $"{Type}";
     }

@@ -19,6 +19,8 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             yield return AlternatingAddRemove();
             yield return InsertAndChangeIncreasingly();
             yield return InsertAndChange();
+            yield return Regression1();
+            yield return Regression2();
         }
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             {
                 new[]
                 {
-                    BuildCase(HeapOperationType.Insert, 0, 0, 0)
+                    Insert(0, 0, 0)
                 }
             };
         }
@@ -46,8 +48,8 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             {
                 new[]
                 {
-                    BuildCase(HeapOperationType.Insert, 0, 0, 0),
-                    BuildCase(HeapOperationType.PullTop, default, false, default, default)
+                    Insert(0, 0, 0),
+                    Extract(false, default, default)
                 }
             };
         }
@@ -62,9 +64,9 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             {
                 new[]
                 {
-                    BuildCase(HeapOperationType.Insert, 0, 0, 0),
-                    BuildCase(HeapOperationType.Insert, 1, 0, 1),
-                    BuildCase(HeapOperationType.PullTop, default, 1, 1)
+                    Insert(0, 0, 0),
+                    Insert(1, 0, 1),
+                    Extract(true, 1, 1)
                 }
             };
         }
@@ -79,17 +81,17 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             {
                 new[]
                 {
-                    BuildCase(HeapOperationType.Insert, 0, 0, 0),
-                    BuildCase(HeapOperationType.Insert, 1, 0, 1),
-                    BuildCase(HeapOperationType.PullTop, default, 1, 1),
-                    BuildCase(HeapOperationType.Insert, 2, 1, 2),
-                    BuildCase(HeapOperationType.PullTop, default, 2, 2),
-                    BuildCase(HeapOperationType.Insert, 3, 2, 3),
-                    BuildCase(HeapOperationType.PullTop, default, 3, 3),
-                    BuildCase(HeapOperationType.Insert, 4, 3, 4),
-                    BuildCase(HeapOperationType.PullTop, default, 4, 4),
-                    BuildCase(HeapOperationType.Insert, 5, 4, 5),
-                    BuildCase(HeapOperationType.PullTop, default, 5, 5)
+                    Insert(0, 0, 0),
+                    Insert(1, 0, 1),
+                    Extract(true, 1, 1),
+                    Insert(2, 1, 2),
+                    Extract(true, 2, 2),
+                    Insert(3, 2, 3),
+                    Extract(true, 3, 3),
+                    Insert(4, 3, 4),
+                    Extract(true, 4, 4),
+                    Insert(5, 4, 5),
+                    Extract(true, 5, 5)
                 }
             };
         }
@@ -103,13 +105,13 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             return new object[]
             {
                 new[] {
-                    BuildCase(HeapOperationType.Insert, 0, 0, 0),
-                    BuildCase(HeapOperationType.Insert, 5, 0, 5),
-                    BuildCase(HeapOperationType.PullTop, default, 5, 5),
-                    BuildCase(HeapOperationType.Insert, 1, 1, 5),
-                    BuildCase(HeapOperationType.Insert, 2, 1, 5),
-                    BuildCase(HeapOperationType.PullTop, default, 2, 5),
-                    BuildCase(HeapOperationType.PullTop, default, 5, 5)
+                    Insert(0, 0, 0),
+                    Insert(5, 0, 5),
+                    Extract(true, 5, 5),
+                    Insert(1, 1, 5),
+                    Insert(2, 1, 5),
+                    Extract(true, 2, 5),
+                    Extract(true, 5, 5)
                 }
             };
         }
@@ -124,11 +126,11 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             {
                 new[]
                 {
-                    BuildCase(HeapOperationType.Insert, 0, 0, 0),
-                    BuildCase(HeapOperationType.Insert, 1, 0, 1),
-                    BuildCase(HeapOperationType.ChangeTop, 2, 1, 2),
-                    BuildCase(HeapOperationType.Insert, 3, 1, 3),
-                    BuildCase(HeapOperationType.ChangeTop, 4, 2, 4),
+                    Insert(0, 0, 0),
+                    Insert(1, 0, 1),
+                    ChangeTop(2, 1, 2),
+                    Insert(3, 1, 3),
+                    ChangeTop(4, 2, 4),
                 }
             };
         }
@@ -143,24 +145,84 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             {
                 new[]
                 {
-                    BuildCase(HeapOperationType.Insert, 0, 0, 0),
-                    BuildCase(HeapOperationType.Insert, 1, 0, 1),
-                    BuildCase(HeapOperationType.ChangeTop, 2, 1, 2),
-                    BuildCase(HeapOperationType.PullTop, default, 2, 2),
-                    BuildCase(HeapOperationType.Insert, 3, 2, 3),
-                    BuildCase(HeapOperationType.ChangeTop, 0, 0, 3),
+                    Insert(0, 0, 0),
+                    Insert(1, 0, 1),
+                    ChangeTop(2, 1, 2),
+                    Extract(true, 2, 2),
+                    Insert(3, 2, 3),
+                    ChangeTop(0, 0, 3),
                 }
             };
         }
 
-        private HeapState<NumericalItem> BuildCase(HeapOperationType type, NumericalItem value,
-            NumericalItem expectedMin, NumericalItem expectedMax) =>
-            BuildCase(type, value, true, expectedMin, expectedMax);
+        /// <summary>
+        /// Preventing first found regression.
+        /// </summary>
+        /// <returns>The default test case parameters</returns>
+        private object[] Regression1()
+        {
+            return new object[]
+            {
+                new[]
+                {
+                    Insert(8, 8, 8),
+                    Insert(9, 8, 9),
+                    Insert(5, 5, 9),
+                    Insert(9, 5, 9),
+                    Insert(4, 4, 9),
+                    Insert(3, 3, 9),
 
-        private HeapState<NumericalItem> BuildCase(HeapOperationType type, NumericalItem value, bool expectItems, NumericalItem expectedMin, NumericalItem expectedMax) =>
+                    // At this point we have six items, remove one and add another one.
+                    RemoveAny(0, true, 4, 9),
+                    Insert(4, 4, 9)
+                }
+            };
+        }
+
+        /// <summary>
+        /// Preventing second found regression.
+        /// </summary>
+        /// <returns>The default test case parameters</returns>
+        private object[] Regression2()
+        {
+            return new object[]
+            {
+                new[]
+                {
+                    Insert(8, 8, 8),
+                    ChangeTop(7, 7, 8),
+                    Insert(9, 7, 9),
+                    ChangeAny(0, 4, 4, 9),
+                    Insert(6, 4, 9),
+                    Insert(7, 4, 9),
+                    Insert(1, 1, 9),
+                    Extract(true, 4, 9),
+                    Insert(9, 4, 9),
+                    Insert(3, 3, 9),
+                    Extract(true, 4, 9),
+                }
+            };
+        }
+
+        private HeapState<NumericalItem> Insert(NumericalItem value, NumericalItem expectedMin, NumericalItem expectedMax) =>
+            BuildCase(HeapOperationType.Insert, index: 0, value: value, true, expectedMin, expectedMax);
+
+        private HeapState<NumericalItem> ChangeTop(NumericalItem value, NumericalItem expectedMin, NumericalItem expectedMax) =>
+            BuildCase(HeapOperationType.ChangeTop, index: 0, value: value, true, expectedMin, expectedMax);
+
+        private HeapState<NumericalItem> ChangeAny(int index, NumericalItem value, NumericalItem expectedMin, NumericalItem expectedMax) =>
+            BuildCase(HeapOperationType.ChangeAny, index: index, value: value, true, expectedMin, expectedMax);
+
+        private HeapState<NumericalItem> Extract(bool expectItems, NumericalItem expectedMin, NumericalItem expectedMax) =>
+            BuildCase(HeapOperationType.Extract, index: 0, value: default, expectItems, expectedMin, expectedMax);
+
+        private HeapState<NumericalItem> RemoveAny(int index, bool expectItems, NumericalItem expectedMin, NumericalItem expectedMax) =>
+            BuildCase(HeapOperationType.RemoveAny, index: index, value: default, expectItems, expectedMin, expectedMax);
+
+        private HeapState<NumericalItem> BuildCase(HeapOperationType type, int index, NumericalItem value, bool expectItems, NumericalItem expectedMin, NumericalItem expectedMax) =>
             new HeapState<NumericalItem>
             (
-                new HeapOperation<NumericalItem>(type, value),
+                new HeapOperation<NumericalItem>(type, index: index, value: value),
                 expectItems,
                 expectedMin,
                 expectedMax

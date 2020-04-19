@@ -38,7 +38,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
             {
                 HeapOperationType.Insert,
                 HeapOperationType.ChangeTop,
-                HeapOperationType.PullTop,
+                HeapOperationType.Extract,
                 HeapOperationType.RemoveAny,
                 HeapOperationType.ChangeAny,
             };
@@ -60,7 +60,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
                 var operation = setOfOperations[rng.Next(0, setOfOperations.Length)];
                 switch (operation)
                 {
-                    case HeapOperationType.PullTop:
+                    case HeapOperationType.Extract:
                     {
                         --simulatedHeapSize;
                         operations.Add((operation, 0, int.MinValue));
@@ -110,7 +110,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
         {
             switch (operation.operationType)
             {
-                case HeapOperationType.PullTop:
+                case HeapOperationType.Extract:
                 {
                     MinHeap.Extract();
                     break;

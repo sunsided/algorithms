@@ -89,30 +89,48 @@ namespace Widemeadows.Algorithms.Heaps
         /// <remarks>
         ///     This is intended solely for debugging.
         /// </remarks>
-        internal IRawHeapAccess<T> RawAccess => this;
+        internal IRawHeapAccess<T> RawAccess
+        {
+            [DebuggerStepThrough]
+            get => this;
+        }
 
         /// <inheritdoc cref="IRawHeapAccess{T}.this"/>
-        T IRawHeapAccess<T>.this[int index] => _minHeap[index].Value;
+        T IRawHeapAccess<T>.this[int index]
+        {
+            [DebuggerStepThrough]
+            get => _minHeap[index].Value;
+        }
 
         /// <inheritdoc cref="IRawHeapAccess{T}.Count"/>
-        int IRawHeapAccess<T>.Count => Count;
+        int IRawHeapAccess<T>.Count
+        {
+            [DebuggerStepThrough]
+            get => Count;
+        }
 
         /// <inheritdoc cref="IRawHeapAccess{T}.Parent"/>
+        [DebuggerStepThrough]
         int IRawHeapAccess<T>.Parent(int i) => Parent(i);
 
         /// <inheritdoc cref="IRawHeapAccess{T}.LeftChild"/>
+        [DebuggerStepThrough]
         int IRawHeapAccess<T>.LeftChild(int i) => LeftChild(i);
 
         /// <inheritdoc cref="IRawHeapAccess{T}.RightChild"/>
+        [DebuggerStepThrough]
         int IRawHeapAccess<T>.RightChild(int i) => RightChild(i);
 
         /// <inheritdoc cref="IRawHeapAccess{T}.IsRoot"/>
+        [DebuggerStepThrough]
         bool IRawHeapAccess<T>.IsRoot(int i) => IsRoot(i);
 
         /// <inheritdoc cref="IRawHeapAccess{T}.Remove"/>
+        [DebuggerStepThrough]
         void IRawHeapAccess<T>.Remove(int i) => Remove(i);
 
         /// <inheritdoc cref="IRawHeapAccess{T}.ChangeValue"/>
+        [DebuggerStepThrough]
         void IRawHeapAccess<T>.ChangeValue(int i, T value) => ChangeValue(i, value);
 
         /// <summary>
@@ -120,6 +138,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// </summary>
         /// <param name="i">The index of the item whose parent should be determined.</param>
         /// <returns>The index of the parent item.</returns>
+        [DebuggerStepThrough]
         private static int Parent([ValueRange(0, int.MaxValue)] int i) => i / 2;
 
         /// <summary>
@@ -127,6 +146,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// </summary>
         /// <param name="i">The index of the item whose left child should be determined.</param>
         /// <returns>The index of the left child item.</returns>
+        [DebuggerStepThrough]
         private static int LeftChild([ValueRange(0, int.MaxValue)] int i) => 2 * i + 1;
 
         /// <summary>
@@ -134,6 +154,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// </summary>
         /// <param name="i">The index of the item whose right child should be determined.</param>
         /// <returns>The index of the right child item.</returns>
+        [DebuggerStepThrough]
         private static int RightChild([ValueRange(0, int.MaxValue)] int i) => 2 * i + 2;
 
         /// <summary>
@@ -144,6 +165,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// </remarks>
         /// <param name="i">The index of the item.</param>
         /// <returns><see langword="true"/> when <paramref name="i"/> is <c>0</c>; <see langword="false"/> otherwise.</returns>
+        [DebuggerStepThrough]
         private static bool IsRoot([ValueRange(0, int.MaxValue)] int i) => i == 0;
 
         /// <summary>
@@ -153,6 +175,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="rhs">The right item's index.</param>
         /// <returns><see langword="true"/> if the left item is greater than the right one; <see langword="false"/> otherwise.</returns>
         /// <seealso cref="Compare"/>
+        [DebuggerStepThrough]
         private bool IsGreater(int lhs, int rhs) => Compare(_minHeap[lhs], _minHeap[rhs]) > 0;
 
         /// <summary>
@@ -162,6 +185,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="rhs">The right item's index.</param>
         /// <returns><see langword="true"/> if the left item is smaller than the right one; <see langword="false"/> otherwise.</returns>
         /// <seealso cref="Compare"/>
+        [DebuggerStepThrough]
         private bool IsSmaller(int lhs, int rhs) => Compare(_minHeap[lhs], _minHeap[rhs]) < 0;
 
         /// <summary>
@@ -171,6 +195,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="rhs">The right item.</param>
         /// <returns><see langword="true"/> if the left item is smaller than the right one; <see langword="false"/> otherwise.</returns>
         /// <seealso cref="Compare"/>
+        [DebuggerStepThrough]
         private bool IsSmaller(Item lhs, Item rhs) => Compare(lhs, rhs) < 0;
 
         /// <summary>

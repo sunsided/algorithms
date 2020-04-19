@@ -13,7 +13,7 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
         /// <summary>
         /// Pulls the top item from the heap.
         /// </summary>
-        PullTop,
+        Extract,
 
         /// <summary>
         /// Changes the value of the top item.
