@@ -515,20 +515,6 @@ internal sealed class PublicAPIAttribute : Attribute
 internal sealed class InstantHandleAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates that a method does not make any observable state changes.
-  /// The same as <c>PureAttribute</c>.
-  /// </summary>
-  /// <example><code>
-  /// [Pure] int Multiply(int x, int y) => x * y;
-  ///
-  /// void M() {
-  ///   Multiply(123, 42); // Warning: Return value of pure method is not used
-  /// }
-  /// </code></example>
-  [AttributeUsage(AttributeTargets.Method)]
-internal sealed class PureAttribute : Attribute { }
-
-  /// <summary>
   /// Indicates that the return value of the method invocation must be used.
   /// </summary>
   /// <remarks>

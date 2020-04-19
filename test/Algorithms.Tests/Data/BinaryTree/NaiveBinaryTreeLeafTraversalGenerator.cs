@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using Widemeadows.Algorithms.Tests.Model;
-using Widemeadows.Algorithms.Trees;
 
-namespace Widemeadows.Algorithms.Tests.Data
+namespace Widemeadows.Algorithms.Tests.Data.BinaryTree
 {
     /// <summary>
     /// Test case generator for <see cref="Widemeadows.Algorithms.Trees.NaiveBinaryTree{T}" /> tests.
     /// </summary>
-    public sealed class NaiveBinaryTreeTraversalGenerator : TestCaseGeneratorBase
+    public sealed class NaiveBinaryTreeLeafTraversalGenerator : NaiveBinaryTreeTestCaseGeneratorBase
     {
         private readonly List<NumericalItem> _items;
 
+        // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
         private readonly NumericalItem _a;
         private readonly NumericalItem _b;
         private readonly NumericalItem _d;
@@ -22,11 +22,12 @@ namespace Widemeadows.Algorithms.Tests.Data
         private readonly NumericalItem _i;
         private readonly NumericalItem _j;
         private readonly NumericalItem _g;
+        // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NaiveBinaryTreeTraversalGenerator"/> class.
+        /// Initializes a new instance of the <see cref="NaiveBinaryTreeLeafTraversalGenerator"/> class.
         /// </summary>
-        public NaiveBinaryTreeTraversalGenerator()
+        public NaiveBinaryTreeLeafTraversalGenerator()
         {
             //                 A
             //        B                  C
@@ -70,27 +71,17 @@ namespace Widemeadows.Algorithms.Tests.Data
         {
             yield return new object[]
             {
-                _items, TraversalMode.PreOrder,
-                new[] { _a, _b, _d, _h, _k, _e, _c, _f, _i, _j, _g }
+                _items, new[] {_k, _e, _i, _j, _g}
             };
 
-            yield return new object[]
-            {
-                _items, TraversalMode.InOrder,
-                new[] { _d, _h, _k, _b, _e, _a, _i, _f, _j, _c, _g }
-            };
+            // Right-skewed tree
+            yield return new object[] {new NumericalItem[] {0, 1, 2, 3, 4, 5, 6}, new NumericalItem[] {6}};
 
-            yield return new object[]
-            {
-                _items, TraversalMode.PostOrder,
-                new[] { _k, _h, _d, _e, _b, _i, _j, _f, _g, _c, _a }
-            };
+            // Left-skewed tree
+            yield return new object[] {new NumericalItem[] {0, -1, -2, -3}, new NumericalItem[] {-3}};
 
-            yield return new object[]
-            {
-                _items, TraversalMode.LevelOrder,
-                new[] { _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k }
-            };
+            // Tree with two arms
+            yield return new object[] {new NumericalItem[] {0, -1, -2, -3, 1, 2}, new NumericalItem[] {-3, 2}};
         }
     }
 }

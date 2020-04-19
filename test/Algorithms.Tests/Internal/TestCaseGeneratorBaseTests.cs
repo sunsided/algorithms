@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using FluentAssertions;
 using Widemeadows.Algorithms.Tests.Data;
+using Widemeadows.Algorithms.Tests.Data.BinaryTree;
 using Xunit;
 
-namespace Widemeadows.Algorithms.Tests
+namespace Widemeadows.Algorithms.Tests.Internal
 {
     public class TestCaseGeneratorBaseTests
     {
