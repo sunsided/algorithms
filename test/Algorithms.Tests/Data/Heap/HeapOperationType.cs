@@ -18,6 +18,22 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
         /// <summary>
         /// Changes the value of the top item.
         /// </summary>
-        ChangeTop
+        ChangeTop,
+
+        /// <summary>
+        /// Remove an item identified by a given index.
+        /// </summary>
+        /// <remarks>
+        ///    Used in fuzzing tests.
+        /// </remarks>
+        RemoveAny,
+
+        /// <summary>
+        /// Change an item identified by a given index.
+        /// </summary>
+        /// <remarks>
+        ///    Used in fuzzing tests.
+        /// </remarks>
+        ChangeAny
     }
 }
