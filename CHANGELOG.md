@@ -13,7 +13,8 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   the binary tree.
 - recursive in-, post- and pre-order traversals for
   the binary tree.
-- Min Heap and Max Heap data structures.
+- Max Heap structure.
+- Min Heap based on the Max Heap implementation.
 
 ### Internal
 

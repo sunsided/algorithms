@@ -12,7 +12,7 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
         /// <inheritdoc />
         public override IEnumerator<object[]> GetEnumerator()
         {
-            yield return BuildTrivialCase();
+            /*yield return BuildTrivialCase();
             yield return LeaveEmptyTree();
             yield return AddTwoRemoveOne();
             yield return IncreasingAlternatingAddRemove();
@@ -20,7 +20,8 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
             yield return InsertAndChangeIncreasingly();
             yield return InsertAndChange();
             yield return Regression1();
-            yield return Regression2();
+            yield return Regression2();*/
+            yield return Regression3();
         }
 
         /// <summary>
@@ -195,6 +196,25 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
                     Extract(true, 2, 6),
                     Insert(7, 2, 7),
                     Insert(3, 2, 7)
+                }
+            };
+        }
+
+        /// <summary>
+        /// Preventing third found regression.
+        /// </summary>
+        /// <returns>The default test case parameters</returns>
+        private object[] Regression3()
+        {
+            return new object[]
+            {
+                new[]
+                {
+                    Insert(1003372685, 1003372685, 1003372685),
+                    Insert(690441371, 690441371, 1003372685),
+                    ChangeTop(1261228746, 1003372685, 1261228746),
+                    Insert(123705148, 123705148, 1261228746),
+                    RemoveAny(2, true, 123705148, 1261228746)
                 }
             };
         }

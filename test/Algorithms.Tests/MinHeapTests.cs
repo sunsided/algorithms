@@ -37,6 +37,7 @@ namespace Widemeadows.Algorithms.Tests
                 var state = states[index];
 
                 ApplySimpleOperation(_minHeap, state.Operation);
+                ValidateMinHeap(_minHeap, index);
 
                 if (state.ExpectItems)
                 {
@@ -51,8 +52,6 @@ namespace Widemeadows.Algorithms.Tests
                 {
                     _minHeap.Count.Should().Be(0, "because we have removed the last item");
                 }
-
-                ValidateMinHeap(_minHeap, index);
             }
         }
 

@@ -6,28 +6,32 @@ using JetBrains.Annotations;
 namespace Widemeadows.Algorithms.Heaps
 {
     /// <summary>
-    /// A max-heap.
+    /// A Heap that can both operate as a Min Heap and a Max Heap.
     /// </summary>
+    /// <remarks>
+    ///     The base implementation is that of a Max Heap; in Min Heap
+    ///     mode, comparisons are inverted.
+    /// </remarks>
     /// <typeparam name="T">The type of the heap elements.</typeparam>
-    public abstract partial class Heap<T> : IHeapIndexes<T>
+    public partial class Heap<T> : IHeapIndexes<T>
         where T : notnull
     {
-        private readonly ItemWeight _heavyItemWeight;
+        private readonly HeapType _heapType;
         private readonly List<HeapItem> _heap;
         private readonly IComparer<T> _comparer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Heap{T}"/> class.
         /// </summary>
-        /// <param name="heavyItemWeight">The weight of an item to be removed.</param>
+        /// <param name="heapType">The type of heap to create.</param>
         /// <param name="initialCapacity">The initial capacity of the heap.</param>
         /// <param name="comparer">An optional comparer for the items.</param>
         protected Heap(
-            ItemWeight heavyItemWeight,
+            HeapType heapType,
             [ValueRange(0, int.MaxValue)] int initialCapacity,
             IComparer<T>? comparer)
         {
-            _heavyItemWeight = heavyItemWeight;
+            _heapType = heapType;
             _heap = new List<HeapItem>(initialCapacity);
             _comparer = comparer ?? Comparer<T>.Default;
         }
@@ -44,7 +48,6 @@ namespace Widemeadows.Algorithms.Heaps
         public T this[int index]
         {
             get => _heap[index].Value;
-            protected set => _heap[index] = new HeapItem(value);
         }
 
         /// <summary>
@@ -96,7 +99,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="i">The index of the item to change.</param>
         public void Remove(int i)
         {
-            _heap[i] = new HeapItem(_heavyItemWeight);
+            _heap[i] = new HeapItem(isMaximum: true);
 
             SiftUp(i);
             Extract();
@@ -113,32 +116,100 @@ namespace Widemeadows.Algorithms.Heaps
         /// </summary>
         /// <param name="i">The index of the item to change.</param>
         /// <param name="value">The new value.</param>
-        public abstract void ChangeValue([ValueRange(0, int.MaxValue)] int i, in T value);
+        public void ChangeValue(int i, in T value)
+        {
+            var oldValue = _heap[i].Value;
+            _heap[i] = new HeapItem(value);
+            if (IsGreater(value, oldValue))
+            {
+                SiftUp(i);
+            }
+            else
+            {
+                SiftDown(i);
+            }
+        }
 
         /// <summary>
         /// Sifts the item with the <paramref name="i"/>-th index up.
         /// </summary>
         /// <param name="i">The index of the item to sift up.</param>
-        protected abstract void SiftUp([ValueRange(0, int.MaxValue)] int i);
+        private void SiftUp(int i)
+        {
+            while (ParentIsSmaller(i))
+            {
+                Swap(Parent(i), i);
+                i = Parent(i);
+            }
+        }
 
         /// <summary>
         /// Sifts the item with the <paramref name="i"/>-th index down.
         /// </summary>
         /// <param name="i">The index of the item to sift down.</param>
-        protected abstract void SiftDown([ValueRange(0, int.MaxValue)] int i);
+        private void SiftDown(int i)
+        {
+            // Starting from the i'th item, we will select the greatest child
+            // and sift the starting value down that path by swapping the items.
+            // If we find no child to swap with, we stop.
+            while (true)
+            {
+                var hasGreaterChild = TryFindGreaterChild(i, out var childIndex);
+                if (!hasGreaterChild) return;
+
+                Swap(i, childIndex);
+                i = childIndex;
+            }
+        }
 
         /// <summary>
         /// Swaps the <paramref name="i"/>-th and <paramref name="j"/>-th item.
         /// </summary>
         /// <param name="i">The index of the first item.</param>
         /// <param name="j">The index of the second item.</param>
-        protected void Swap(int i, int j)
+        private void Swap(int i, int j)
         {
             Debug.Assert(i >= 0 && i < _heap.Count, "i >= 0 && i < values.Count");
             Debug.Assert(j >= 0 && j < _heap.Count, "j >= 0 && j < values.Count");
             Debug.Assert(i != j, "i != j");
 
             (_heap[i], _heap[j]) = (_heap[j], _heap[i]);
+        }
+
+        /// <summary>
+        /// Determines whether the parent of the <paramref name="i"/>-th item is smaller
+        /// than the <paramref name="i"/>-th item itself.
+        /// </summary>
+        /// <param name="i">The index of the item to compare with its parent.</param>
+        /// <returns><see langword="true"/> if the parent is smaller; <see langword="false"/> otherwise.</returns>
+        private bool ParentIsSmaller(int i) =>
+            !IsRoot(i) && IsSmaller(Parent(i), i);
+
+        /// <summary>
+        /// Finds the child that is greater than the item at the <paramref name="i"/>-th index.
+        /// </summary>
+        /// <param name="i">The root node.</param>
+        /// <param name="childIndex">The index of the greater child; only meaningful if the method evaluates to <see langword="true"/>.</param>
+        /// <returns><see langword="true"/> if a greater child exists; <see langword="false"/> otherwise.</returns>
+        private bool TryFindGreaterChild(int i, out int childIndex)
+        {
+            childIndex = i;
+            var hasLeftChild = TryGetLeftChild(i, out var leftChildIndex);
+            var hasRightChild = TryGetRightChild(i, out var rightChildIndex);
+
+            // Test if the left child is greater than the current item.
+            if (hasLeftChild && IsGreater(leftChildIndex, childIndex))
+            {
+                childIndex = leftChildIndex;
+            }
+
+            // Test if the right child is greater than the currently greatest item
+            if (hasRightChild && IsGreater(rightChildIndex, childIndex))
+            {
+                childIndex = rightChildIndex;
+            }
+
+            return childIndex != i;
         }
     }
 }

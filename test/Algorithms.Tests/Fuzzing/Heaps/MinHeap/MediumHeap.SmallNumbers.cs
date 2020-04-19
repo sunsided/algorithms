@@ -17,7 +17,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps.MinHeap
         {
             get
             {
-                const int numTestCases = 1000;
+                const int numTestCases = 100;
                 var random = new Random();
 
                 for (var i = 0; i < numTestCases; ++i)

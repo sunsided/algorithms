@@ -37,6 +37,7 @@ namespace Widemeadows.Algorithms.Tests
                 var state = states[index];
 
                 ApplySimpleOperation(_maxHeap, state.Operation);
+                ValidateMaxHeap(_maxHeap, index);
 
                 if (state.ExpectItems)
                 {
@@ -51,8 +52,6 @@ namespace Widemeadows.Algorithms.Tests
                 {
                     _maxHeap.Count.Should().Be(0, "because we have removed the last item");
                 }
-
-                ValidateMaxHeap(_maxHeap, index);
             }
         }
 

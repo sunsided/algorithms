@@ -10,7 +10,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps.MaxHeap
     /// Tests for <see cref="MinHeap{T}"/>.
     /// </summary>
     [Trait("Fuzzing","Fast")]
-    public class MediumHeapBigNumbers : MinHeapFuzzingBase
+    public class MediumHeapBigNumbers : MaxHeapFuzzingBase
     {
         private const int MaxOperations = 100;
 
@@ -18,7 +18,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps.MaxHeap
         {
             get
             {
-                const int numTestCases = 1000;
+                const int numTestCases = 100;
                 var random = new Random();
 
                 for (var i = 0; i < numTestCases; ++i)

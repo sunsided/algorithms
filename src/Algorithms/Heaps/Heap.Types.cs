@@ -10,22 +10,19 @@ namespace Widemeadows.Algorithms.Heaps
     public abstract partial class Heap<T>
     {
         /// <summary>
-        /// The weight of an item in a heap.
+        /// The type of a heap.
         /// </summary>
-        /// <remarks>
-        ///    Used to sift up items that are to be removed.
-        /// </remarks>
-        protected enum ItemWeight
+        protected enum HeapType
         {
             /// <summary>
-            /// The item has the smallest possible value.
+            /// Min Heap.
             /// </summary>
-            NegativeInfinity = -1,
+            MinHeap = -1,
 
             /// <summary>
-            /// The item has the largest possible value.
+            /// Max Heap.
             /// </summary>
-            PositiveInfinity = 1
+            MaxHeap = 1
         }
 
         /// <summary>
@@ -33,7 +30,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// </summary>
         private readonly struct HeapItem
         {
-            public readonly int Polarity;
+            public readonly bool IsMaximum;
             public readonly T Value;
 
             /// <summary>
@@ -42,26 +39,25 @@ namespace Widemeadows.Algorithms.Heaps
             /// <param name="value">The item value.</param>
             public HeapItem(T value)
             {
-                Polarity = 0;
+                IsMaximum = false;
                 Value = value;
             }
 
             /// <summary>
             /// Initializes an instance of the <see cref="HeapItem"/> struct.
             /// </summary>
-            /// <param name="weight">A weight of the item.</param>
-            public HeapItem(ItemWeight weight)
+            /// <param name="isMaximum">Determines whether this is the maximum token.</param>
+            public HeapItem(bool isMaximum)
             {
-                Debug.Assert(weight == ItemWeight.NegativeInfinity || weight == ItemWeight.PositiveInfinity, "weight == ItemWeight.NegativeInfinity || weight == ItemWeight.PositiveInfinity");
-                Polarity = (int) weight;
+                IsMaximum = isMaximum;
                 Value = default!;
             }
 
             /// <inheritdoc />
-            public override string ToString() => Polarity != 0 ? "Special" : Value.ToString();
+            public override string ToString() => IsMaximum ? "Special" : Value.ToString();
 
             /// <inheritdoc />
-            public override int GetHashCode() => HashCode.Combine(Polarity, Value);
+            public override int GetHashCode() => HashCode.Combine(IsMaximum, Value);
         }
     }
 }

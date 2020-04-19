@@ -56,7 +56,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="index">The index of the left child item. Only valid if the method evaluates to <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the left child exists; <see langword="false"/> otherwise.</returns>
         [Pure, DebuggerStepThrough]
-        protected bool TryGetLeftChild([ValueRange(0, int.MaxValue)] int i, [ValueRange(1, int.MaxValue)] out int index)
+        private bool TryGetLeftChild([ValueRange(0, int.MaxValue)] int i, [ValueRange(1, int.MaxValue)] out int index)
         {
             index = LeftChild(i);
             return index < Count;
@@ -69,7 +69,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="index">The index of the right child item. Only valid if the method evaluates to <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the right child exists; <see langword="false"/> otherwise.</returns>
         [Pure, DebuggerStepThrough]
-        protected bool TryGetRightChild([ValueRange(0, int.MaxValue)] int i, [ValueRange(2, int.MaxValue)] out int index)
+        private bool TryGetRightChild([ValueRange(0, int.MaxValue)] int i, [ValueRange(2, int.MaxValue)] out int index)
         {
             index = RightChild(i);
             return index < Count;
