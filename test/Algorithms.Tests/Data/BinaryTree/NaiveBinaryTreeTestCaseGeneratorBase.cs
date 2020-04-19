@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Widemeadows.Algorithms.Tests.Model;
 using Widemeadows.Algorithms.Trees;
 
-namespace Widemeadows.Algorithms.Tests.Data
+namespace Widemeadows.Algorithms.Tests.Data.BinaryTree
 {
     /// <summary>
     /// Base class for <see cref="NaiveBinaryTree{T}"/> test case generators.

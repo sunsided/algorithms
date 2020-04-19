@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Widemeadows.Algorithms.Tests.Data;
+using Widemeadows.Algorithms.Tests.Data.BinaryTree;
 using Widemeadows.Algorithms.Tests.Model;
 using Widemeadows.Algorithms.Trees;
 using Xunit;

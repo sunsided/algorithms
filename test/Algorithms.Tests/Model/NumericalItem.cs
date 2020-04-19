@@ -47,5 +47,12 @@ namespace Widemeadows.Algorithms.Tests.Model
         /// <param name="value">The value to convert.</param>
         /// <returns>The <see cref="NumericalItem"/> representing the <paramref name="value"/>.</returns>
         public static implicit operator NumericalItem(int value) => new NumericalItem(value);
+
+        public static bool operator <(NumericalItem lhs, NumericalItem rhs) => lhs.CompareTo(rhs) < 0;
+        public static bool operator >(NumericalItem lhs, NumericalItem rhs) => lhs.CompareTo(rhs) > 0;
+        public static bool operator <=(NumericalItem lhs, NumericalItem rhs) => lhs.CompareTo(rhs) <= 0;
+        public static bool operator >=(NumericalItem lhs, NumericalItem rhs) => lhs.CompareTo(rhs) >= 0;
+        public static bool operator ==(NumericalItem lhs, NumericalItem rhs) => lhs.CompareTo(rhs) == 0;
+        public static bool operator !=(NumericalItem lhs, NumericalItem rhs) => lhs.CompareTo(rhs) != 0;
     }
 }
