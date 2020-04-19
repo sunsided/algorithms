@@ -16,6 +16,7 @@ ProjectSection(SolutionItems) = preProject
 	LICENSE.md = LICENSE.md
 	README.md = README.md
 	Directory.Build.props = Directory.Build.props
+	CHANGELOG.md = CHANGELOG.md
 EndProjectSection
 EndProject
 Global
