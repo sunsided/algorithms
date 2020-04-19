@@ -137,9 +137,10 @@ namespace Widemeadows.Algorithms.Heaps
         /// Calculates the index of the parent of the <paramref name="i"/>-th item.
         /// </summary>
         /// <param name="i">The index of the item whose parent should be determined.</param>
-        /// <returns>The index of the parent item.</returns>
+        /// <returns>The index of the parent item or <c>-1</c> if the item is the root element (at <c>0</c>).</returns>
         [DebuggerStepThrough]
-        private static int Parent([ValueRange(0, int.MaxValue)] int i) => i / 2;
+        [ValueRange(-1, int.MaxValue)]
+        private static int Parent([ValueRange(0, int.MaxValue)] int i) => (i - 1) / 2;
 
         /// <summary>
         /// Calculates the index of the left child of the <paramref name="i"/>-th item.
@@ -147,6 +148,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="i">The index of the item whose left child should be determined.</param>
         /// <returns>The index of the left child item.</returns>
         [DebuggerStepThrough]
+        [ValueRange(1, int.MaxValue)]
         private static int LeftChild([ValueRange(0, int.MaxValue)] int i) => 2 * i + 1;
 
         /// <summary>
@@ -155,6 +157,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="i">The index of the item whose right child should be determined.</param>
         /// <returns>The index of the right child item.</returns>
         [DebuggerStepThrough]
+        [ValueRange(2, int.MaxValue)]
         private static int RightChild([ValueRange(0, int.MaxValue)] int i) => 2 * i + 2;
 
         /// <summary>
