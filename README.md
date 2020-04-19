@@ -16,6 +16,7 @@ and data structures.
 - Binary Tree
     - In-, Level-, Pre- and Post-Order Traversals
     - Recursive In-, Pre- and Post-Order Traversals
+- Min Heap and Max Heap
 
 ### License
 
