@@ -25,3 +25,4 @@ This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Using [ErrorProne.NET](https://github.com/SergeyTeplyakov/ErrorProne.NET)
   in order to improve code correctness.
 - Added SourceLink against the GitHub repo.
+- Using fuzzing to ensure Min/Max Heap implementation correctness.

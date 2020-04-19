@@ -149,31 +149,11 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="i">The index of the item to sift down.</param>
         private void SiftDown(int i)
         {
-            // Starting from the i'th item, we will select the greatest child
-            // and sift the starting value down that path by swapping the items.
-            // If we find no child to swap with, we stop.
-            while (true)
+            while (HasGreaterChild(i, out var childIndex))
             {
-                var hasGreaterChild = TryFindGreaterChild(i, out var childIndex);
-                if (!hasGreaterChild) return;
-
                 Swap(i, childIndex);
                 i = childIndex;
             }
-        }
-
-        /// <summary>
-        /// Swaps the <paramref name="i"/>-th and <paramref name="j"/>-th item.
-        /// </summary>
-        /// <param name="i">The index of the first item.</param>
-        /// <param name="j">The index of the second item.</param>
-        private void Swap(int i, int j)
-        {
-            Debug.Assert(i >= 0 && i < _heap.Count, "i >= 0 && i < values.Count");
-            Debug.Assert(j >= 0 && j < _heap.Count, "j >= 0 && j < values.Count");
-            Debug.Assert(i != j, "i != j");
-
-            (_heap[i], _heap[j]) = (_heap[j], _heap[i]);
         }
 
         /// <summary>
@@ -186,12 +166,13 @@ namespace Widemeadows.Algorithms.Heaps
             !IsRoot(i) && IsSmaller(Parent(i), i);
 
         /// <summary>
-        /// Finds the child that is greater than the item at the <paramref name="i"/>-th index.
+        /// Finds the child that is greater than the item at the <paramref name="i"/>-th index
+        /// or returns <see langword="false"/> if no such child exists.
         /// </summary>
         /// <param name="i">The root node.</param>
         /// <param name="childIndex">The index of the greater child; only meaningful if the method evaluates to <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if a greater child exists; <see langword="false"/> otherwise.</returns>
-        private bool TryFindGreaterChild(int i, out int childIndex)
+        private bool HasGreaterChild(int i, out int childIndex)
         {
             childIndex = i;
             var hasLeftChild = TryGetLeftChild(i, out var leftChildIndex);
@@ -210,6 +191,20 @@ namespace Widemeadows.Algorithms.Heaps
             }
 
             return childIndex != i;
+        }
+
+        /// <summary>
+        /// Swaps the <paramref name="i"/>-th and <paramref name="j"/>-th item.
+        /// </summary>
+        /// <param name="i">The index of the first item.</param>
+        /// <param name="j">The index of the second item.</param>
+        private void Swap(int i, int j)
+        {
+            Debug.Assert(i >= 0 && i < _heap.Count, "i >= 0 && i < values.Count");
+            Debug.Assert(j >= 0 && j < _heap.Count, "j >= 0 && j < values.Count");
+            Debug.Assert(i != j, "i != j");
+
+            (_heap[i], _heap[j]) = (_heap[j], _heap[i]);
         }
     }
 }
