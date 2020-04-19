@@ -45,8 +45,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="i">The index of the item to sift up.</param>
         protected override void SiftUp(int i)
         {
-            // Nothing to do if the item is the root or already smaller than or equal to the parent.
-            while (!IsRoot(i) && IsGreater(Parent(i), i))
+            while (ParentIsGreater(i))
             {
                 Swap(Parent(i), i);
                 i = Parent(i);
@@ -59,28 +58,53 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="i">The index of the item to sift down.</param>
         protected override void SiftDown(int i)
         {
+            // Starting from the i'th item, we will select the smallest child
+            // and sift the starting value down that path by swapping the items.
+            // If we find no child to swap with, we stop.
             while (true)
             {
-                var minIndex = i;
-                var l = LeftChild(i);
-                var hasLeftChild = l < Count;
-                if (hasLeftChild && IsSmaller(l, minIndex))
-                {
-                    minIndex = l;
-                }
+                var hasSmallerChild = TryFindSmallerChild(i, out var childIndex);
+                if (!hasSmallerChild) return;
 
-                var r = RightChild(i);
-                var hasRightChild = r < Count;
-                if (hasRightChild && IsSmaller(r, minIndex))
-                {
-                    minIndex = r;
-                }
-
-                if (i == minIndex) return;
-
-                Swap(i, minIndex);
-                i = minIndex;
+                Swap(i, childIndex);
+                i = childIndex;
             }
+        }
+
+        /// <summary>
+        /// Determines whether the parent of the <paramref name="i"/>-th item is greater
+        /// than the <paramref name="i"/>-th item itself.
+        /// </summary>
+        /// <param name="i">The index of the item to compare with its parent.</param>
+        /// <returns><see langword="true"/> if the parent is greater; <see langword="false"/> otherwise.</returns>
+        private bool ParentIsGreater(int i) =>
+            !IsRoot(i) && IsGreater(Parent(i), i);
+
+        /// <summary>
+        /// Finds the child that is greater than the item at the <paramref name="i"/>-th index.
+        /// </summary>
+        /// <param name="i">The root node.</param>
+        /// <param name="childIndex">The index of the greater child; only meaningful if the method evaluates to <see langword="true"/>.</param>
+        /// <returns><see langword="true"/> if a greater child exists; <see langword="false"/> otherwise.</returns>
+        private bool TryFindSmallerChild(int i, out int childIndex)
+        {
+            childIndex = i;
+            var hasLeftChild = TryGetLeftChild(i, out var leftChildIndex);
+            var hasRightChild = TryGetRightChild(i, out var rightChildIndex);
+
+            // Test if the left child is smaller than the current item.
+            if (hasLeftChild && IsSmaller(leftChildIndex, childIndex))
+            {
+                childIndex = leftChildIndex;
+            }
+
+            // Test if the right child is smaller than the currently smallest item
+            if (hasRightChild && IsSmaller(rightChildIndex, childIndex))
+            {
+                childIndex = rightChildIndex;
+            }
+
+            return childIndex != i;
         }
     }
 }
