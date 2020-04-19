@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Widemeadows.Algorithms.Heaps;
 using Xunit;
 
-namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
+namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps.MaxHeap
 {
     /// <summary>
     /// Tests for <see cref="MinHeap{T}"/>.
     /// </summary>
     [Trait("Fuzzing","Fast")]
-    public class MediumHeapBigNumbers : MinHeapFuzzingBase
+    public class MediumHeapSmallNumbers : MaxHeapFuzzingBase
     {
         private const int MaxOperations = 100;
 
@@ -31,7 +31,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
         [MemberData(nameof(RandomSeeds), DisableDiscoveryEnumeration = true)]
         public void Fuzzing(int seed)
         {
-            Fuzz(seed, MaxOperations);
+            Fuzz(seed, MaxOperations, 0, 10);
         }
     }
 }

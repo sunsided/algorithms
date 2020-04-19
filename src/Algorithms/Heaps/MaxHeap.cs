@@ -6,33 +6,32 @@ using JetBrains.Annotations;
 namespace Widemeadows.Algorithms.Heaps
 {
     /// <summary>
-    /// A min-heap.
+    /// A max-heap.
     /// </summary>
     /// <typeparam name="T">The type of the heap elements.</typeparam>
-    public sealed class MinHeap<T> : IRawHeapAccess<T>
+    public sealed class MaxHeap<T> : IRawHeapAccess<T>
         where T : notnull
     {
         private readonly IComparer<T> _comparer;
 
-        // TODO: min heap specific
-        private readonly List<Item> _minHeap;
+        private readonly List<Item> _maxHeap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MinHeap{T}"/> class.
         /// </summary>
         /// <param name="initialCapacity"></param>
         /// <param name="comparer"></param>
-        public MinHeap([ValueRange(0, int.MaxValue)] int initialCapacity = 0, IComparer<T>? comparer = default)
+        public MaxHeap([ValueRange(0, int.MaxValue)] int initialCapacity = 0, IComparer<T>? comparer = default)
         {
             _comparer = comparer ?? Comparer<T>.Default;
-            _minHeap = new List<Item>(initialCapacity);
+            _maxHeap = new List<Item>(initialCapacity);
         }
 
         /// <summary>
         /// Gets the number of items in the heap.
         /// </summary>
         [ValueRange(0, int.MaxValue)]
-        public int Count => _minHeap.Count;
+        public int Count => _maxHeap.Count;
 
         /// <summary>
         /// Inserts a value into the heap.
@@ -43,8 +42,8 @@ namespace Widemeadows.Algorithms.Heaps
             // At this point, we may want to add a check to ensure that we can only
             // insert to the heap if its size is less than the maximums size (i.e. the actual size of the array).
             // This is obviously not required when using a list rather than an array.
-            _minHeap.Add(new Item(value));
-            SiftUp(_minHeap.Count - 1);
+            _maxHeap.Add(new Item(value));
+            SiftUp(_maxHeap.Count - 1);
         }
 
         /// <summary>
@@ -59,8 +58,8 @@ namespace Widemeadows.Algorithms.Heaps
         /// <returns>The item.</returns>
         public T Peek()
         {
-            if (_minHeap.Count <= 0) throw new InvalidOperationException("The heap must contain at least one item.");
-            return _minHeap[0].Value;
+            if (_maxHeap.Count <= 0) throw new InvalidOperationException("The heap must contain at least one item.");
+            return _maxHeap[0].Value;
         }
 
         /// <summary>
@@ -69,15 +68,15 @@ namespace Widemeadows.Algorithms.Heaps
         /// <returns>The first item.</returns>
         public T Extract()
         {
-            if (_minHeap.Count <= 0) throw new InvalidOperationException("The heap must contain at least one item.");
+            if (_maxHeap.Count <= 0) throw new InvalidOperationException("The heap must contain at least one item.");
 
             // In a min heap, the root item is the minimum.
-            var result = _minHeap[0];
+            var result = _maxHeap[0];
 
             // Replace it with the last item and sift that one down;
             // making sure the formerly "last" item is "removed" from the list.
-            _minHeap[0] = _minHeap[^1];
-            _minHeap.RemoveAt(_minHeap.Count - 1);
+            _maxHeap[0] = _maxHeap[^1];
+            _maxHeap.RemoveAt(_maxHeap.Count - 1);
             SiftDown(0);
 
             return result.Value;
@@ -99,7 +98,7 @@ namespace Widemeadows.Algorithms.Heaps
         T IRawHeapAccess<T>.this[int index]
         {
             [DebuggerStepThrough]
-            get => _minHeap[index].Value;
+            get => _maxHeap[index].Value;
         }
 
         /// <inheritdoc cref="IRawHeapAccess{T}.Parent"/>
@@ -122,7 +121,7 @@ namespace Widemeadows.Algorithms.Heaps
         [DebuggerStepThrough]
         void IRawHeapAccess<T>.Remove(int i) => Remove(i);
 
-        /// <inheritdoc cref="IRawHeapAccess{T}.ChangeValue"/>
+        /// <inheritdoc cref="IRawHeapAccess{T}.ChangeValue(int,T)"/>
         [DebuggerStepThrough]
         void IRawHeapAccess<T>.ChangeValue(int i, T value) => ChangeValue(i, value);
 
@@ -172,7 +171,17 @@ namespace Widemeadows.Algorithms.Heaps
         /// <returns><see langword="true"/> if the left item is greater than the right one; <see langword="false"/> otherwise.</returns>
         /// <seealso cref="Compare"/>
         [DebuggerStepThrough]
-        private bool IsGreater(int lhs, int rhs) => Compare(_minHeap[lhs], _minHeap[rhs]) > 0;
+        private bool IsGreater(int lhs, int rhs) => Compare(_maxHeap[lhs], _maxHeap[rhs]) > 0;
+
+        /// <summary>
+        /// Determines whether an item is strictly greater than another one.
+        /// </summary>
+        /// <param name="lhs">The left item's index.</param>
+        /// <param name="rhs">The right item's index.</param>
+        /// <returns><see langword="true"/> if the left item is greater than the right one; <see langword="false"/> otherwise.</returns>
+        /// <seealso cref="Compare"/>
+        [DebuggerStepThrough]
+        private bool IsGreater(Item lhs, Item rhs) => Compare(lhs, rhs) > 0;
 
         /// <summary>
         /// Determines whether an item is strictly smaller than another one.
@@ -182,17 +191,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// <returns><see langword="true"/> if the left item is smaller than the right one; <see langword="false"/> otherwise.</returns>
         /// <seealso cref="Compare"/>
         [DebuggerStepThrough]
-        private bool IsSmaller(int lhs, int rhs) => Compare(_minHeap[lhs], _minHeap[rhs]) < 0;
-
-        /// <summary>
-        /// Determines whether an item is strictly smaller than another one.
-        /// </summary>
-        /// <param name="lhs">The left item.</param>
-        /// <param name="rhs">The right item.</param>
-        /// <returns><see langword="true"/> if the left item is smaller than the right one; <see langword="false"/> otherwise.</returns>
-        /// <seealso cref="Compare"/>
-        [DebuggerStepThrough]
-        private bool IsSmaller(Item lhs, Item rhs) => Compare(lhs, rhs) < 0;
+        private bool IsSmaller(int lhs, int rhs) => Compare(_maxHeap[lhs], _maxHeap[rhs]) < 0;
 
         /// <summary>
         /// Compares two items.
@@ -203,14 +202,14 @@ namespace Widemeadows.Algorithms.Heaps
         /// <seealso cref="IComparable.CompareTo"/>
         private int Compare(Item lhs, Item rhs)
         {
-            if (!lhs.IsMinimumToken && !rhs.IsMinimumToken)
+            if (!lhs.IsMaximumToken && !rhs.IsMaximumToken)
             {
                 return _comparer.Compare(lhs.Value, rhs.Value);
             }
 
-            if (lhs.IsMinimumToken && rhs.IsMinimumToken) return 0;
-            if (lhs.IsMinimumToken) return -1;
-            return 1;
+            if (lhs.IsMaximumToken && rhs.IsMaximumToken) return 0;
+            if (lhs.IsMaximumToken) return 1;
+            return -1;
         }
 
         /// <summary>
@@ -220,7 +219,7 @@ namespace Widemeadows.Algorithms.Heaps
         private void SiftUp(int i)
         {
             // Nothing to do if the item is the root or already smaller than or equal to the parent.
-            while (!IsRoot(i) && IsGreater(Parent(i), i))
+            while (!IsRoot(i) && IsSmaller(Parent(i), i))
             {
                 Swap(Parent(i), i);
                 i = Parent(i);
@@ -236,34 +235,34 @@ namespace Widemeadows.Algorithms.Heaps
             while (true)
             {
                 // TODO: Remove duplicate assignment
-                var minIndex = i;
+                var maxIndex = i;
                 var l = LeftChild(i);
-                var hasLeftChild = l < _minHeap.Count;
-                if (hasLeftChild && IsSmaller(l, minIndex))
+                var hasLeftChild = l < _maxHeap.Count;
+                if (hasLeftChild && IsGreater(l, maxIndex))
                 {
-                    minIndex = l;
+                    maxIndex = l;
                 }
 
                 var r = RightChild(i);
-                var hasRightChild = r < _minHeap.Count;
-                if (hasRightChild && IsSmaller(r, minIndex))
+                var hasRightChild = r < _maxHeap.Count;
+                if (hasRightChild && IsGreater(r, maxIndex))
                 {
-                    minIndex = r;
+                    maxIndex = r;
                 }
 
-                if (i == minIndex) return;
+                if (i == maxIndex) return;
 
-                Swap(i, minIndex);
-                i = minIndex;
+                Swap(i, maxIndex);
+                i = maxIndex;
             }
         }
 
         private void ChangeValue(int i, T value)
         {
-            var oldValue = _minHeap[i];
+            var oldValue = _maxHeap[i];
             var newValue = new Item(value);
-            _minHeap[i] = newValue;
-            if (IsSmaller(newValue, oldValue)) // TODO: min heap specific
+            _maxHeap[i] = newValue;
+            if (IsGreater(newValue, oldValue))
             {
                 SiftUp(i);
             }
@@ -273,12 +272,11 @@ namespace Widemeadows.Algorithms.Heaps
             }
         }
 
-        // TOOD: Add test case
         private void Remove(int i)
         {
-            // In a min heap, replace the item to be removed with "negative infinity",
-            // sift the item up, then extract the minimum.
-            _minHeap[i] = new Item(isMinimum: true);
+            // In a max heap, replace the item to be removed with "positive infinity",
+            // sift the item up, then extract the maximum.
+            _maxHeap[i] = new Item(isMaximum: true);
 
             SiftUp(i);
             Extract();
@@ -291,11 +289,11 @@ namespace Widemeadows.Algorithms.Heaps
         /// <param name="j">The index of the second item.</param>
         private void Swap(int i, int j)
         {
-            Debug.Assert(i >= 0 && i < _minHeap.Count, "i >= 0 && i < values.Count");
-            Debug.Assert(j >= 0 && j < _minHeap.Count, "j >= 0 && j < values.Count");
+            Debug.Assert(i >= 0 && i < _maxHeap.Count, "i >= 0 && i < values.Count");
+            Debug.Assert(j >= 0 && j < _maxHeap.Count, "j >= 0 && j < values.Count");
             Debug.Assert(i != j, "i != j");
 
-            (_minHeap[i], _minHeap[j]) = (_minHeap[j], _minHeap[i]);
+            (_maxHeap[i], _maxHeap[j]) = (_maxHeap[j], _maxHeap[i]);
         }
 
         /// <summary>
@@ -303,8 +301,7 @@ namespace Widemeadows.Algorithms.Heaps
         /// </summary>
         private readonly struct Item
         {
-            // TODO: min heap specific
-            public readonly bool IsMinimumToken;
+            public readonly bool IsMaximumToken;
             public readonly T Value;
 
             /// <summary>
@@ -313,29 +310,25 @@ namespace Widemeadows.Algorithms.Heaps
             /// <param name="value">The item value.</param>
             public Item(T value)
             {
-                // TODO: min heap specific
-                IsMinimumToken = false;
+                IsMaximumToken = false;
                 Value = value;
             }
 
             /// <summary>
             /// Initializes an instance of the <see cref="Item"/> struct.
             /// </summary>
-            /// <param name="isMinimum">A value indicating whether this item represents the minimum token.</param>
-            public Item(bool isMinimum)
+            /// <param name="isMaximum">A value indicating whether this item represents the minimum token.</param>
+            public Item(bool isMaximum)
             {
-                // TODO: min heap specific
-                IsMinimumToken = isMinimum;
+                IsMaximumToken = isMaximum;
                 Value = default!;
             }
 
             /// <inheritdoc />
-            // TODO: min heap specific
-            public override string ToString() => IsMinimumToken ? "Minimum" : Value.ToString();
+            public override string ToString() => IsMaximumToken ? "Maximum" : Value.ToString();
 
             /// <inheritdoc />
-            // TODO: min heap specific
-            public override int GetHashCode() => HashCode.Combine(IsMinimumToken, Value);
+            public override int GetHashCode() => HashCode.Combine(IsMaximumToken, Value);
         }
     }
 }

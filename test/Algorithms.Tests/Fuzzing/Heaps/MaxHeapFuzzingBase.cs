@@ -1,18 +1,22 @@
 using System;
 using System.Collections.Generic;
-using FluentAssertions;
 using Widemeadows.Algorithms.Heaps;
 using Widemeadows.Algorithms.Tests.Data.Heap;
 using Widemeadows.Algorithms.Tests.Model;
 
-namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
+namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps
 {
     /// <summary>
-    /// Base class for fuzzing <see cref="MinHeap{T}"/>.
+    /// Base class for fuzzing <see cref="Heap{T}"/>.
     /// </summary>
-    public abstract class MinHeapFuzzingBase
+    public abstract class HeapFuzzingBase
     {
-        protected readonly MinHeap<NumericalItem> MinHeap = new MinHeap<NumericalItem>();
+        internal readonly IRawHeapAccess<NumericalItem> Heap;
+
+        internal HeapFuzzingBase(IRawHeapAccess<NumericalItem> heap)
+        {
+            Heap = heap;
+        }
 
         protected void Fuzz(int seed, int maxOperations, int minValue = 0, int maxValue = int.MaxValue)
         {
@@ -24,7 +28,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
             {
                 var operation = operations[i];
                 ApplyFuzzedOperation(operation);
-                ValidateMinHeap(MinHeap.RawAccess, i);
+                ValidateHeap(i);
             }
         }
 
@@ -112,31 +116,31 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
             {
                 case HeapOperationType.Extract:
                 {
-                    MinHeap.Extract();
+                    Heap.Extract();
                     break;
                 }
 
                 case HeapOperationType.Insert:
                 {
-                    MinHeap.Insert(operation.value);
+                    Heap.Insert(operation.value);
                     break;
                 }
 
                 case HeapOperationType.ChangeTop:
                 {
-                    MinHeap.ChangeValue(operation.value);
+                    Heap.ChangeValue(operation.value);
                     break;
                 }
 
                 case HeapOperationType.RemoveAny:
                 {
-                    MinHeap.RawAccess.Remove(operation.index);
+                    Heap.Remove(operation.index);
                     break;
                 }
 
                 case HeapOperationType.ChangeAny:
                 {
-                    MinHeap.RawAccess.ChangeValue(operation.index, operation.value);
+                    Heap.ChangeValue(operation.index, operation.value);
                     break;
                 }
 
@@ -145,23 +149,6 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
             }
         }
 
-        internal static void ValidateMinHeap(IRawHeapAccess<NumericalItem> heap, int step)
-        {
-            for (var i = 0; i < heap.Count; ++i)
-            {
-                var idxFirstChild = heap.LeftChild(i);
-                var idxSecondChild = heap.RightChild(i);
-
-                // If the first child index is out of bounds, the second one must be, too.
-                // Since every following element would produce an index even greater,
-                // we can terminate the entire check at this point.
-                if (idxFirstChild >= heap.Count) break;
-                heap[i].Should().BeLessOrEqualTo(heap[idxFirstChild], "because a min heap requires values[{0}] <= values[{1}]; current heap size: {2} after step {3}", i, idxFirstChild, heap.Count, step);
-
-                // Even though a left child existed, a right child may not.
-                if (idxSecondChild >= heap.Count) break;
-                heap[i].Should().BeLessOrEqualTo(heap[idxFirstChild], "because a min heap requires values[{0}] <= values[{1}]; current heap size: {2} after step {3}", i, idxFirstChild, heap.Count, step);
-            }
-        }
+        internal abstract void ValidateHeap(int step);
     }
 }

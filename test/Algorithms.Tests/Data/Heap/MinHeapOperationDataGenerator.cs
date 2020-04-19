@@ -7,7 +7,7 @@ namespace Widemeadows.Algorithms.Tests.Data.Heap
     /// <summary>
     /// Test case generator for heaps tests, e.g. <see cref="MinHeap{T}" />.
     /// </summary>
-    public sealed class HeapOperationDataGenerator : TestCaseGeneratorBase
+    public sealed class MinHeapOperationDataGenerator : TestCaseGeneratorBase
     {
         /// <inheritdoc />
         public override IEnumerator<object[]> GetEnumerator()

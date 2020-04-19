@@ -9,11 +9,11 @@ using Xunit;
 namespace Widemeadows.Algorithms.Tests
 {
     /// <summary>
-    /// Tests for <see cref="MinHeap{T}"/>.
+    /// Tests for <see cref="MaxHeap{T}"/>.
     /// </summary>
-    public class MinHeapTests
+    public class MaxHeapTests
     {
-        private readonly MinHeap<NumericalItem> _minHeap = new MinHeap<NumericalItem>();
+        private readonly MaxHeap<NumericalItem> _maxHeap = new MaxHeap<NumericalItem>();
 
         [Theory]
         [ClassData(typeof(NumericalItemHeapDataGenerator))]
@@ -21,42 +21,42 @@ namespace Widemeadows.Algorithms.Tests
         {
             foreach (var item in items)
             {
-                _minHeap.Insert(item);
+                _maxHeap.Insert(item);
             }
 
-            _minHeap.Count.Should().Be(items.Count, "because that is the number of items we inserted");
-            ValidateMinHeap(_minHeap.RawAccess, items.Count);
+            _maxHeap.Count.Should().Be(items.Count, "because that is the number of items we inserted");
+            ValidateMaxHeap(_maxHeap.RawAccess, items.Count);
         }
 
         [Theory]
-        [ClassData(typeof(MinHeapOperationDataGenerator))]
+        [ClassData(typeof(MaxHeapOperationDataGenerator))]
         public void Heap_AfterModification_IsInCorrectState(HeapState<NumericalItem>[] states)
         {
             for (var index = 0; index < states.Length; index++)
             {
                 var state = states[index];
 
-                ApplySimpleOperation(_minHeap, state.Operation);
+                ApplySimpleOperation(_maxHeap, state.Operation);
 
                 if (state.ExpectItems)
                 {
-                    _minHeap.Count.Should().BeGreaterThan(0, "because we expect at least one item");
+                    _maxHeap.Count.Should().BeGreaterThan(0, "because we expect at least one item");
 
-                    var top = _minHeap.Peek();
-                    top.Should().Be(state.ExpectedMin, "because this is the new minimum value");
-                    top.Value.Should().BeLessOrEqualTo(state.ExpectedMax.Value,
-                        "because this is the expected maximum value");
+                    var top = _maxHeap.Peek();
+                    top.Should().Be(state.ExpectedMax, "because this is the new maximum value");
+                    top.Value.Should().BeGreaterOrEqualTo(state.ExpectedMin.Value,
+                        "because this is the expected minimum value");
                 }
                 else
                 {
-                    _minHeap.Count.Should().Be(0, "because we have removed the last item");
+                    _maxHeap.Count.Should().Be(0, "because we have removed the last item");
                 }
 
-                ValidateMinHeap(_minHeap.RawAccess, index);
+                ValidateMaxHeap(_maxHeap.RawAccess, index);
             }
         }
 
-        private static void ApplySimpleOperation(MinHeap<NumericalItem> heap, HeapOperation<NumericalItem> operation)
+        private static void ApplySimpleOperation(MaxHeap<NumericalItem> heap, HeapOperation<NumericalItem> operation)
         {
             switch (operation.Type)
             {
@@ -84,7 +84,7 @@ namespace Widemeadows.Algorithms.Tests
             }
         }
 
-        private static void ValidateMinHeap(IRawHeapAccess<NumericalItem> heap, int step)
+        private static void ValidateMaxHeap(IRawHeapAccess<NumericalItem> heap, int step)
         {
             for (var i = 0; i < heap.Count; ++i)
             {
@@ -95,11 +95,11 @@ namespace Widemeadows.Algorithms.Tests
                 // Since every following element would produce an index even greater,
                 // we can terminate the entire check at this point.
                 if (idxFirstChild >= heap.Count) break;
-                heap[i].Should().BeLessOrEqualTo(heap[idxFirstChild], "because a min heap requires values[{0}] <= values[{1}]; current heap size: {2} after step {3}", i, idxFirstChild, heap.Count, step);
+                heap[i].Should().BeGreaterOrEqualTo(heap[idxFirstChild], "because a min heap requires values[{0}] >= values[{1}]; current heap size: {2} after step {3}", i, idxFirstChild, heap.Count, step);
 
                 // Even though a left child existed, a right child may not.
                 if (idxSecondChild >= heap.Count) break;
-                heap[i].Should().BeLessOrEqualTo(heap[idxFirstChild], "because a min heap requires values[{0}] <= values[{1}]; current heap size: {2} after step {3}", i, idxFirstChild, heap.Count, step);
+                heap[i].Should().BeGreaterOrEqualTo(heap[idxFirstChild], "because a min heap requires values[{0}] >= values[{1}]; current heap size: {2} after step {3}", i, idxFirstChild, heap.Count, step);
             }
         }
     }

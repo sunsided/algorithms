@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Widemeadows.Algorithms.Heaps;
 using Xunit;
 
-namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
+namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps.MinHeap
 {
     /// <summary>
     /// Tests for <see cref="MinHeap{T}"/>.
@@ -49,7 +49,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
             {
                 var operation = operations[i];
                 ApplyFuzzedOperation(operation);
-                ValidateMinHeap(MinHeap.RawAccess, i);
+                ValidateHeap(i);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
             {
                 var operation = operations[i];
                 ApplyFuzzedOperation(operation);
-                ValidateMinHeap(MinHeap.RawAccess, i);
+                ValidateHeap(i);
             }
         }
 
@@ -87,7 +87,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
             {
                 var operation = operations[i];
                 ApplyFuzzedOperation(operation);
-                ValidateMinHeap(MinHeap.RawAccess, i);
+                ValidateHeap(i);
             }
         }
     }

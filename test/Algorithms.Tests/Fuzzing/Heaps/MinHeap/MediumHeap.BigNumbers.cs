@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using Widemeadows.Algorithms.Heaps;
 using Xunit;
 
-namespace Widemeadows.Algorithms.Tests.Fuzzing.MinHeap
+namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps.MinHeap
 {
     /// <summary>
     /// Tests for <see cref="MinHeap{T}"/>.
     /// </summary>
-    [Trait("Fuzzing","Slow")]
-    public class BigHeapBigNumbers : MinHeapFuzzingBase
+    [Trait("Fuzzing","Fast")]
+    public class MediumHeapBigNumbers : MinHeapFuzzingBase
     {
-        private const int MaxOperations = 10000;
+        private const int MaxOperations = 100;
 
         public static IEnumerable<object[]> RandomSeeds
         {

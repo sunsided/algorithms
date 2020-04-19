@@ -7,19 +7,13 @@ namespace Widemeadows.Algorithms.Heaps
     /// <summary>
     /// Raw access to heap data.
     /// </summary>
-    internal interface IRawHeapAccess<T>
+    internal interface IRawHeapAccess<T> : IHeap<T>
         where T : notnull
     {
         /// <summary>
         /// Gets the underlying value storage of the heap.
         /// </summary>
         T this[[ValueRange(0, int.MaxValue)] int index] { get; }
-
-        /// <summary>
-        /// Gets the number of items in the heap.
-        /// </summary>
-        [ValueRange(0, int.MaxValue)]
-        int Count { get; }
 
         /// <summary>
         /// Calculates the index of the parent of the <paramref name="i"/>-th item.
