@@ -10,6 +10,17 @@ namespace Widemeadows.Algorithms.Heaps
         where T : notnull
     {
         /// <summary>
+        /// Determines whether the item determined by the <paramref name="i"/>-th index is the root element.
+        /// </summary>
+        /// <remarks>
+        ///     This is only ever the case if <paramref name="i"/> is <c>0</c>.
+        /// </remarks>
+        /// <param name="i">The index of the item.</param>
+        /// <returns><see langword="true"/> when <paramref name="i"/> is <c>0</c>; <see langword="false"/> otherwise.</returns>
+        [Pure]
+        bool IsRoot([ValueRange(0, int.MaxValue)] int i);
+
+        /// <summary>
         /// Calculates the index of the parent of the <paramref name="i"/>-th item.
         /// </summary>
         /// <param name="i">The index of the item whose parent should be determined.</param>
@@ -32,16 +43,5 @@ namespace Widemeadows.Algorithms.Heaps
         /// <returns>The index of the right child item.</returns>
         [Pure]
         int RightChild([ValueRange(0, int.MaxValue)] int i);
-
-        /// <summary>
-        /// Determines whether the item determined by the <paramref name="i"/>-th index is the root element.
-        /// </summary>
-        /// <remarks>
-        ///     This is only ever the case if <paramref name="i"/> is <c>0</c>.
-        /// </remarks>
-        /// <param name="i">The index of the item.</param>
-        /// <returns><see langword="true"/> when <paramref name="i"/> is <c>0</c>; <see langword="false"/> otherwise.</returns>
-        [Pure]
-        bool IsRoot([ValueRange(0, int.MaxValue)] int i);
     }
 }

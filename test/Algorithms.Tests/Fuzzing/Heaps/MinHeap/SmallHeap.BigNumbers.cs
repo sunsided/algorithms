@@ -17,7 +17,7 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps.MinHeap
         {
             get
             {
-                const int numTestCases = 1000;
+                const int numTestCases = 100;
                 var random = new Random();
 
                 for (var i = 0; i < numTestCases; ++i)
@@ -32,6 +32,25 @@ namespace Widemeadows.Algorithms.Tests.Fuzzing.Heaps.MinHeap
         public void Fuzzing_SmallHeap_BigNumbers(int seed)
         {
             Fuzz(seed, MaxOperations);
+        }
+
+        [Fact]
+        public void Fix_1001837906()
+        {
+            const int seed = 1001837906;
+            const int minValue = 0;
+            const int maxValue = int.MaxValue;
+
+            var rng = new Random(seed);
+            var numOperations = rng.Next(1, MaxOperations);
+            var operations = FuzzOperations(rng, numOperations, minValue, maxValue);
+
+            for (var i = 0; i < operations.Count; ++i)
+            {
+                var operation = operations[i];
+                ApplyFuzzedOperation(operation);
+                ValidateHeap(i);
+            }
         }
     }
 }
