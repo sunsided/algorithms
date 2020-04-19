@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Widemeadows.Algorithms.Tests.Model;
 
 namespace Widemeadows.Algorithms.Tests.Data
@@ -9,7 +8,6 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// </summary>
     public sealed class NaiveBinaryTreeHalfNodeCountGenerator : NaiveBinaryTreeTestCaseGeneratorBase
     {
-        [NotNull]
         private readonly List<NumericalItem> _items;
 
         /// <summary>

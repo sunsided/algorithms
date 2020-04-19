@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Widemeadows.Algorithms.Tests.Model;
 using Widemeadows.Algorithms.Trees;
 
@@ -10,7 +9,6 @@ namespace Widemeadows.Algorithms.Tests.Data
     /// </summary>
     public sealed class NaiveBinaryTreeTraversalGenerator : TestCaseGeneratorBase
     {
-        [NotNull]
         private readonly List<NumericalItem> _items;
 
         private readonly NumericalItem _a;

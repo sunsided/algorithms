@@ -35,38 +35,6 @@ using System;
 namespace JetBrains.Annotations
 {
   /// <summary>
-  /// Indicates that the value of the marked element could be <c>null</c> sometimes,
-  /// so checking for <c>null</c> is required before its usage.
-  /// </summary>
-  /// <example><code>
-  /// [CanBeNull] object Test() => null;
-  ///
-  /// void UseTest() {
-  ///   var p = Test();
-  ///   var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
-  /// }
-  /// </code></example>
-  [AttributeUsage(
-    AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
-    AttributeTargets.Delegate | AttributeTargets.Field | AttributeTargets.Event |
-    AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.GenericParameter)]
-internal sealed class CanBeNullAttribute : Attribute { }
-
-  /// <summary>
-  /// Indicates that the value of the marked element can never be <c>null</c>.
-  /// </summary>
-  /// <example><code>
-  /// [NotNull] object Foo() {
-  ///   return null; // Warning: Possible 'null' assignment
-  /// }
-  /// </code></example>
-  [AttributeUsage(
-    AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
-    AttributeTargets.Delegate | AttributeTargets.Field | AttributeTargets.Event |
-    AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.GenericParameter)]
-internal sealed class NotNullAttribute : Attribute { }
-
-  /// <summary>
   /// Can be applied to symbols of types derived from IEnumerable as well as to symbols of Task
   /// and Lazy classes to indicate that the value of a collection item, of the Task.Result property
   /// or of the Lazy.Value property can never be null.
@@ -126,12 +94,12 @@ internal sealed class StringFormatMethodAttribute : Attribute
     /// <param name="formatParameterName">
     /// Specifies which parameter of an annotated method should be treated as the format string
     /// </param>
-    public StringFormatMethodAttribute([NotNull] string formatParameterName)
+    public StringFormatMethodAttribute(string formatParameterName)
     {
       FormatParameterName = formatParameterName;
     }
 
-    [NotNull] public string FormatParameterName { get; }
+    public string FormatParameterName { get; }
   }
 
   /// <summary>
@@ -166,12 +134,12 @@ internal sealed class StringFormatMethodAttribute : Attribute
     AllowMultiple = true)]
 internal sealed class ValueProviderAttribute : Attribute
   {
-    public ValueProviderAttribute([NotNull] string name)
+    public ValueProviderAttribute(string name)
     {
       Name = name;
     }
 
-    [NotNull] public string Name { get; }
+    public string Name { get; }
   }
 
   /// <summary>
@@ -289,12 +257,12 @@ internal sealed class InvokerParameterNameAttribute : Attribute { }
 internal sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
   {
     public NotifyPropertyChangedInvocatorAttribute() { }
-    public NotifyPropertyChangedInvocatorAttribute([NotNull] string parameterName)
+    public NotifyPropertyChangedInvocatorAttribute(string parameterName)
     {
       ParameterName = parameterName;
     }
 
-    [CanBeNull] public string ParameterName { get; }
+    public string? ParameterName { get; }
   }
 
   /// <summary>
@@ -344,16 +312,16 @@ internal sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
   [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 internal sealed class ContractAnnotationAttribute : Attribute
   {
-    public ContractAnnotationAttribute([NotNull] string contract)
+    public ContractAnnotationAttribute(string contract)
       : this(contract, false) { }
 
-    public ContractAnnotationAttribute([NotNull] string contract, bool forceFullStates)
+    public ContractAnnotationAttribute(string contract, bool forceFullStates)
     {
       Contract = contract;
       ForceFullStates = forceFullStates;
     }
 
-    [NotNull] public string Contract { get; }
+    public string Contract { get; }
 
     public bool ForceFullStates { get; }
   }
@@ -418,12 +386,12 @@ internal sealed class CannotApplyEqualityOperatorAttribute : Attribute { }
   [BaseTypeRequired(typeof(Attribute))]
 internal sealed class BaseTypeRequiredAttribute : Attribute
   {
-    public BaseTypeRequiredAttribute([NotNull] Type baseType)
+    public BaseTypeRequiredAttribute(Type baseType)
     {
       BaseType = baseType;
     }
 
-    [NotNull] public Type BaseType { get; }
+    public Type BaseType { get; }
   }
 
   /// <summary>
@@ -530,12 +498,12 @@ internal sealed class PublicAPIAttribute : Attribute
   {
     public PublicAPIAttribute() { }
 
-    public PublicAPIAttribute([NotNull] string comment)
+    public PublicAPIAttribute(string? comment)
     {
       Comment = comment;
     }
 
-    [CanBeNull] public string Comment { get; }
+    public string? Comment { get; }
   }
 
   /// <summary>
@@ -548,7 +516,7 @@ internal sealed class InstantHandleAttribute : Attribute { }
 
   /// <summary>
   /// Indicates that a method does not make any observable state changes.
-  /// The same as <c>System.Diagnostics.Contracts.PureAttribute</c>.
+  /// The same as <c>PureAttribute</c>.
   /// </summary>
   /// <example><code>
   /// [Pure] int Multiply(int x, int y) => x * y;
@@ -576,12 +544,12 @@ internal sealed class MustUseReturnValueAttribute : Attribute
   {
     public MustUseReturnValueAttribute() { }
 
-    public MustUseReturnValueAttribute([NotNull] string justification)
+    public MustUseReturnValueAttribute(string justification)
     {
       Justification = justification;
     }
 
-    [CanBeNull] public string Justification { get; }
+    public string? Justification { get; }
   }
 
   /// <summary>
@@ -613,12 +581,12 @@ internal sealed class PathReferenceAttribute : Attribute
   {
     public PathReferenceAttribute() { }
 
-    public PathReferenceAttribute([NotNull, PathReference] string basePath)
+    public PathReferenceAttribute([PathReference] string basePath)
     {
       BasePath = basePath;
     }
 
-    [CanBeNull] public string BasePath { get; }
+    public string? BasePath { get; }
   }
 
   /// <summary>
@@ -682,7 +650,7 @@ internal sealed class MacroAttribute : Attribute
     /// Allows specifying a macro that will be executed for a <see cref="SourceTemplateAttribute">source template</see>
     /// parameter when the template is expanded.
     /// </summary>
-    [CanBeNull] public string Expression { get; set; }
+    public string? Expression { get; set; }
 
     /// <summary>
     /// Allows specifying which occurrence of the target parameter becomes editable when the template is deployed.
@@ -698,252 +666,8 @@ internal sealed class MacroAttribute : Attribute
     /// Identifies the target parameter of a <see cref="SourceTemplateAttribute">source template</see> if the
     /// <see cref="MacroAttribute"/> is applied on a template method.
     /// </summary>
-    [CanBeNull] public string Target { get; set; }
+    public string? Target { get; set; }
   }
-
-  [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-internal sealed class AspMvcAreaMasterLocationFormatAttribute : Attribute
-  {
-    public AspMvcAreaMasterLocationFormatAttribute([NotNull] string format)
-    {
-      Format = format;
-    }
-
-    [NotNull] public string Format { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-internal sealed class AspMvcAreaPartialViewLocationFormatAttribute : Attribute
-  {
-    public AspMvcAreaPartialViewLocationFormatAttribute([NotNull] string format)
-    {
-      Format = format;
-    }
-
-    [NotNull] public string Format { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-internal sealed class AspMvcAreaViewLocationFormatAttribute : Attribute
-  {
-    public AspMvcAreaViewLocationFormatAttribute([NotNull] string format)
-    {
-      Format = format;
-    }
-
-    [NotNull] public string Format { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-internal sealed class AspMvcMasterLocationFormatAttribute : Attribute
-  {
-    public AspMvcMasterLocationFormatAttribute([NotNull] string format)
-    {
-      Format = format;
-    }
-
-    [NotNull] public string Format { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-internal sealed class AspMvcPartialViewLocationFormatAttribute : Attribute
-  {
-    public AspMvcPartialViewLocationFormatAttribute([NotNull] string format)
-    {
-      Format = format;
-    }
-
-    [NotNull] public string Format { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-internal sealed class AspMvcViewLocationFormatAttribute : Attribute
-  {
-    public AspMvcViewLocationFormatAttribute([NotNull] string format)
-    {
-      Format = format;
-    }
-
-    [NotNull] public string Format { get; }
-  }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
-  /// is an MVC action. If applied to a method, the MVC action name is calculated
-  /// implicitly from the context. Use this attribute for custom wrappers similar to
-  /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcActionAttribute : Attribute
-  {
-    public AspMvcActionAttribute() { }
-
-    public AspMvcActionAttribute([NotNull] string anonymousProperty)
-    {
-      AnonymousProperty = anonymousProperty;
-    }
-
-    [CanBeNull] public string AnonymousProperty { get; }
-  }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC area.
-  /// Use this attribute for custom wrappers similar to
-  /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcAreaAttribute : Attribute
-  {
-    public AspMvcAreaAttribute() { }
-
-    public AspMvcAreaAttribute([NotNull] string anonymousProperty)
-    {
-      AnonymousProperty = anonymousProperty;
-    }
-
-    [CanBeNull] public string AnonymousProperty { get; }
-  }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is
-  /// an MVC controller. If applied to a method, the MVC controller name is calculated
-  /// implicitly from the context. Use this attribute for custom wrappers similar to
-  /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcControllerAttribute : Attribute
-  {
-    public AspMvcControllerAttribute() { }
-
-    public AspMvcControllerAttribute([NotNull] string anonymousProperty)
-    {
-      AnonymousProperty = anonymousProperty;
-    }
-
-    [CanBeNull] public string AnonymousProperty { get; }
-  }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC Master. Use this attribute
-  /// for custom wrappers similar to <c>System.Web.Mvc.Controller.View(String, String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcMasterAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC model type. Use this attribute
-  /// for custom wrappers similar to <c>System.Web.Mvc.Controller.View(String, Object)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter)]
-internal sealed class AspMvcModelTypeAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is an MVC
-  /// partial view. If applied to a method, the MVC partial view name is calculated implicitly
-  /// from the context. Use this attribute for custom wrappers similar to
-  /// <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcPartialViewAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. Allows disabling inspections for MVC views within a class or a method.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-internal sealed class AspMvcSuppressViewErrorAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
-  /// Use this attribute for custom wrappers similar to
-  /// <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcDisplayTemplateAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC editor template.
-  /// Use this attribute for custom wrappers similar to
-  /// <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcEditorTemplateAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC template.
-  /// Use this attribute for custom wrappers similar to
-  /// <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcTemplateAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
-  /// is an MVC view component. If applied to a method, the MVC view name is calculated implicitly
-  /// from the context. Use this attribute for custom wrappers similar to
-  /// <c>System.Web.Mvc.Controller.View(Object)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcViewAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
-  /// is an MVC view component name.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcViewComponentAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
-  /// is an MVC view component view. If applied to a method, the MVC view component view name is default.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class AspMvcViewComponentViewAttribute : Attribute { }
-
-  /// <summary>
-  /// ASP.NET MVC attribute. When applied to a parameter of an attribute,
-  /// indicates that this parameter is an MVC action name.
-  /// </summary>
-  /// <example><code>
-  /// [ActionName("Foo")]
-  /// public ActionResult Login(string returnUrl) {
-  ///   ViewBag.ReturnUrl = Url.Action("Foo"); // OK
-  ///   return RedirectToAction("Bar"); // Error: Cannot resolve action
-  /// }
-  /// </code></example>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
-internal sealed class AspMvcActionSelectorAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field)]
-internal sealed class HtmlElementAttributesAttribute : Attribute
-  {
-    public HtmlElementAttributesAttribute() { }
-
-    public HtmlElementAttributesAttribute([NotNull] string name)
-    {
-      Name = name;
-    }
-
-    [CanBeNull] public string Name { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-internal sealed class HtmlAttributeValueAttribute : Attribute
-  {
-    public HtmlAttributeValueAttribute([NotNull] string name)
-    {
-      Name = name;
-    }
-
-    [NotNull] public string Name { get; }
-  }
-
-  /// <summary>
-  /// Razor attribute. Indicates that the marked parameter or method is a Razor section.
-  /// Use this attribute for custom wrappers similar to
-  /// <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
-internal sealed class RazorSectionAttribute : Attribute { }
 
   /// <summary>
   /// Indicates how method, constructor invocation, or property access
@@ -1090,148 +814,4 @@ internal sealed class RegexPatternAttribute : Attribute { }
   [AttributeUsage(
     AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.Enum)]
 internal sealed class NoReorderAttribute : Attribute { }
-
-  /// <summary>
-  /// XAML attribute. Indicates the type that has <c>ItemsSource</c> property and should be treated
-  /// as <c>ItemsControl</c>-derived type, to enable inner items <c>DataContext</c> type resolve.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Class)]
-internal sealed class XamlItemsControlAttribute : Attribute { }
-
-  /// <summary>
-  /// XAML attribute. Indicates the property of some <c>BindingBase</c>-derived type, that
-  /// is used to bind some item of <c>ItemsControl</c>-derived type. This annotation will
-  /// enable the <c>DataContext</c> type resolve for XAML bindings for such properties.
-  /// </summary>
-  /// <remarks>
-  /// Property should have the tree ancestor of the <c>ItemsControl</c> type or
-  /// marked with the <see cref="XamlItemsControlAttribute"/> attribute.
-  /// </remarks>
-  [AttributeUsage(AttributeTargets.Property)]
-internal sealed class XamlItemBindingOfItemsControlAttribute : Attribute { }
-
-  /// <summary>
-  /// XAML attribute. Indicates the property of some <c>Style</c>-derived type, that
-  /// is used to style items of <c>ItemsControl</c>-derived type. This annotation will
-  /// enable the <c>DataContext</c> type resolve for XAML bindings for such properties.
-  /// </summary>
-  /// <remarks>
-  /// Property should have the tree ancestor of the <c>ItemsControl</c> type or
-  /// marked with the <see cref="XamlItemsControlAttribute"/> attribute.
-  /// </remarks>
-  [AttributeUsage(AttributeTargets.Property)]
-internal sealed class XamlItemStyleOfItemsControlAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-internal sealed class AspChildControlTypeAttribute : Attribute
-  {
-    public AspChildControlTypeAttribute([NotNull] string tagName, [NotNull] Type controlType)
-    {
-      TagName = tagName;
-      ControlType = controlType;
-    }
-
-    [NotNull] public string TagName { get; }
-
-    [NotNull] public Type ControlType { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
-internal sealed class AspDataFieldAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
-internal sealed class AspDataFieldsAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Property)]
-internal sealed class AspMethodPropertyAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-internal sealed class AspRequiredAttributeAttribute : Attribute
-  {
-    public AspRequiredAttributeAttribute([NotNull] string attribute)
-    {
-      Attribute = attribute;
-    }
-
-    [NotNull] public string Attribute { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Property)]
-internal sealed class AspTypePropertyAttribute : Attribute
-  {
-    public bool CreateConstructorReferences { get; }
-
-    public AspTypePropertyAttribute(bool createConstructorReferences)
-    {
-      CreateConstructorReferences = createConstructorReferences;
-    }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-internal sealed class RazorImportNamespaceAttribute : Attribute
-  {
-    public RazorImportNamespaceAttribute([NotNull] string name)
-    {
-      Name = name;
-    }
-
-    [NotNull] public string Name { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-internal sealed class RazorInjectionAttribute : Attribute
-  {
-    public RazorInjectionAttribute([NotNull] string type, [NotNull] string fieldName)
-    {
-      Type = type;
-      FieldName = fieldName;
-    }
-
-    [NotNull] public string Type { get; }
-
-    [NotNull] public string FieldName { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-internal sealed class RazorDirectiveAttribute : Attribute
-  {
-    public RazorDirectiveAttribute([NotNull] string directive)
-    {
-      Directive = directive;
-    }
-
-    [NotNull] public string Directive { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-internal sealed class RazorPageBaseTypeAttribute : Attribute
-  {
-      public RazorPageBaseTypeAttribute([NotNull] string baseType)
-      {
-        BaseType = baseType;
-      }
-      public RazorPageBaseTypeAttribute([NotNull] string baseType, string pageName)
-      {
-          BaseType = baseType;
-          PageName = pageName;
-      }
-
-      [NotNull] public string BaseType { get; }
-      [CanBeNull] public string PageName { get; }
-  }
-
-  [AttributeUsage(AttributeTargets.Method)]
-internal sealed class RazorHelperCommonAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Property)]
-internal sealed class RazorLayoutAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Method)]
-internal sealed class RazorWriteLiteralMethodAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Method)]
-internal sealed class RazorWriteMethodAttribute : Attribute { }
-
-  [AttributeUsage(AttributeTargets.Parameter)]
-internal sealed class RazorWriteMethodParameterAttribute : Attribute { }
 }

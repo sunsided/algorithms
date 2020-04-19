@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Widemeadows.Algorithms.Trees
 {
@@ -15,7 +15,7 @@ namespace Widemeadows.Algorithms.Trees
         /// Initializes a new instance of the <see cref="BinaryTreeNode{T}"/> class.
         /// </summary>
         /// <param name="value">The value of the node.</param>
-        public BinaryTreeNode([NotNull] T value)
+        public BinaryTreeNode([DisallowNull] T value)
         {
             Value = value;
         }
@@ -24,22 +24,19 @@ namespace Widemeadows.Algorithms.Trees
         /// Gets or sets the value of the node.
         /// </summary>
         /// <value>The item.</value>
-        [NotNull]
         public T Value { get; }
 
         /// <summary>
         /// Gets or sets the left node reference.
         /// </summary>
         /// <value>The node.</value>
-        [CanBeNull]
-        public BinaryTreeNode<T> LeftNode { get; set; }
+        public BinaryTreeNode<T>? LeftNode { get; set; }
 
         /// <summary>
         /// Gets or sets the right node reference.
         /// </summary>
         /// <value>The node.</value>
-        [CanBeNull]
-        public BinaryTreeNode<T> RightNode { get; set; }
+        public BinaryTreeNode<T>? RightNode { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this node is a leaf node.

@@ -30,7 +30,8 @@ namespace Widemeadows.Algorithms.Tests
         [InlineData(typeof(NaiveBinaryTreeDeepestNodeGenerator))]
         public void TestCaseGeneratorBaseEnumeratesCorrectly(Type type)
         {
-            var instance = (TestCaseGeneratorBase)Activator.CreateInstance(type);
+            var instance = (TestCaseGeneratorBase?)Activator.CreateInstance(type);
+            if (instance == null) throw new InvalidOperationException($"Instance of type {type} could not be created.");
 
             var explicitEnumerator = ((IEnumerable<object[]>) instance).GetEnumerator();
             var implicitEnumerator = ((IEnumerable)instance).GetEnumerator();
@@ -47,7 +48,10 @@ namespace Widemeadows.Algorithms.Tests
                 implicitEnumerator.Current.Should()
                     .BeOfType<object[]>("because the enumerator is returning object arrays");
 
-                var implicitValues = (object[]) implicitEnumerator.Current;
+                var current = implicitEnumerator.Current;
+                current.Should().NotBeNull("because the enumerator is returning non-null object arrays");
+
+                var implicitValues = (object[]) current!;
 
                 explicitEnumerator.Current.Should().HaveCount(implicitValues.Length,
                     "because both enumerators should return the same amount of values");

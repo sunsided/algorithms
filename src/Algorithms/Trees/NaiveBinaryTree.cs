@@ -47,8 +47,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <summary>
         /// The root node.
         /// </summary>
-        [CanBeNull]
-        private BinaryTreeNode<T> _root;
+        private BinaryTreeNode<T>? _root;
 
         /// <summary>
         /// The height (or depth) of the tree, as a cached value.
@@ -188,7 +187,7 @@ namespace Widemeadows.Algorithms.Trees
         /// Inserts a range of items.
         /// </summary>
         /// <param name="items">The items to insert</param>
-        public void AddRange([NotNull, ItemNotNull, InstantHandle] IEnumerable<T> items)
+        public void AddRange([ItemNotNull, InstantHandle] IEnumerable<T> items)
         {
             if (ReferenceEquals(items, null)) throw new ArgumentNullException(nameof(items));
             foreach (var item in items)
@@ -233,7 +232,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <param name="mode">The traversal order.</param>
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
-        [NotNull, Pure]
+        [Pure]
         public IEnumerable<T> Traverse(TraversalMode mode) => TraverseNodes(_root, mode).Select(n => n.Value);
 
         /// <summary>
@@ -242,7 +241,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <param name="mode">The traversal order.</param>
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
         /// <seealso cref="Traverse"/>
-        [NotNull, Pure]
+        [Pure]
         public IEnumerable<T> TraverseRecursively(TraversalMode mode)
         {
             if (RecursiveTraversals.TryGetValue(mode, out var traversal))
@@ -259,7 +258,7 @@ namespace Widemeadows.Algorithms.Trees
         /// <returns>An <see cref="IEnumerable{T}"/> enumerating the leaves.</returns>
         /// <seealso cref="TraversalMode.InOrder"/>
         /// <seealso cref="Traverse"/>
-        [NotNull, Pure]
+        [Pure]
         public IEnumerable<T> TraverseLeaves()
         {
             // This method uses recursion-free in-order traversal to
@@ -304,7 +303,7 @@ namespace Widemeadows.Algorithms.Trees
         }
 
         /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
-        [NotNull, Pure]
+        [Pure]
         public IEnumerator<T> GetEnumerator() => Traverse(TraversalMode.InOrder).GetEnumerator();
 
         /// <summary>
@@ -312,7 +311,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <returns>The smallest element.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
-        [NotNull, Pure]
+        [Pure]
         public T GetSmallest()
         {
             var token = ThrowForNoElements(_root);
@@ -332,7 +331,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <returns>The largest element.</returns>
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
-        [NotNull, Pure]
+        [Pure]
         public T GetLargest()
         {
             var token = ThrowForNoElements(_root);
@@ -362,7 +361,7 @@ namespace Widemeadows.Algorithms.Trees
             // In theory, we could set the root node to null and be done with it.
             // However, this results in a big connected graph of nodes that the
             // Garbage Collection has to deal with.
-            var stack = new Stack<BinaryTreeNode<T>>();
+            var stack = new Stack<BinaryTreeNode<T>?>();
             stack.Push(_root);
 
             while (stack.Count > 0)
@@ -394,12 +393,13 @@ namespace Widemeadows.Algorithms.Trees
         [Pure]
         public T GetDeepestNode()
         {
+            var root = ThrowForNoElements(_root);
+
             var maxDepth = 0;
-            var deepest = ThrowForNoElements(_root);
-            Debug.Assert(deepest != null, "deepest != null");
+            var deepest = root;
 
             var stack = new Stack<(int height, BinaryTreeNode<T> node)>();
-            stack.Push((height: 0, node: _root));
+            stack.Push((height: 0, node: root));
 
             while (stack.Count > 0)
             {
@@ -456,11 +456,11 @@ namespace Widemeadows.Algorithms.Trees
         /// </remarks>
         /// <param name="otherTree">The tree to compare with.</param>
         /// <returns><see langword="true"/> if the trees are structurally similar; <see langword="false"/> otherwise.</returns>
-        public bool IsStructurallyIdenticalTo([CanBeNull] NaiveBinaryTree<T> otherTree)
+        public bool IsStructurallyIdenticalTo(NaiveBinaryTree<T>? otherTree)
         {
             // We're expanding the nodes in breadth-first order in order to
             // early stop when there are structural differences "up" in the tree.
-            var explore = new Queue<(BinaryTreeNode<T> root1, BinaryTreeNode<T> root2)>();
+            var explore = new Queue<(BinaryTreeNode<T>? root1, BinaryTreeNode<T>? root2)>();
             explore.Enqueue((_root, otherTree?._root));
 
             while (explore.Count > 0)
@@ -499,8 +499,9 @@ namespace Widemeadows.Algorithms.Trees
         /// <exception cref="InvalidOperationException">The tree has no elements.</exception>
         /// <seealso cref="ThrowForNoElements"/>
         [ContractAnnotation("value:null => halt; value:notnull => notnull")]
-        [NotNull, Pure]
-        private static TValue ThrowForNoElements<TValue>([CanBeNull] TValue value)
+        [Pure]
+        [return:NotNull]
+        private static TValue ThrowForNoElements<TValue>([MaybeNull] TValue value)
         {
             if (value != null) return value;
             throw new InvalidOperationException("The tree needs to have at least one item.");
@@ -526,7 +527,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <returns>The size of the tree.</returns>
         [Pure]
-        private static int GetSizeRecursively([CanBeNull] BinaryTreeNode<T> node)
+        private static int GetSizeRecursively(BinaryTreeNode<T>? node)
         {
             if (node == null)
             {
@@ -542,7 +543,7 @@ namespace Widemeadows.Algorithms.Trees
         /// </summary>
         /// <returns>The size of the tree.</returns>
         [Pure]
-        private static bool TryGetHeightRecursively([CanBeNull] BinaryTreeNode<T> node, out int height)
+        private static bool TryGetHeightRecursively(BinaryTreeNode<T>? node, out int height)
         {
             if (node == null)
             {
@@ -577,8 +578,8 @@ namespace Widemeadows.Algorithms.Trees
         /// <param name="node">The root node.</param>
         /// <param name="mode">The traversal order.</param>
         /// <returns>An <see cref="IEnumerable{T}"/>.</returns>
-        [NotNull, Pure]
-        private static IEnumerable<BinaryTreeNode<T>> TraverseNodes([CanBeNull] BinaryTreeNode<T> node, TraversalMode mode)
+        [Pure]
+        private static IEnumerable<BinaryTreeNode<T>> TraverseNodes(BinaryTreeNode<T>? node, TraversalMode mode)
         {
             if (Traversals.TryGetValue(mode, out var traversal))
             {
@@ -598,26 +599,30 @@ namespace Widemeadows.Algorithms.Trees
         public int CalculateDiameter()
         {
             var diameter = 0;
-            GetDiameter(_root, ref diameter);
+            CalculateDiameter(_root, ref diameter);
             return diameter;
+        }
 
-            int GetDiameter(BinaryTreeNode<T> node, ref int value)
-            {
-                if (node == null) return 0;
+        /// <inheritdoc cref="CalculateDiameter"/>
+        /// <param name="root">The start node.</param>
+        /// <param name="maxDiameter">The previously known maximum diameter.</param>
+        /// <returns>The diameter of the subtree rooted at <paramref name="root"/>.</returns>
+        private static int CalculateDiameter(BinaryTreeNode<T>? root, ref int maxDiameter)
+        {
+            if (root == null) return 0;
 
-                // Calculate left and right sub-tree heights.
-                var leftHeight = GetDiameter(node.LeftNode, ref value);
-                var rightHeight = GetDiameter(node.RightNode, ref value);
+            // Calculate left and right sub-tree heights.
+            var leftDiameter = CalculateDiameter(root.LeftNode, ref maxDiameter);
+            var rightDiameter = CalculateDiameter(root.RightNode, ref maxDiameter);
 
-                // Calculate diameter through the current node.
-                var maxDiameter = leftHeight + rightHeight + 1;
+            // Calculate diameter through the current node.
+            var subtreeDiameter = leftDiameter + rightDiameter + 1;
 
-                // Update maximum diameter.
-                diameter = Math.Max(diameter, maxDiameter);
+            // Update maximum diameter.
+            maxDiameter = Math.Max(maxDiameter, subtreeDiameter);
 
-                // Return the height of the subtree rooted at current node.
-                return Math.Max(leftHeight, rightHeight) + 1;
-            }
+            // Return the height of the subtree rooted at current node.
+            return Math.Max(leftDiameter, rightDiameter) + 1;
         }
     }
 }

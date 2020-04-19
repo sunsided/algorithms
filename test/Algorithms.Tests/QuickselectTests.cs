@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using JetBrains.Annotations;
 using Xunit;
 
 namespace Widemeadows.Algorithms.Tests
@@ -20,7 +19,6 @@ namespace Widemeadows.Algorithms.Tests
         /// <summary>
         /// The list to test against
         /// </summary>
-        [NotNull]
         private readonly List<double> _list;
 
         /// <summary>
@@ -205,10 +203,10 @@ namespace Widemeadows.Algorithms.Tests
         {
             var qs = new Quickselect<double>();
             // ReSharper disable once AssignNullToNotNullAttribute
-            Action action = () => qs.Select((List<double>) null, 0);
+            Action action = () => qs.Select((List<double>) null!, 0);
             action.Should().ThrowExactly<ArgumentNullException>();
         }
-        
+
         /// <summary>
         /// Attempting to select on a <see langword="null"/> reference throws an exception.
         /// </summary>
@@ -217,10 +215,10 @@ namespace Widemeadows.Algorithms.Tests
         {
             var qs = new Quickselect<double>();
             // ReSharper disable once AssignNullToNotNullAttribute
-            Action action = () => qs.SelectRecursive((List<double>) null, 0);
+            Action action = () => qs.SelectRecursive((List<double>) null!, 0);
             action.Should().ThrowExactly<ArgumentNullException>();
         }
-        
+
         /// <summary>
         /// Attempting to select on a <see langword="null"/> reference throws an exception.
         /// </summary>
@@ -231,7 +229,7 @@ namespace Widemeadows.Algorithms.Tests
             Action action = () => qs.Select(_list, -1);
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
-        
+
         /// <summary>
         /// Attempting to select on a <see langword="null"/> reference throws an exception.
         /// </summary>
@@ -242,7 +240,7 @@ namespace Widemeadows.Algorithms.Tests
             Action action = () => qs.SelectRecursive(_list, -1);
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
-        
+
         /// <summary>
         /// Attempting to select on a <see langword="null"/> reference throws an exception.
         /// </summary>
@@ -253,7 +251,7 @@ namespace Widemeadows.Algorithms.Tests
             Action action = () => qs.Select(_list, _list.Count);
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
-        
+
         /// <summary>
         /// Attempting to select on a <see langword="null"/> reference throws an exception.
         /// </summary>

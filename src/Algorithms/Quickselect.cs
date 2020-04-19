@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using JetBrains.Annotations;
 
 namespace Widemeadows.Algorithms
 {
@@ -19,20 +18,18 @@ namespace Widemeadows.Algorithms
         /// The random number generator used for pivot element selection.
         /// </summary>
         /// <seealso cref="SelectPivotElement"/>
-        [NotNull]
         private readonly Random _random = new Random();
 
         /// <summary>
         /// The comparer
         /// </summary>
-        [NotNull]
         private readonly IComparer<TElement> _comparer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Quickselect{TElement}"/> class.
         /// </summary>
         /// <param name="comparer">The comparer.</param>
-        public Quickselect([CanBeNull] IComparer<TElement> comparer = null)
+        public Quickselect(IComparer<TElement>? comparer = null)
         {
             _comparer = comparer ?? Comparer<TElement>.Default;
         }
@@ -50,7 +47,7 @@ namespace Widemeadows.Algorithms
         /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
         /// <exception cref="System.ArgumentException">List reference was null</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">n was either negative or greater than or equal to the size of the list</exception>
-        public int SelectRecursive<TList>([NotNull] TList list, int n)
+        public int SelectRecursive<TList>([DisallowNull] TList list, int n)
             where TList : IList<TElement>
         {
             if (ReferenceEquals(null, list)) throw new ArgumentNullException(nameof(list), "List reference must not be null");
@@ -72,7 +69,7 @@ namespace Widemeadows.Algorithms
         /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
         /// <exception cref="System.ArgumentException">List reference was null</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">n was either negative or greater than or equal to the size of the list</exception>
-        public int Select<TList>([NotNull] TList list, int n)
+        public int Select<TList>([DisallowNull] TList list, int n)
             where TList : IList<TElement>
         {
             if (ReferenceEquals(null, list)) throw new ArgumentNullException(nameof(list), "List reference must not be null");
@@ -97,7 +94,7 @@ namespace Widemeadows.Algorithms
         /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
         /// <seealso cref="Select{TList}"/>
         [SuppressMessage("ReSharper", "TailRecursiveCall", Justification = "Recursive on purpose")]
-        private int SelectRecursive<TList>([NotNull] TList list, int leftIndex, int rightIndex, int n)
+        private int SelectRecursive<TList>([DisallowNull] TList list, int leftIndex, int rightIndex, int n)
             where TList : IList<TElement>
         {
             // NOTE: This method is tail recursive. For an unrolled version, see Select<T>().
@@ -140,7 +137,8 @@ namespace Widemeadows.Algorithms
         /// <param name="rightIndex">End index in the list.</param>
         /// <param name="n">The order (e.g. smallest element (<c>n=0</c>), 2nd smallest element (<c>n=1</c>), 3rd smallest (<c>n=2</c>), ...).</param>
         /// <returns>The index of the <c>(n+1)</c>-th smallest element.</returns>
-        private int Select<TList>([NotNull] TList list, int leftIndex, int rightIndex, int n) where TList : IList<TElement>
+        private int Select<TList>([DisallowNull] TList list, int leftIndex, int rightIndex, int n)
+            where TList : IList<TElement>
         {
             while (true)
             {
@@ -191,7 +189,7 @@ namespace Widemeadows.Algorithms
         /// <param name="list">The list.</param>
         /// <param name="sourceIndex">Index of the source.</param>
         /// <param name="targetIndex">Index of the target.</param>
-        private static void SwapElementAt<TList>([NotNull] TList list, int sourceIndex, int targetIndex)
+        private static void SwapElementAt<TList>([DisallowNull] TList list, int sourceIndex, int targetIndex)
             where TList : IList<TElement>
         {
             var temp = list[targetIndex];
@@ -210,7 +208,7 @@ namespace Widemeadows.Algorithms
         /// <param name="leftIndex">Start index in the list.</param>
         /// <param name="rightIndex">End index in the list.</param>
         /// <param name="pivotIndex">Index of the pivot element.</param>
-        private int Partition<TList>([NotNull] TList list, int leftIndex, int rightIndex, int pivotIndex)
+        private int Partition<TList>([DisallowNull] TList list, int leftIndex, int rightIndex, int pivotIndex)
             where TList : IList<TElement>
         {
             Debug.Assert(pivotIndex >= 0 && pivotIndex < list.Count, "pivotIndex >= 0 && pivotIndex < list.Count");

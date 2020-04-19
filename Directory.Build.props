@@ -9,6 +9,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <RepositoryUrl>https://github.com/sunsided/algorithms</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>

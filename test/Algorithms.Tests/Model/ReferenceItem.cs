@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Widemeadows.Algorithms.Tests.Model
 {
@@ -16,7 +16,7 @@ namespace Widemeadows.Algorithms.Tests.Model
         /// Initializes a new instance of the <see cref="NumericalItem"/> struct.
         /// </summary>
         /// <param name="value">The item value.</param>
-        public ReferenceItem([CanBeNull] T value)
+        public ReferenceItem([AllowNull] T value)
         {
             Value = value;
         }
@@ -25,14 +25,14 @@ namespace Widemeadows.Algorithms.Tests.Model
         /// Gets the item value.
         /// </summary>
         /// <value>The value.</value>
-        [CanBeNull]
+        [MaybeNull, AllowNull]
         public T Value { get; }
 
         /// <inheritdoc cref="IEquatable{T}.Equals(T)" />
-        public bool Equals(ReferenceItem<T> other) => Equals(Value, other.Value);
+        public bool Equals(ReferenceItem<T>? other) => other != null && Equals(Value, other.Value);
 
         /// <inheritdoc cref="ValueType.Equals(object)" />
-        public override bool Equals(object obj) => obj is ReferenceItem<T> other && Equals(other);
+        public override bool Equals(object? obj) => obj is ReferenceItem<T> other && Equals(other);
 
         /// <inheritdoc cref="ValueType.GetHashCode" />
         public override int GetHashCode() => Value?.GetHashCode() ?? 0;
@@ -48,7 +48,7 @@ namespace Widemeadows.Algorithms.Tests.Model
         }
 
         /// <inheritdoc cref="ValueType.ToString"/>
-        public override string ToString() => Value?.ToString();
+        public override string ToString() => Value?.ToString() ?? string.Empty;
 
         /// <summary>
         /// Implicitly converts an <see cref="int"/> to a <see cref="NumericalItem"/>.

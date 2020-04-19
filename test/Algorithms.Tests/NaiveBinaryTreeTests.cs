@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using JetBrains.Annotations;
 using Widemeadows.Algorithms.Tests.Data;
 using Widemeadows.Algorithms.Tests.Model;
 using Widemeadows.Algorithms.Trees;
@@ -12,10 +11,8 @@ namespace Widemeadows.Algorithms.Tests
 {
     public class NaiveBinaryTreeTests
     {
-        [NotNull]
         private readonly Random _random = new Random();
 
-        [NotNull]
         private readonly NaiveBinaryTree<NumericalItem> _tree;
 
         public NaiveBinaryTreeTests()
@@ -41,7 +38,7 @@ namespace Widemeadows.Algorithms.Tests
         public void AddingANullItemThrows()
         {
             var tree = new NaiveBinaryTree<ReferenceItem<NumericalItem>>();
-            Action action = () => tree.Add(null);
+            Action action = () => tree.Add(null!);
             action.Should().Throw<ArgumentNullException>("because the argument was null");
         }
 
@@ -58,7 +55,7 @@ namespace Widemeadows.Algorithms.Tests
         {
             const int count = 10;
             var tree = new NaiveBinaryTree<ReferenceItem<NumericalItem>>();
-            Action action = () => tree.AddRange(Enumerable.Range(0, count).Select((x, i) => i <= count / 2 ? new ReferenceItem<NumericalItem>(RandomItem) : null));
+            Action action = () => tree.AddRange(Enumerable.Range(0, count).Select((x, i) => i <= count / 2 ? new ReferenceItem<NumericalItem>(RandomItem) : null)!);
             action.Should().Throw<ArgumentNullException>("because some arguments were null");
         }
 
@@ -66,7 +63,7 @@ namespace Widemeadows.Algorithms.Tests
         public void AddingNullSequenceThrows()
         {
             var tree = new NaiveBinaryTree<ReferenceItem<NumericalItem>>();
-            Action action = () => tree.AddRange(null);
+            Action action = () => tree.AddRange(null!);
             action.Should().Throw<ArgumentNullException>("because some arguments were null");
         }
 
@@ -103,7 +100,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeValueGenerator))]
-        public void SizeAndHeightIsCorrect([NotNull] IList<NumericalItem> items, int expectedSize, int expectedHeight)
+        public void SizeAndHeightIsCorrect(IList<NumericalItem> items, int expectedSize, int expectedHeight)
         {
             var hasItems = items.Count > 0;
             _tree.AddRange(items);
@@ -148,7 +145,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeTraversalGenerator))]
-        public void TreeTraversalVisitsNodesInCorrectOrder([NotNull] IList<NumericalItem> items, TraversalMode mode, [NotNull] IList<NumericalItem> expectedItems)
+        public void TreeTraversalVisitsNodesInCorrectOrder(IList<NumericalItem> items, TraversalMode mode, IList<NumericalItem> expectedItems)
         {
             _tree.AddRange(items);
             var traversedItems = _tree.Traverse(mode).ToList();
@@ -157,7 +154,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeTraversalGenerator))]
-        public void RecursiveTreeTraversalVisitsNodesInCorrectOrder([NotNull] IList<NumericalItem> items, TraversalMode mode, [NotNull] IList<NumericalItem> expectedItems)
+        public void RecursiveTreeTraversalVisitsNodesInCorrectOrder(IList<NumericalItem> items, TraversalMode mode, IList<NumericalItem> expectedItems)
         {
             _tree.AddRange(items);
             var traversedItems = _tree.TraverseRecursively(mode).ToList();
@@ -363,7 +360,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeDeepestNodeGenerator))]
-        public void TreeGetDeepestNodeFindsDeepestNode([NotNull] IList<NumericalItem> items, NumericalItem expectedItem)
+        public void TreeGetDeepestNodeFindsDeepestNode(IList<NumericalItem> items, NumericalItem expectedItem)
         {
             _tree.AddRange(items);
             var deepestNode = _tree.GetDeepestNode();
@@ -379,7 +376,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeLeafTraversalGenerator))]
-        public void EnumerateLeavesEnumeratesLeavesInAscendingOrder([NotNull] IList<NumericalItem> items, [NotNull] IList<NumericalItem> expectedItems)
+        public void EnumerateLeavesEnumeratesLeavesInAscendingOrder(IList<NumericalItem> items, IList<NumericalItem> expectedItems)
         {
             _tree.AddRange(items);
             _tree.TraverseLeaves().Should().ContainInOrder(expectedItems, "because these are the leaves of the tree");
@@ -393,7 +390,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeLeafCountGenerator))]
-        public void NumberOfLeavesIsDeterminedCorrectly([NotNull] IList<NumericalItem> items, int expectedCount)
+        public void NumberOfLeavesIsDeterminedCorrectly(IList<NumericalItem> items, int expectedCount)
         {
             _tree.AddRange(items);
             _tree.CalculateNumberOfLeaves().Should().Be(expectedCount, "because this is the number of leaves in the tree");
@@ -401,7 +398,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeFullNodeCountGenerator))]
-        public void NumberOfFullNodesIsDeterminedCorrectly([NotNull] IList<NumericalItem> items, int expectedCount)
+        public void NumberOfFullNodesIsDeterminedCorrectly(IList<NumericalItem> items, int expectedCount)
         {
             _tree.AddRange(items);
             _tree.CalculateNumberOfFullNodes().Should().Be(expectedCount, "because this is the number of full nodes in the tree");
@@ -409,7 +406,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeHalfNodeCountGenerator))]
-        public void NumberOfHalfNodesIsDeterminedCorrectly([NotNull] IList<NumericalItem> items, int expectedCount)
+        public void NumberOfHalfNodesIsDeterminedCorrectly(IList<NumericalItem> items, int expectedCount)
         {
             _tree.AddRange(items);
             _tree.CalculateNumberOfHalfNodes().Should().Be(expectedCount, "because this is the number of half nodes in the tree");
@@ -432,7 +429,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeGenerator))]
-        public void TreeIsNeverStructurallyIdenticalToNullUnlessSourceTreeHasNoItems([NotNull] IList<NumericalItem> items)
+        public void TreeIsNeverStructurallyIdenticalToNullUnlessSourceTreeHasNoItems(IList<NumericalItem> items)
         {
             _tree.AddRange(items);
             var structurallyEqual = _tree.IsStructurallyIdenticalTo(null);
@@ -449,7 +446,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeGenerator))]
-        public void TwoTreesAreStructurallyTheSameIfTheTreesAreIdentical([NotNull] IList<NumericalItem> items)
+        public void TwoTreesAreStructurallyTheSameIfTheTreesAreIdentical(IList<NumericalItem> items)
         {
             _tree.AddRange(items);
             var structurallyEqual = _tree.IsStructurallyIdenticalTo(_tree);
@@ -458,7 +455,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeGenerator))]
-        public void TwoTreesAreStructurallyTheSameIfTheTreesHaveTheSameShape([NotNull] IList<NumericalItem> items)
+        public void TwoTreesAreStructurallyTheSameIfTheTreesHaveTheSameShape(IList<NumericalItem> items)
         {
             _tree.AddRange(items);
             var otherTree = new NaiveBinaryTree<NumericalItem>();
@@ -470,7 +467,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeDivergingStructureGenerator))]
-        public void TwoTreesAreStructurallyDifferentIfTheTreesDontShareTheSameShape([NotNull] IList<NumericalItem> items, [NotNull] IList<NumericalItem> otherItems)
+        public void TwoTreesAreStructurallyDifferentIfTheTreesDontShareTheSameShape(IList<NumericalItem> items, IList<NumericalItem> otherItems)
         {
             _tree.AddRange(items);
             var otherTree = new NaiveBinaryTree<NumericalItem>();
@@ -482,7 +479,7 @@ namespace Widemeadows.Algorithms.Tests
 
         [Theory]
         [ClassData(typeof(NaiveBinaryTreeDiameterGenerator))]
-        public void DiameterOfTreeIsCalculatedCorrectly([NotNull] IList<NumericalItem> items, int expectedValue)
+        public void DiameterOfTreeIsCalculatedCorrectly(IList<NumericalItem> items, int expectedValue)
         {
             _tree.AddRange(items);
 

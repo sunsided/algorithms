@@ -30,7 +30,7 @@ namespace Widemeadows.Algorithms.Tests.Model
         public bool Equals(NumericalItem other) => Value == other.Value;
 
         /// <inheritdoc cref="ValueType.Equals(object)" />
-        public override bool Equals(object obj) => obj is NumericalItem other && Equals(other);
+        public override bool Equals(object? obj) => obj is NumericalItem other && Equals(other);
 
         /// <inheritdoc cref="ValueType.GetHashCode" />
         public override int GetHashCode() => Value;

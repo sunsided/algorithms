@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Widemeadows.Algorithms.Trees.TreeTraversals
 {
@@ -14,7 +14,6 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals
         /// </summary>
         /// <param name="node">The root node to start traversal from.</param>
         /// <returns>An enumerable of all traversed data items.</returns>
-        [NotNull]
-        public abstract IEnumerable<TNode> TraverseNodes([CanBeNull] TNode node);
+        public abstract IEnumerable<TNode> TraverseNodes([AllowNull] TNode node);
     }
 }

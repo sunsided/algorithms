@@ -2,12 +2,11 @@
 
   <PropertyGroup>
     <RootNamespace>Widemeadows.Algorithms</RootNamespace>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>CA1303</NoWarn>
   </PropertyGroup>
 

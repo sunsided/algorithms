@@ -11,7 +11,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     {
         /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
-        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData> node)
+        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData>? node)
         {
             if (node == null)
             {
@@ -22,7 +22,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
 
             // We use a token variable to test whether we're ascending
             // from a child back to its parent.
-            BinaryTreeNode<TData> previousNode = null;
+            BinaryTreeNode<TData>? previousNode = null;
 
             do
             {

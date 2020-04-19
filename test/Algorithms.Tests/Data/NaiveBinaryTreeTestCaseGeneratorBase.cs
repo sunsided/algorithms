@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Widemeadows.Algorithms.Tests.Model;
 using Widemeadows.Algorithms.Trees;
 
@@ -15,7 +14,6 @@ namespace Widemeadows.Algorithms.Tests.Data
         /// </summary>
         /// <param name="value">The value to return.</param>
         /// <returns>The list of items.</returns>
-        [NotNull]
         protected IList<NumericalItem> BuildSingleElementList(int value) => new List<NumericalItem> { new NumericalItem(value) };
 
         /// <summary>
@@ -27,7 +25,6 @@ namespace Widemeadows.Algorithms.Tests.Data
         ///     while <c>1</c> builds a right-skewed one.
         /// </param>
         /// <returns>The list of items.</returns>
-        [NotNull]
         protected IList<NumericalItem> BuildMonotonicallySkewedTree(int count, int sign)
         {
             var items = new List<NumericalItem>(count);
@@ -45,7 +42,6 @@ namespace Widemeadows.Algorithms.Tests.Data
         /// <param name="count">The number of items.</param>
         /// <param name="flip">Whether to flip the ordering of the elements.</param>
         /// <returns>The list of items.</returns>
-        [NotNull]
         protected IList<NumericalItem> BuildSkewedTree(int count, bool flip)
         {
             var items = new List<NumericalItem>(count);
@@ -65,7 +61,6 @@ namespace Widemeadows.Algorithms.Tests.Data
         /// </summary>
         /// <param name="depth">The depth of the tree.</param>
         /// <returns>The list of items.</returns>
-        [NotNull]
         protected IList<NumericalItem> BuildBalancedTreeItems(int depth) => Bisect(int.MinValue + 1, int.MaxValue - 1, depth);
 
         /// <summary>
@@ -75,8 +70,7 @@ namespace Widemeadows.Algorithms.Tests.Data
         /// <param name="max">The maximum value to consider.</param>
         /// <param name="remaining">The number of remaining levels to create.</param>
         /// <returns>The list of nodes obtained by bisecting the left and right sub-trees.</returns>
-        [NotNull]
-        protected static IList<NumericalItem> Bisect(int min, int max, int remaining)
+        private static IList<NumericalItem> Bisect(int min, int max, int remaining)
         {
             var pivot = (int)(((long)max + min) / 2);
             var list = new List<NumericalItem> { new NumericalItem(pivot) };

@@ -14,7 +14,7 @@ namespace Widemeadows.Algorithms.Trees.TreeTraversals.BinaryTree
     {
         /// <inheritdoc cref="TreeTraversal{TNode}.TraverseNodes"/>
         [Pure]
-        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData> node)
+        public override IEnumerable<BinaryTreeNode<TData>> TraverseNodes(BinaryTreeNode<TData>? node)
         {
             if (node == null)
             {
